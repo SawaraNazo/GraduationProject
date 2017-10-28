@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dict>
+  <key>backgroundT1</key>
+  <string>新游戏</string>
+  <key>backgroundT2</key>
+  <string>读取进度</string>
+  <key>backgroundT3</key>
+  <string>设置</string>
+  <key>backgroundT4</key>  
+  <string>退出</string>
+  
+  <key>exitPopupT1</key>
+  <string>是否要离开游戏？</string>
+  <key>exitPopupT2</key>
+  <string>是</string>
+  <key>exitPopupT3</key>
+  <string>否</string>
+</dict>

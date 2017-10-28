@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\设置">
+      <UniqueIdentifier>{57d90b9e-6b1f-4b15-9a3c-b689f6c550b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\标题界面">
+      <UniqueIdentifier>{750f29a1-d696-4cb9-bbbf-1170639a607a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\标题动画">
+      <UniqueIdentifier>{bc759f38-f5ec-46ee-8b3a-ae3d8ad8c19d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource\XML">
+      <UniqueIdentifier>{4d9ef816-c74f-484b-a969-d504ae781ea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\新游戏">
+      <UniqueIdentifier>{30c92ccc-64dd-4858-85cb-4fbf1cee9acd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TitleAniScene.cpp">
+      <Filter>src\标题动画</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TitleLayer.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TitleScene.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TitleAniLayer.cpp">
+      <Filter>src\标题动画</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TitleBackgroundLayer.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ExitPopupLayer.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TitleAniLayer.h">
+      <Filter>src\标题动画</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TitleAniScene.h">
+      <Filter>src\标题动画</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TitleLayer.h">
+      <Filter>src\标题界面</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TitleScene.h">
+      <Filter>src\标题界面</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TitleBackgroundLayer.h">
+      <Filter>src\标题界面</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ExitPopupLayer.h">
+      <Filter>src\标题界面</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Resources\XML\TitleAni.XML">
+      <Filter>resource\XML</Filter>
+    </Xml>
+    <Xml Include="..\Resources\XML\Title.xml">
+      <Filter>resource\XML</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>
