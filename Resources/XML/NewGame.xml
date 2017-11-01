@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dict>
+  <key>player1</key>
+  <string>玩家一</string>
+  <key>player2</key>
+  <string>玩家二</string>
+
+  <key>upgradeLand0</key>
+  <string>是否要购买此土地？</string>
+  <key>upgradeLand1</key>
+  <string>是否要升级此土地？</string>
+  <key>upgradeLand2</key>
+  <string>是否要升级此房屋？</string>
+  <key>payToUpgrade</key>
+  <string>需要花费：</string>
+
+  <key>belongLand</key>
+  <string>这块土地属于：</string>
+  <key>payLand</key>
+  <string>收取过路费：</string>
+
+  <key>yes</key>
+  <string>是</string>
+  <key>no</key>
+  <string>否</string>
+</dict>

@@ -21,5 +21,7 @@ bool TitleScene::init()
 	auto layerM = TitleLayer::create();
 	this->addChild(layerM, 1);
 
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/rich01.mp3");
+
 	return true;
 }

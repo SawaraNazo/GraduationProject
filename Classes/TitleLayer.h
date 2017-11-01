@@ -2,9 +2,12 @@
 
 #include "cocos2d.h"
 #include "ExitPopupLayer.h"
+#include "NewGameScene.h"
+#include "SimpleAudioEngine.h"
 
 using namespace std;
 using namespace cocos2d;
+using namespace CocosDenshion;
 
 class TitleLayer : public Layer
 {

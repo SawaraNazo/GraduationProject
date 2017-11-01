@@ -51,7 +51,9 @@
     <ClCompile Include="..\Classes\ExitPopupLayer.cpp">
       <Filter>src\标题界面</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="..\Classes\NewGameScene.cpp">
+      <Filter>src\新游戏</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -78,7 +80,9 @@
     <ClInclude Include="..\Classes\ExitPopupLayer.h">
       <Filter>src\标题界面</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="..\Classes\NewGameScene.h">
+      <Filter>src\新游戏</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
@@ -90,6 +94,9 @@
       <Filter>resource\XML</Filter>
     </Xml>
     <Xml Include="..\Resources\XML\Title.xml">
+      <Filter>resource\XML</Filter>
+    </Xml>
+    <Xml Include="..\Resources\XML\NewGame.xml">
       <Filter>resource\XML</Filter>
     </Xml>
   </ItemGroup>

@@ -150,23 +150,23 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\ExitPopupLayer.cpp" />
+    <ClCompile Include="..\Classes\NewGameScene.cpp" />
     <ClCompile Include="..\Classes\TitleAniLayer.cpp" />
     <ClCompile Include="..\Classes\TitleAniScene.cpp" />
     <ClCompile Include="..\Classes\TitleBackgroundLayer.cpp" />
     <ClCompile Include="..\Classes\TitleLayer.cpp" />
     <ClCompile Include="..\Classes\TitleScene.cpp" />
-    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\ExitPopupLayer.h" />
+    <ClInclude Include="..\Classes\NewGameScene.h" />
     <ClInclude Include="..\Classes\TitleAniLayer.h" />
     <ClInclude Include="..\Classes\TitleAniScene.h" />
     <ClInclude Include="..\Classes\TitleBackgroundLayer.h" />
     <ClInclude Include="..\Classes\TitleLayer.h" />
     <ClInclude Include="..\Classes\TitleScene.h" />
-    <ClInclude Include="GameScene.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +185,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ResourceCompile Include="game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Resources\XML\NewGame.xml" />
     <Xml Include="..\Resources\XML\Title.xml" />
     <Xml Include="..\Resources\XML\TitleAni.XML" />
   </ItemGroup>

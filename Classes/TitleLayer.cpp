@@ -21,6 +21,8 @@ bool TitleLayer::init()
 	this->createLogo();
 	this->createMenu();
 
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("music/rich01.mp3", true);
+
 	return true;
 }
 
@@ -78,7 +80,9 @@ void TitleLayer::createMenu()
 
 void TitleLayer::newGameCallback(Ref* pSender)
 {
-
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
+	NewGameScene* ngs = NewGameScene::create();
+	Director::getInstance()->pushScene(ngs);
 }
 
 void TitleLayer::loadGameCallback(Ref* pSender)

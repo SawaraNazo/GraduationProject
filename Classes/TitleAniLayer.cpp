@@ -59,7 +59,7 @@ void TitleAniLayer::goNextScene()
 	auto title = TitleScene::create();
 	TransitionScene* transition = TransitionFade::create(3, title);
 
-	Director::getInstance()->replaceScene(transition);
+	Director::getInstance()->pushScene(transition);
 }
 
 void TitleAniLayer::update(float dt)
