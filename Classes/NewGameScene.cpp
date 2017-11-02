@@ -18,8 +18,8 @@ bool NewGameScene::init()
 	visibleSize = Director::getInstance()->getVisibleSize();
 	origin = Director::getInstance()->getVisibleOrigin();
 
-	playerPoint = Vec2(4, 4);
-
+	nowPlayerNumber = 1;
+	
 	this->createMap();
 	this->createPlayer();
 	this->createPlayerPro();
@@ -41,127 +41,70 @@ void NewGameScene::createMap()
 
 void NewGameScene::createPlayer()
 {
-	objectGroup = tileMap->getObjectGroup("Players");
+	playersNumber = 2;
 
-	auto player1 = objectGroup->getObject("Player1");
-	Sprite* p1 = Sprite::create("image/Player.png");
-	float p1x = player1["x"].asFloat();
-	float p1y = player1["y"].asFloat();
-	p1->setPosition(p1x, p1y);
-	tileMap->addChild(p1, tileMap->getChildrenCount(), "player1");
+	objectGroup = tileMap->getObjectGroup("Object");
+	auto player = objectGroup->getObject("player");
+	float px = player["x"].asFloat();
+	float py = player["y"].asFloat();
+	
+	for (int i = 1; i <= playersNumber; i++)
+	{
+		Player p;
+		p.name = "player" + to_string(i);
+		p.isGoing = false;
+		p.faceTo = faceForward::right;
+		p.rolePosition = Vec2(4, 4);
+		p.roleSprite = Sprite::create("image/" + p.name + ".png");
+		p.spritePosition = Vec2(px + i * 3, py);
+		p.roleSprite->setPosition(p.spritePosition);
 
+		if (i == 1)
+		{
+			p.color = Color3B::RED;
+		}
+		else if (i == 2)
+		{
+			p.color = Color3B::BLUE;
+		}
+		else if (i == 3)
+		{
+			p.color = Color3B::YELLOW;
+		}
+		else if (i == 4)
+		{
+			p.color = Color3B::GREEN;
+		}
+
+		tileMap->addChild(p.roleSprite, tileMap->getChildrenCount(), "player" + to_string(i));
+
+		players.push_back(p);
+	}
 }
 
 void NewGameScene::createPlayerPro()
 {
 	auto ng = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	int times = 0;
 
-	const char* player1 = ((String*)ng->objectForKey("player1"))->getCString();
-	Label* l1 = Label::createWithSystemFont(player1, "arial", 20);
-	l1->setPosition(visibleSize.width * 6 / 7, visibleSize.height-l1->getContentSize().height);
-	this->addChild(l1);
+	for (auto p : players)
+	{
+		const char* pc = ((String*)ng->objectForKey(p.name))->getCString();
+		Label* l = Label::createWithSystemFont(pc, "arial", 20);
+		l->setColor(p.color);
+		l->setPosition(visibleSize.width * 6 / 7,
+			visibleSize.height - visibleSize.height * 3 * times / 16 - l->getContentSize().height / 2);
+		this->addChild(l);
 
-	const char* player2 = ((String*)ng->objectForKey("player2"))->getCString();
-	Label* l2 = Label::createWithSystemFont(player2, "arial", 20);
-	l2->setPosition(visibleSize.width * 6 / 7, l1->getPosition().y - visibleSize.height / 5);
-	this->addChild(l2);
+		times++;
+	}
 
 	Button* diceButton = Button::create("image/diceButtonNormal.png", "image/diceButtonPressed.png");
-	diceButton->setPosition(Vec2(visibleSize.width - diceButton->getContentSize().width / 2, diceButton->getContentSize().height / 2));
+	diceButton->setPosition(Vec2(visibleSize.width - diceButton->getContentSize().width / 2,
+		diceButton->getContentSize().height / 2));
 	diceButton->addTouchEventListener(CC_CALLBACK_2(NewGameScene::diceEvent, this));
 	diceButton->setPressedActionEnabled(true);
 	this->addChild(diceButton, 2);
-}
-
-void NewGameScene::playerGo(float dt)
-{
-	auto player1 = tileMap->getChildByName("player1");
-	auto player1Position = player1->getPosition();
-	
-	if (road->getTileAt(playerPoint))
-	{
-		if (nowFace == faceForward::right)
-		{
-			if (road->getTileAt(Vec2(playerPoint.x + 1, playerPoint.y)))
-			{
-				playerPoint.x++;
-				player1Position.x += 30;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x, playerPoint.y - 1)))
-			{
-				playerPoint.y--;
-				player1Position.y += 30;
-				nowFace = faceForward::up;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x, playerPoint.y + 1)))
-			{
-				playerPoint.y++;
-				player1Position.y -= 30;
-				nowFace = faceForward::down;
-			}
-		}
-		else if (nowFace == faceForward::down)
-		{
-			if (road->getTileAt(Vec2(playerPoint.x, playerPoint.y + 1)))
-			{
-				playerPoint.y++;
-				player1Position.y -= 30;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x + 1, playerPoint.y)))
-			{
-				playerPoint.x++;
-				player1Position.x += 30;
-				nowFace = faceForward::right;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x - 1, playerPoint.y)))
-			{
-				playerPoint.x--;
-				player1Position.x -= 30;
-				nowFace = faceForward::left;
-			}
-		}
-		else if (nowFace == faceForward::left)
-		{
-			if (road->getTileAt(Vec2(playerPoint.x - 1, playerPoint.y)))
-			{
-				playerPoint.x--;
-				player1Position.x -= 30;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x, playerPoint.y + 1)))
-			{
-				playerPoint.y++;
-				player1Position.y -= 30;
-				nowFace = faceForward::down;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x, playerPoint.y - 1)))
-			{
-				playerPoint.y--;
-				player1Position.y += 30;
-				nowFace = faceForward::up;
-			}
-		}
-		else if (nowFace == faceForward::up)
-		{
-			if (road->getTileAt(Vec2(playerPoint.x, playerPoint.y - 1)))
-			{
-				playerPoint.y--;
-				player1Position.y += 30;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x + 1, playerPoint.y)))
-			{
-				playerPoint.x++;
-				player1Position.x += 30;
-				nowFace = faceForward::right;
-			}
-			else if (road->getTileAt(Vec2(playerPoint.x - 1, playerPoint.y)))
-			{
-				playerPoint.x--;
-				player1Position.x -= 30;
-				nowFace = faceForward::left;
-			}
-		}
-		player1->setPosition(player1Position);
-	}
 }
 
 void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
@@ -173,39 +116,55 @@ void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
 	case Widget::TouchEventType::MOVED:
 		break;
 	case Widget::TouchEventType::ENDED:
-		if (isGoing == false)
+	{
+		int n = 1;
+		
+		for (auto& p : players)
 		{
-			int i = random(1, 6);
-			switch (i)
+			if (n == nowPlayerNumber)
 			{
-			case 1:
-				dicePointS = Sprite::create("image/point1.png");
-				break;
-			case 2:
-				dicePointS = Sprite::create("image/point2.png");
-				break;
-			case 3:
-				dicePointS = Sprite::create("image/point3.png");
-				break;
-			case 4:
-				dicePointS = Sprite::create("image/point4.png");
-				break;
-			case 5:
-				dicePointS = Sprite::create("image/point5.png");
-				break;
-			case 6:
-				dicePointS = Sprite::create("image/point6.png");
+				if (p.isGoing == false)
+				{
+					int i = random(1, 6);
+
+					switch (i)
+					{
+					case 1:
+						dicePointS = Sprite::create("image/point1.png");
+						break;
+					case 2:
+						dicePointS = Sprite::create("image/point2.png");
+						break;
+					case 3:
+						dicePointS = Sprite::create("image/point3.png");
+						break;
+					case 4:
+						dicePointS = Sprite::create("image/point4.png");
+						break;
+					case 5:
+						dicePointS = Sprite::create("image/point5.png");
+						break;
+					case 6:
+						dicePointS = Sprite::create("image/point6.png");
+						break;
+					}
+					dicePointS->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+					this->addChild(dicePointS, 5, "dicePoint");
+
+					p.isGoing = true;
+
+					this->schedule(CC_CALLBACK_1(NewGameScene::playerGo, this, p.name), 0.5, i - 1, 0, "playerGo");
+					this->scheduleOnce(CC_CALLBACK_1(NewGameScene::removeDicePointS, this, p.name), i*0.5, "removeDicePointS");
+				}
+
 				break;
 			}
-			dicePointS->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-			this->addChild(dicePointS, 5, "dicePoint");
 
-			isGoing = true;
-
-			this->schedule(schedule_selector(NewGameScene::playerGo), 0.5, i - 1, 0);
-			this->scheduleOnce(schedule_selector(NewGameScene::removeDicePointS), i*0.5);
+			n++;
 		}
+
 		break;
+	}
 	case Widget::TouchEventType::CANCELED:
 		break;
 	default:
@@ -213,11 +172,121 @@ void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
 	}
 }
 
-void NewGameScene::removeDicePointS(float dt)
+void NewGameScene::playerGo(float dt, string playerName)
+{
+	for (auto& nowPlayer : players)
+	{
+		if (nowPlayer.name == playerName)
+		{
+			if (road->getTileAt(nowPlayer.rolePosition))
+			{
+				if (nowPlayer.faceTo == faceForward::right)
+				{
+					if (road->getTileAt(Vec2(nowPlayer.rolePosition.x + 1, nowPlayer.rolePosition.y)))
+					{
+						nowPlayer.rolePosition.x++;
+						nowPlayer.spritePosition.x += 30;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
+					{
+						nowPlayer.rolePosition.y--;
+						nowPlayer.spritePosition.y += 30;
+						nowPlayer.faceTo = faceForward::up;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y + 1)))
+					{
+						nowPlayer.rolePosition.y++;
+						nowPlayer.spritePosition.y -= 30;
+						nowPlayer.faceTo = faceForward::down;
+					}
+				}
+				else if (nowPlayer.faceTo == faceForward::down)
+				{
+					if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y + 1)))
+					{
+						nowPlayer.rolePosition.y++;
+						nowPlayer.spritePosition.y -= 30;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x + 1, nowPlayer.rolePosition.y)))
+					{
+						nowPlayer.rolePosition.x++;
+						nowPlayer.spritePosition.x += 30;
+						nowPlayer.faceTo = faceForward::right;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
+					{
+						nowPlayer.rolePosition.x--;
+						nowPlayer.spritePosition.x -= 30;
+						nowPlayer.faceTo = faceForward::left;
+					}
+				}
+				else if (nowPlayer.faceTo == faceForward::left)
+				{
+					if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
+					{
+						nowPlayer.rolePosition.x--;
+						nowPlayer.spritePosition.x -= 30;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y + 1)))
+					{
+						nowPlayer.rolePosition.y++;
+						nowPlayer.spritePosition.y -= 30;
+						nowPlayer.faceTo = faceForward::down;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
+					{
+						nowPlayer.rolePosition.y--;
+						nowPlayer.spritePosition.y += 30;
+						nowPlayer.faceTo = faceForward::up;
+					}
+				}
+				else if (nowPlayer.faceTo == faceForward::up)
+				{
+					if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
+					{
+						nowPlayer.rolePosition.y--;
+						nowPlayer.spritePosition.y += 30;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x + 1, nowPlayer.rolePosition.y)))
+					{
+						nowPlayer.rolePosition.x++;
+						nowPlayer.spritePosition.x += 30;
+						nowPlayer.faceTo = faceForward::right;
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
+					{
+						nowPlayer.rolePosition.x--;
+						nowPlayer.spritePosition.x -= 30;
+						nowPlayer.faceTo = faceForward::left;
+					}
+				}
+			}
+
+			nowPlayer.roleSprite->setPosition(nowPlayer.spritePosition);
+
+			break;
+		}
+	}
+}
+
+void NewGameScene::removeDicePointS(float dt, string playerName)
 {
 	this->removeChildByName("dicePoint");
-	this->checkLand();
-	isGoing = false;
+	//this->checkLand();
+
+	for (auto& nowPlayer : players)
+	{
+		if (nowPlayer.name == playerName)
+		{
+			nowPlayer.isGoing = false;
+		}
+	}
+	
+	nowPlayerNumber++;
+	if (nowPlayerNumber > players.size())
+	{
+		nowPlayerNumber = 1;
+	}
 }
 
 void NewGameScene::checkLand()
@@ -310,17 +379,17 @@ void NewGameScene::menuYes()
 		if (gLand == empty_land)
 		{
 			land->setTileGID(level1_land, nowLand);
-			land->getTileAt(nowLand)->setColor(player1_color);
+			//land->getTileAt(nowLand)->setColor(player1_color);
 		}
 		else if (gLand == level1_land)
 		{
 			land->setTileGID(level2_land, nowLand);
-			land->getTileAt(nowLand)->setColor(player1_color);
+			//land->getTileAt(nowLand)->setColor(player1_color);
 		}
 		else if (gLand == level2_land)
 		{
 			land->setTileGID(level3_land, nowLand);
-			land->getTileAt(nowLand)->setColor(player1_color);
+			//land->getTileAt(nowLand)->setColor(player1_color);
 		}
 	}
 

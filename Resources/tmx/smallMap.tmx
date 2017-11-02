@@ -81,8 +81,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Players">
-  <object id="1" name="Player1" x="143.87" y="136.599" width="2.72166" height="3.66351" rotation="-0.573389"/>
-  <object id="2" name="Player2" x="132.833" y="166.167" width="21.1667" height="21"/>
+ <objectgroup name="Object">
+  <object id="1" name="player" x="136.078" y="132.607" width="2.72166" height="3.66351" rotation="-0.573389"/>
  </objectgroup>
 </map>
