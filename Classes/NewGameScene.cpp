@@ -153,8 +153,8 @@ void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
 
 					p.isGoing = true;
 
-					this->schedule(CC_CALLBACK_1(NewGameScene::playerGo, this, p.name), 0.5, i - 1, 0, "playerGo");
-					this->scheduleOnce(CC_CALLBACK_1(NewGameScene::removeDicePointS, this, p.name), i*0.5, "removeDicePointS");
+					this->schedule(schedule_selector(NewGameScene::playerGo), 0.5, i - 1, 0);
+					this->scheduleOnce(schedule_selector(NewGameScene::checkLand), i*0.5);
 				}
 
 				break;
@@ -172,11 +172,13 @@ void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
 	}
 }
 
-void NewGameScene::playerGo(float dt, string playerName)
+void NewGameScene::playerGo(float dt)
 {
+	int n = 1;
+
 	for (auto& nowPlayer : players)
 	{
-		if (nowPlayer.name == playerName)
+		if (n == nowPlayerNumber)
 		{
 			if (road->getTileAt(nowPlayer.rolePosition))
 			{
@@ -266,22 +268,165 @@ void NewGameScene::playerGo(float dt, string playerName)
 
 			break;
 		}
+		n++;
 	}
 }
 
-void NewGameScene::removeDicePointS(float dt, string playerName)
+void NewGameScene::checkLand(float dt)
 {
+	// 移除骰子图片
 	this->removeChildByName("dicePoint");
-	//this->checkLand();
 
-	for (auto& nowPlayer : players)
+	int n = 1;
+
+	for (auto& p : players)
 	{
-		if (nowPlayer.name == playerName)
+		if (n == nowPlayerNumber)
 		{
-			nowPlayer.isGoing = false;
+			// 判断人物朝向，确定土地位置
+			switch (p.faceTo)
+			{
+			case faceForward::right:
+				nowLand = Vec2(p.rolePosition.x, p.rolePosition.y + 1);
+				break;
+			case faceForward::down:
+				nowLand = Vec2(p.rolePosition.x - 1, p.rolePosition.y);
+				break;
+			case faceForward::left:
+				nowLand = Vec2(p.rolePosition.x, p.rolePosition.y - 1);
+				break;
+			case faceForward::up:
+				nowLand = Vec2(p.rolePosition.x + 1, p.rolePosition.y);
+				break;
+			}
+
+			sLand = land->getTileAt(nowLand);
+			gLand = land->getTileGIDAt(nowLand);
+
+			if (sLand)
+			{
+				if (gLand == empty_land)
+				{
+					this->emptyLand();
+				}
+				else if (sLand->getColor() == p.color)
+				{
+					this->myLand();
+				}
+				else
+				{
+					this->otherLand();
+				}
+			}
+			else
+			{
+				// 设置角色可以移动
+				p.isGoing = false;
+
+				// 切换操作玩家
+				nowPlayerNumber++;
+				if (nowPlayerNumber > players.size())
+				{
+					nowPlayerNumber = 1;
+				}
+			}
+
+			break;
 		}
+
+		n++;
 	}
+}
+
+void NewGameScene::emptyLand()
+{
+	string name;
+	int n = 1;
+
+	for (auto p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			name = p.name;
+			break;
+		}
+
+		n++;
+	}
+
+
+	// 菜单面板图片
+	menuBoard = Sprite::create("image/Popup.png");
+	menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(menuBoard);
+
+	// 字儿们
+	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+
+	// 菜单 ：是
+	MenuItem* yesM = MenuItemImage::create("image/GreenNormal.png",
+		"image/GreenPressed.png", CC_CALLBACK_0(NewGameScene::emptyMenuYes, this));
+	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
+
+	const char* yesC = ((String*)ngContent->objectForKey("yes"))->getCString();
+	Label* yesL = Label::createWithSystemFont(yesC, "arial", 20);
+	yesM->addChild(yesL);
+	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
+	yesL->setTextColor(Color4B::BLACK);
+
+	// 菜单 ：否
+	MenuItem* noM = MenuItemImage::create("image/RedNormal.png",
+		"image/RedPressed.png", CC_CALLBACK_0(NewGameScene::emptyMenuNo, this));
+	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
+
+	const char* noC = ((String*)ngContent->objectForKey("no"))->getCString();
+	Label* noL = Label::createWithSystemFont(noC, "arial", 20);
+	noM->addChild(noL);
+	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
+	noL->setTextColor(Color4B::BLACK);
+
+	Label* noticeL;
+
+	string blank = " ";
+	const char* nc = ((String*)ngContent->objectForKey(name))->getCString();
+	const char* upgradeLand0 = ((String*)ngContent->objectForKey("upgradeLand0"))->getCString();
+	const char* payToUpgrade = ((String*)ngContent->objectForKey("payToUpgrade"))->getCString();
+	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+	string s = nc + blank + comma + upgradeLand0 + "\n" + payToUpgrade;
+	noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+	menuBoard->addChild(noticeL);
+	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+	noticeL->setTextColor(Color4B::BLACK);
+
+	noticeMenu = Menu::create(yesM, noM, NULL);
+	this->addChild(noticeMenu);
+}
+
+void NewGameScene::emptyMenuYes()
+{
+	int n = 1;
+
+	for (auto& p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			land->setTileGID(level1_land, nowLand);
+			land->getTileAt(nowLand)->setColor(p.color);
+
+			// 设置角色可以移动
+			p.isGoing = false;
+			
+			break;
+		}
+
+		n++;
+	}
+
+	noticeMenu->removeFromParentAndCleanup(true);
+	menuBoard->removeFromParentAndCleanup(true);
 	
+	// 切换操作玩家
 	nowPlayerNumber++;
 	if (nowPlayerNumber > players.size())
 	{
@@ -289,116 +434,259 @@ void NewGameScene::removeDicePointS(float dt, string playerName)
 	}
 }
 
-void NewGameScene::checkLand()
+void NewGameScene::emptyMenuNo()
 {
-	// 1.先检查所在地块是否有土地
-	// 2.检查土地所属
+	noticeMenu->removeFromParentAndCleanup(true);
+	menuBoard->removeFromParentAndCleanup(true);
 
-	switch (nowFace)
+	int n = 1;
+
+	for (auto& p : players)
 	{
-	case faceForward::right:
-		nowLand = Vec2(playerPoint.x, playerPoint.y + 1);
-		break;
-	case faceForward::down:
-		nowLand = Vec2(playerPoint.x - 1, playerPoint.y);
-		break;
-	case faceForward::left:
-		nowLand = Vec2(playerPoint.x, playerPoint.y - 1);
-		break;
-	case faceForward::up:
-		nowLand = Vec2(playerPoint.x + 1, playerPoint.y);
-		break;
+		if (n == nowPlayerNumber)
+		{
+			// 设置角色可以移动
+			p.isGoing = false;
+			break;
+		}
+
+		n++;
 	}
-
-	sLand = land->getTileAt(nowLand);
-	gLand = land->getTileGIDAt(nowLand);
-
-	if (sLand)
+	
+	// 切换操作玩家
+	nowPlayerNumber++;
+	if (nowPlayerNumber > players.size())
 	{
-		// 菜单面板图片
-		menuBoard = Sprite::create("image/Popup.png");
-		menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-		this->addChild(menuBoard);
-
-		// 字儿们
-		auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-
-		// 菜单 ：是
-		MenuItem* yesM = MenuItemImage::create("image/GreenNormal.png",
-			"image/GreenPressed.png", CC_CALLBACK_0(NewGameScene::menuYes, this));
-		yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
-
-		const char* yesC = ((String*)ngContent->objectForKey("yes"))->getCString();
-		Label* yesL = Label::createWithSystemFont(yesC, "arial", 20);
-		yesM->addChild(yesL);
-		yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
-		yesL->setTextColor(Color4B::BLACK);
-
-		// 菜单 ：否
-		MenuItem* noM = MenuItemImage::create("image/RedNormal.png",
-			"image/RedPressed.png", CC_CALLBACK_0(NewGameScene::menuNo, this));
-		noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
-
-		const char* noC = ((String*)ngContent->objectForKey("no"))->getCString();
-		Label* noL = Label::createWithSystemFont(noC, "arial", 20);
-		noM->addChild(noL);
-		noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
-		noL->setTextColor(Color4B::BLACK);
-
-		Label* noticeL;
-
-		if (gLand == empty_land)
-		{
-			const char* upgradeLand0 = ((String*)ngContent->objectForKey("upgradeLand0"))->getCString();
-			noticeL = Label::createWithSystemFont(upgradeLand0, "arial", 30);
-		}
-		else if (gLand == level1_land)
-		{
-			const char* upgradeLand1 = ((String*)ngContent->objectForKey("upgradeLand1"))->getCString();
-			noticeL = Label::createWithSystemFont(upgradeLand1, "arial", 30);
-		}
-		else if (gLand == level2_land)
-		{
-			const char* upgradeLand2 = ((String*)ngContent->objectForKey("upgradeLand2"))->getCString();
-			noticeL = Label::createWithSystemFont(upgradeLand2, "arial", 30);
-		}
-
-		menuBoard->addChild(noticeL);
-		noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
-		noticeL->setTextColor(Color4B::BLACK);
-
-		noticeMenu = Menu::create(yesM, noM, NULL);
-		this->addChild(noticeMenu);
+		nowPlayerNumber = 1;
 	}
 }
 
-void NewGameScene::menuYes()
+void NewGameScene::myLand()
 {
-	if (sLand)
+	string name;
+	int n = 1;
+
+	for (auto p : players)
 	{
-		if (gLand == empty_land)
+		if (n == nowPlayerNumber)
 		{
-			land->setTileGID(level1_land, nowLand);
-			//land->getTileAt(nowLand)->setColor(player1_color);
+			name = p.name;
+			break;
 		}
-		else if (gLand == level1_land)
+
+		n++;
+	}
+
+	// 菜单面板图片
+	menuBoard = Sprite::create("image/Popup.png");
+	menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(menuBoard);
+
+	// 字儿们
+	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+
+	// 菜单 ：是
+	MenuItem* yesM = MenuItemImage::create("image/GreenNormal.png",
+		"image/GreenPressed.png", CC_CALLBACK_0(NewGameScene::myMenuYes, this));
+	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
+
+	const char* yesC = ((String*)ngContent->objectForKey("yes"))->getCString();
+	Label* yesL = Label::createWithSystemFont(yesC, "arial", 20);
+	yesM->addChild(yesL);
+	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
+	yesL->setTextColor(Color4B::BLACK);
+
+	// 菜单 ：否
+	MenuItem* noM = MenuItemImage::create("image/RedNormal.png",
+		"image/RedPressed.png", CC_CALLBACK_0(NewGameScene::myMenuNo, this));
+	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
+
+	const char* noC = ((String*)ngContent->objectForKey("no"))->getCString();
+	Label* noL = Label::createWithSystemFont(noC, "arial", 20);
+	noM->addChild(noL);
+	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
+	noL->setTextColor(Color4B::BLACK);
+
+	Label* noticeL;
+	string blank = " ";
+	const char* nc = ((String*)ngContent->objectForKey(name))->getCString();
+	const char* upgradeLand;
+
+	if (gLand == level1_land)
+	{
+		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand1"))->getCString();
+	}
+	else if (gLand == level2_land)
+	{
+		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand2"))->getCString();
+	}
+	else if (gLand == level3_land)
+	{
+
+	}
+
+	const char* payToUpgrade = ((String*)ngContent->objectForKey("payToUpgrade"))->getCString();
+	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+	string s = nc + blank + comma + upgradeLand + "\n" + payToUpgrade;
+	noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+	menuBoard->addChild(noticeL);
+	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+	noticeL->setTextColor(Color4B::BLACK);
+
+	noticeMenu = Menu::create(yesM, noM, NULL);
+	this->addChild(noticeMenu);
+}
+
+void NewGameScene::myMenuYes()
+{
+	int n = 1;
+
+	for (auto& p : players)
+	{
+		if (n == nowPlayerNumber)
 		{
-			land->setTileGID(level2_land, nowLand);
-			//land->getTileAt(nowLand)->setColor(player1_color);
+			if (gLand == level1_land)
+			{
+				land->setTileGID(level2_land, nowLand);
+			}
+			else if (gLand == level2_land)
+			{
+				land->setTileGID(level3_land, nowLand);
+			}
+			else if (gLand == level3_land)
+			{
+
+			}
+
+			land->getTileAt(nowLand)->setColor(p.color);
+
+			// 设置角色可以移动
+			p.isGoing = false;
+
+			break;
 		}
-		else if (gLand == level2_land)
-		{
-			land->setTileGID(level3_land, nowLand);
-			//land->getTileAt(nowLand)->setColor(player1_color);
-		}
+
+		n++;
 	}
 
 	noticeMenu->removeFromParentAndCleanup(true);
 	menuBoard->removeFromParentAndCleanup(true);
+
+	// 切换操作玩家
+	nowPlayerNumber++;
+	if (nowPlayerNumber > players.size())
+	{
+		nowPlayerNumber = 1;
+	}
 }
 
-void NewGameScene::menuNo()
+void NewGameScene::myMenuNo()
 {
 	noticeMenu->removeFromParentAndCleanup(true);
 	menuBoard->removeFromParentAndCleanup(true);
+
+	int n = 1;
+
+	for (auto& p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			// 设置角色可以移动
+			p.isGoing = false;
+			break;
+		}
+
+		n++;
+	}
+
+	// 切换操作玩家
+	nowPlayerNumber++;
+	if (nowPlayerNumber > players.size())
+	{
+		nowPlayerNumber = 1;
+	}
+}
+
+void NewGameScene::otherLand()
+{
+	string payName,earnName;
+	int n = 1;
+	
+	for (auto p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			payName = p.name;
+		}
+		if (p.color == sLand->getColor())
+		{
+			earnName = p.name;
+		}
+
+		n++;
+	}
+
+	// 菜单面板图片
+	menuBoard = Sprite::create("image/Popup.png");
+	menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(menuBoard);
+
+	// 字儿们
+	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+
+	// 菜单：确定
+	MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+		"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::otherMenuClose, this));
+	okM->setPosition(0, -visibleSize.height / 5);
+
+	const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+	Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+	okM->addChild(okL);
+	okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+	okL->setTextColor(Color4B::BLACK);
+	
+	Label* noticeL;
+	string blank = " ";
+	const char* payC = ((String*)ngContent->objectForKey(payName))->getCString();
+	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+	const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
+	const char* earnC = ((String*)ngContent->objectForKey(earnName))->getCString();
+	const char* payLand = ((String*)ngContent->objectForKey("payLand"))->getCString();
+	string s = payC + blank + comma + belongLand + earnC + "\n" + payLand;
+	noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+	menuBoard->addChild(noticeL);
+	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+	noticeL->setTextColor(Color4B::BLACK);
+
+	noticeMenu = Menu::create(okM, NULL);
+	this->addChild(noticeMenu);
+}
+
+void NewGameScene::otherMenuClose()
+{
+	noticeMenu->removeFromParentAndCleanup(true);
+	menuBoard->removeFromParentAndCleanup(true);
+
+	int n = 1;
+
+	for (auto& p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			// 设置角色可以移动
+			p.isGoing = false;
+			break;
+		}
+
+		n++;
+	}
+
+	// 切换操作玩家
+	nowPlayerNumber++;
+	if (nowPlayerNumber > players.size())
+	{
+		nowPlayerNumber = 1;
+	}
 }

@@ -67,17 +67,19 @@ private:
 	// 正在操作的玩家序号
 	int nowPlayerNumber;
 	
-	Vec2 playerPoint;
-	faceForward nowFace = faceForward::right;
-	bool isGoing = false;
-
+	// 骰子图片
 	Sprite* dicePointS;
 
+	
 	// Belong to checkLand()
-	// 地块图片、地块GID、现在的地块坐标、Menu面板
+
+	// 地块图片
 	Sprite* sLand;
+	// 地块GID（+1）
 	uint32_t gLand;
+	// 现在的地块坐标
 	Vec2 nowLand;
+	// Menu面板及图片
 	Menu* noticeMenu;
 	Sprite* menuBoard;
 
@@ -98,11 +100,21 @@ public:
 
 	void diceEvent(Ref* pSender,Widget::TouchEventType type);
 
-	void playerGo(float dt, string playerName);
-	void removeDicePointS(float dt, string playerName);
-	void checkLand();
-	void menuYes();
-	void menuNo();
+	void playerGo(float dt);
 
+	// 检查土地归属
+	void checkLand(float dt);
+	// 空地
+	void emptyLand();
+	void emptyMenuYes();
+	void emptyMenuNo();
+	// 自己的土地
+	void myLand();
+	void myMenuYes();
+	void myMenuNo();
+	// 别人的土地
+	void otherLand();
+	void otherMenuClose();
+	
 	CREATE_FUNC(NewGameScene);
 };
