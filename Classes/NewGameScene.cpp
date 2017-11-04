@@ -18,8 +18,18 @@ bool NewGameScene::init()
 	visibleSize = Director::getInstance()->getVisibleSize();
 	origin = Director::getInstance()->getVisibleOrigin();
 
+	// 初始化到第一位玩家
 	nowPlayerNumber = 1;
-	
+
+	// 预设置开始金钱为10000元
+	startMoney = 10000;
+
+	// 预设置开始的土地等级数
+	landLevelNumber = 8;
+
+	// 预设置玩家数量
+	playersNumber = 2;
+
 	this->createMap();
 	this->createPlayer();
 	this->createPlayerPro();
@@ -36,18 +46,22 @@ void NewGameScene::createMap()
 
 	background = tileMap->getLayer("Background");
 	road = tileMap->getLayer("Road");
-	land = tileMap->getLayer("Land");
+	
+	for (int i = 1; i <= landLevelNumber; i++)
+	{
+		string s = "Land" + to_string(i);
+		TMXLayer* tl = tileMap->getLayer(s);
+		lands.push_back(tl);
+	}
 }
 
 void NewGameScene::createPlayer()
 {
-	playersNumber = 2;
-
 	objectGroup = tileMap->getObjectGroup("Object");
 	auto player = objectGroup->getObject("player");
 	float px = player["x"].asFloat();
 	float py = player["y"].asFloat();
-	
+
 	for (int i = 1; i <= playersNumber; i++)
 	{
 		Player p;
@@ -56,6 +70,7 @@ void NewGameScene::createPlayer()
 		p.faceTo = faceForward::right;
 		p.rolePosition = Vec2(4, 4);
 		p.roleSprite = Sprite::create("image/" + p.name + ".png");
+		p.money = startMoney;
 		p.spritePosition = Vec2(px + i * 3, py);
 		p.roleSprite->setPosition(p.spritePosition);
 
@@ -85,16 +100,26 @@ void NewGameScene::createPlayer()
 void NewGameScene::createPlayerPro()
 {
 	auto ng = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+
 	int times = 0;
 
 	for (auto p : players)
 	{
+		// 玩家姓名
 		const char* pc = ((String*)ng->objectForKey(p.name))->getCString();
-		Label* l = Label::createWithSystemFont(pc, "arial", 20);
-		l->setColor(p.color);
-		l->setPosition(visibleSize.width * 6 / 7,
-			visibleSize.height - visibleSize.height * 3 * times / 16 - l->getContentSize().height / 2);
-		this->addChild(l);
+		Label* l1 = Label::createWithSystemFont(pc, "arial", 20);
+		l1->setColor(p.color);
+		l1->setPosition(visibleSize.width * 6 / 7,
+			visibleSize.height - visibleSize.height * 3 * times / 16 - l1->getContentSize().height / 2);
+		this->addChild(l1, 2, pc);
+
+		// 玩家金钱
+		const char* rmb = ((String*)ng->objectForKey("rmb"))->getCString();
+		string m = rmb + to_string(p.money);
+		string blank = " ";
+		Label* l2 = Label::createWithSystemFont(m, "arial", 18);
+		l2->setPosition(visibleSize.width * 6 / 7, l1->getPosition().y - 2 * l1->getContentSize().height);
+		this->addChild(l2, 2, p.name + blank + "money");
 
 		times++;
 	}
@@ -118,7 +143,7 @@ void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
 	case Widget::TouchEventType::ENDED:
 	{
 		int n = 1;
-		
+
 		for (auto& p : players)
 		{
 			if (n == nowPlayerNumber)
@@ -300,12 +325,22 @@ void NewGameScene::checkLand(float dt)
 				break;
 			}
 
-			sLand = land->getTileAt(nowLand);
-			gLand = land->getTileGIDAt(nowLand);
+			// 从所有土地层判断是否在对应坐标存在土地
+			for (auto l : lands)
+			{
+				sLand = l->getTileAt(nowLand);
+
+				if (sLand)
+				{
+					gLand = l->getTileGIDAt(nowLand);
+
+					break;
+				}
+			}
 
 			if (sLand)
 			{
-				if (gLand == empty_land)
+				if (gLand == empty_land_GID)
 				{
 					this->emptyLand();
 				}
@@ -384,15 +419,31 @@ void NewGameScene::emptyLand()
 	noM->addChild(noL);
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
 	noL->setTextColor(Color4B::BLACK);
+	
 
+	// 菜单主要内容
 	Label* noticeL;
 
-	string blank = " ";
 	const char* nc = ((String*)ngContent->objectForKey(name))->getCString();
+	string blank = " ";
+	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
 	const char* upgradeLand0 = ((String*)ngContent->objectForKey("upgradeLand0"))->getCString();
 	const char* payToUpgrade = ((String*)ngContent->objectForKey("payToUpgrade"))->getCString();
-	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
-	string s = nc + blank + comma + upgradeLand0 + "\n" + payToUpgrade;
+
+	// 所在空白地块的价格
+	int emptyBuildCost;
+
+	for (auto l : lands)
+	{
+		if (l->getTileAt(nowLand))
+		{
+			emptyBuildCost = l->getProperty("emptyBuildCost").asInt();
+		}
+	}
+
+	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+	string s = nc + blank + comma + upgradeLand0 + "\n" +
+		payToUpgrade + to_string(emptyBuildCost) + yuan;
 	noticeL = Label::createWithSystemFont(s, "arial", 30);
 
 	menuBoard->addChild(noticeL);
@@ -411,12 +462,34 @@ void NewGameScene::emptyMenuYes()
 	{
 		if (n == nowPlayerNumber)
 		{
-			land->setTileGID(level1_land, nowLand);
-			land->getTileAt(nowLand)->setColor(p.color);
+			int emptyBuildCost;
+
+			for (auto l : lands)
+			{
+				auto s = l->getTileAt(nowLand);
+
+				if (s)
+				{
+					emptyBuildCost = l->getProperty("emptyBuildCost").asInt();
+
+					l->setTileGID(level1_land_GID, nowLand);
+					l->getTileAt(nowLand)->setColor(p.color);
+					p.money -= emptyBuildCost;
+
+					break;
+				}
+			}
+						
+			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+			const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+			string blank = " ";
+			string s = rmb + blank + to_string(p.money);
+
+			((Label*)this->getChildByName(p.name + blank + "money"))->setString(s);
 
 			// 设置角色可以移动
 			p.isGoing = false;
-			
+
 			break;
 		}
 
@@ -425,7 +498,7 @@ void NewGameScene::emptyMenuYes()
 
 	noticeMenu->removeFromParentAndCleanup(true);
 	menuBoard->removeFromParentAndCleanup(true);
-	
+
 	// 切换操作玩家
 	nowPlayerNumber++;
 	if (nowPlayerNumber > players.size())
@@ -452,7 +525,7 @@ void NewGameScene::emptyMenuNo()
 
 		n++;
 	}
-	
+
 	// 切换操作玩家
 	nowPlayerNumber++;
 	if (nowPlayerNumber > players.size())
@@ -512,15 +585,15 @@ void NewGameScene::myLand()
 	const char* nc = ((String*)ngContent->objectForKey(name))->getCString();
 	const char* upgradeLand;
 
-	if (gLand == level1_land)
+	if (gLand == level1_land_GID)
 	{
 		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand1"))->getCString();
 	}
-	else if (gLand == level2_land)
+	else if (gLand == level2_land_GID)
 	{
 		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand2"))->getCString();
 	}
-	else if (gLand == level3_land)
+	else if (gLand == level3_land_GID)
 	{
 
 	}
@@ -546,20 +619,20 @@ void NewGameScene::myMenuYes()
 	{
 		if (n == nowPlayerNumber)
 		{
-			if (gLand == level1_land)
+			if (gLand == level1_land_GID)
 			{
-				land->setTileGID(level2_land, nowLand);
+				//land->setTileGID(level2_land_GID, nowLand);
 			}
-			else if (gLand == level2_land)
+			else if (gLand == level2_land_GID)
 			{
-				land->setTileGID(level3_land, nowLand);
+				//land->setTileGID(level3_land_GID, nowLand);
 			}
-			else if (gLand == level3_land)
+			else if (gLand == level3_land_GID)
 			{
 
 			}
 
-			land->getTileAt(nowLand)->setColor(p.color);
+			//land->getTileAt(nowLand)->setColor(p.color);
 
 			// 设置角色可以移动
 			p.isGoing = false;
@@ -610,9 +683,9 @@ void NewGameScene::myMenuNo()
 
 void NewGameScene::otherLand()
 {
-	string payName,earnName;
+	string payName, earnName;
 	int n = 1;
-	
+
 	for (auto p : players)
 	{
 		if (n == nowPlayerNumber)
@@ -645,7 +718,7 @@ void NewGameScene::otherLand()
 	okM->addChild(okL);
 	okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 	okL->setTextColor(Color4B::BLACK);
-	
+
 	Label* noticeL;
 	string blank = " ";
 	const char* payC = ((String*)ngContent->objectForKey(payName))->getCString();
@@ -653,7 +726,7 @@ void NewGameScene::otherLand()
 	const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
 	const char* earnC = ((String*)ngContent->objectForKey(earnName))->getCString();
 	const char* payLand = ((String*)ngContent->objectForKey("payLand"))->getCString();
-	string s = payC + blank + comma + belongLand + earnC + "\n" + payLand;
+	string s = belongLand + blank + earnC + comma + payC + "\n" + payLand;
 	noticeL = Label::createWithSystemFont(s, "arial", 30);
 
 	menuBoard->addChild(noticeL);

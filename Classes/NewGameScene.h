@@ -29,15 +29,21 @@ struct Player
 	faceForward faceTo;
 	bool isGoing;
 	Color3B color;
+	int money;
 };
 
 class NewGameScene : public Scene
 {
 private:
-	const unsigned int empty_land = 110;
-	const unsigned int level1_land = 454;
-	const unsigned int level2_land = 451;
-	const unsigned int level3_land = 466;
+	// 不同等级地块对应GID
+	const unsigned int empty_land_GID = 110;
+	const unsigned int level1_land_GID = 454;
+	const unsigned int level2_land_GID = 451;
+	const unsigned int level3_land_GID = 466;
+
+	// 不同等级升级花费
+	
+	// 不同等级过路花费
 
 
 	// 初始新游戏，条件选择
@@ -45,10 +51,10 @@ private:
 	// 游戏玩家数量
 	int playersNumber;
 	// 初始资金
-	float startMoney;
+	int startMoney;
 	// 胜利条件
 
-	
+
 	// 显示尺寸
 	Size visibleSize;
 	// 显示原点
@@ -56,21 +62,23 @@ private:
 
 	// TMX 地图
 	TMXTiledMap* tileMap;
+
 	TMXLayer* background;
 	TMXLayer* road;
-	TMXLayer* land;
+	int landLevelNumber;
+	vector<TMXLayer*> lands;
 	TMXObjectGroup* objectGroup;
-	
+
 	// 角色集合
 	vector<Player> players;
 
 	// 正在操作的玩家序号
 	int nowPlayerNumber;
-	
+
 	// 骰子图片
 	Sprite* dicePointS;
 
-	
+
 	// Belong to checkLand()
 
 	// 地块图片
@@ -98,7 +106,7 @@ public:
 	// 创建游戏面板
 	void createPlayerPro();
 
-	void diceEvent(Ref* pSender,Widget::TouchEventType type);
+	void diceEvent(Ref* pSender, Widget::TouchEventType type);
 
 	void playerGo(float dt);
 
@@ -115,6 +123,6 @@ public:
 	// 别人的土地
 	void otherLand();
 	void otherMenuClose();
-	
+
 	CREATE_FUNC(NewGameScene);
 };
