@@ -340,7 +340,7 @@ void NewGameScene::checkLand(float dt)
 
 			if (sLand)
 			{
-				if (gLand == empty_land_GID)
+				if (gLand == empty_land_GID && sLand->getColor() == Color3B::WHITE)
 				{
 					this->emptyLand();
 				}
@@ -443,7 +443,7 @@ void NewGameScene::emptyLand()
 
 	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
 	string s = nc + blank + comma + upgradeLand0 + "\n" +
-		payToUpgrade + to_string(emptyBuildCost) + yuan;
+		payToUpgrade + blank + to_string(emptyBuildCost) + yuan;
 	noticeL = Label::createWithSystemFont(s, "arial", 30);
 
 	menuBoard->addChild(noticeL);
@@ -466,20 +466,17 @@ void NewGameScene::emptyMenuYes()
 
 			for (auto l : lands)
 			{
-				auto s = l->getTileAt(nowLand);
-
-				if (s)
+				if (l->getTileAt(nowLand))
 				{
 					emptyBuildCost = l->getProperty("emptyBuildCost").asInt();
 
-					l->setTileGID(level1_land_GID, nowLand);
 					l->getTileAt(nowLand)->setColor(p.color);
 					p.money -= emptyBuildCost;
 
 					break;
 				}
 			}
-						
+			
 			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 			const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
 			string blank = " ";
@@ -580,27 +577,60 @@ void NewGameScene::myLand()
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
 	noL->setTextColor(Color4B::BLACK);
 
+	// 提示栏内容
 	Label* noticeL;
-	string blank = " ";
 	const char* nc = ((String*)ngContent->objectForKey(name))->getCString();
+	string blank = " ";
+	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
 	const char* upgradeLand;
+	int price;
 
-	if (gLand == level1_land_GID)
+	if (gLand == empty_land_GID)
 	{
 		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand1"))->getCString();
+
+		for (auto l : lands)
+		{
+			if (l->getTileAt(nowLand))
+			{
+				price = l->getProperty("level1BuildCost").asInt();
+			}
+		}
+	}
+	else if (gLand == level1_land_GID)
+	{
+		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand2"))->getCString();
+
+		for (auto l : lands)
+		{
+			if (l->getTileAt(nowLand))
+			{
+				price = l->getProperty("level2BuildCost").asInt();
+			}
+		}
 	}
 	else if (gLand == level2_land_GID)
 	{
-		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand2"))->getCString();
+		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand3"))->getCString();
+
+		for (auto l : lands)
+		{
+			if (l->getTileAt(nowLand))
+			{
+				price = l->getProperty("level3BuildCost").asInt();
+			}
+		}
 	}
 	else if (gLand == level3_land_GID)
 	{
-
+		// 土地已为最高级，无需弹出对话框
 	}
 
 	const char* payToUpgrade = ((String*)ngContent->objectForKey("payToUpgrade"))->getCString();
-	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
-	string s = nc + blank + comma + upgradeLand + "\n" + payToUpgrade;
+	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+
+	string s = nc + blank + comma + upgradeLand + "\n" +
+		payToUpgrade + blank + to_string(price) + yuan;
 	noticeL = Label::createWithSystemFont(s, "arial", 30);
 
 	menuBoard->addChild(noticeL);
@@ -619,20 +649,45 @@ void NewGameScene::myMenuYes()
 	{
 		if (n == nowPlayerNumber)
 		{
-			if (gLand == level1_land_GID)
-			{
-				//land->setTileGID(level2_land_GID, nowLand);
-			}
-			else if (gLand == level2_land_GID)
-			{
-				//land->setTileGID(level3_land_GID, nowLand);
-			}
-			else if (gLand == level3_land_GID)
-			{
+			int buildCost;
 
+			for (auto l : lands)
+			{
+				if (l->getTileAt(nowLand))
+				{
+					if (gLand == empty_land_GID)
+					{
+						buildCost = l->getProperty("level1BuildCost").asInt();
+						l->setTileGID(level1_land_GID, nowLand);
+					}
+					else if (gLand == level1_land_GID)
+					{
+						buildCost = l->getProperty("level2BuildCost").asInt();
+						l->setTileGID(level2_land_GID, nowLand);
+					}
+					else if (gLand == level2_land_GID)
+					{
+						buildCost = l->getProperty("level3BuildCost").asInt();
+						l->setTileGID(level3_land_GID, nowLand);
+					}
+					else if (gLand == level3_land_GID)
+					{
+
+					}
+
+					l->getTileAt(nowLand)->setColor(p.color);
+					p.money -= buildCost;
+
+					break;
+				}
 			}
 
-			//land->getTileAt(nowLand)->setColor(p.color);
+			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+			const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+			string blank = " ";
+			string s = rmb + blank + to_string(p.money);
+
+			((Label*)this->getChildByName(p.name + blank + "money"))->setString(s);
 
 			// 设置角色可以移动
 			p.isGoing = false;
@@ -710,7 +765,7 @@ void NewGameScene::otherLand()
 
 	// 菜单：确定
 	MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-		"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::otherMenuClose, this));
+		"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::otherMenuClose, this, payName, earnName));
 	okM->setPosition(0, -visibleSize.height / 5);
 
 	const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -719,14 +774,43 @@ void NewGameScene::otherLand()
 	okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 	okL->setTextColor(Color4B::BLACK);
 
+	// 提示框内容
 	Label* noticeL;
-	string blank = " ";
-	const char* payC = ((String*)ngContent->objectForKey(payName))->getCString();
-	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
 	const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
+	string blank = " ";
 	const char* earnC = ((String*)ngContent->objectForKey(earnName))->getCString();
+	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+	const char* payC = ((String*)ngContent->objectForKey(payName))->getCString();
 	const char* payLand = ((String*)ngContent->objectForKey("payLand"))->getCString();
-	string s = belongLand + blank + earnC + comma + payC + "\n" + payLand;
+
+	int price;
+
+	for (auto l : lands)
+	{
+		if (l->getTileAt(nowLand))
+		{
+			if (gLand == empty_land_GID)
+			{
+				price = l->getProperty("emptyValue").asInt();
+			}
+			else if (gLand == level1_land_GID)
+			{
+				price = l->getProperty("level1Value").asInt();
+			}
+			else if (gLand == level2_land_GID)
+			{
+				price = l->getProperty("level2Value").asInt();
+			}
+			else if (gLand == level3_land_GID)
+			{
+				price = l->getProperty("level3Value").asInt();
+			}
+		}
+	}
+
+	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+	string s = belongLand + blank + earnC + comma + payC + "\n" +
+		payLand + blank + to_string(price) + yuan;
 	noticeL = Label::createWithSystemFont(s, "arial", 30);
 
 	menuBoard->addChild(noticeL);
@@ -737,23 +821,62 @@ void NewGameScene::otherLand()
 	this->addChild(noticeMenu);
 }
 
-void NewGameScene::otherMenuClose()
+void NewGameScene::otherMenuClose(string payName, string earnName)
 {
 	noticeMenu->removeFromParentAndCleanup(true);
 	menuBoard->removeFromParentAndCleanup(true);
-
-	int n = 1;
-
+	
+	// 找出对应的两个玩家，进行金（P）钱（Y）交易
 	for (auto& p : players)
 	{
-		if (n == nowPlayerNumber)
+		for (auto& e : players)
 		{
-			// 设置角色可以移动
-			p.isGoing = false;
-			break;
-		}
+			if (p.name == payName && e.name == earnName)
+			{
+				int price;
 
-		n++;
+				for (auto l : lands)
+				{
+					if (l->getTileAt(nowLand))
+					{
+						if (gLand == empty_land_GID)
+						{
+							price = l->getProperty("emptyValue").asInt();
+						}
+						else if (gLand == level1_land_GID)
+						{
+							price = l->getProperty("level1Value").asInt();
+						}
+						else if (gLand == level2_land_GID)
+						{
+							price = l->getProperty("level2Value").asInt();
+						}
+						else if (gLand == level3_land_GID)
+						{
+							price = l->getProperty("level3Value").asInt();
+						}
+
+						break;
+					}
+				}
+
+				p.money -= price;
+				e.money += price;
+
+				auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+				const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+				string blank = " ";
+				string sp = rmb + blank + to_string(p.money);
+				string se = rmb + blank + to_string(e.money);
+
+				((Label*)this->getChildByName(payName + blank + "money"))->setString(sp);
+				((Label*)this->getChildByName(earnName + blank + "money"))->setString(se);
+
+				// 设置角色可以移动
+				p.isGoing = false;
+				break;
+			}
+		}
 	}
 
 	// 切换操作玩家

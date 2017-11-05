@@ -11,6 +11,8 @@
   <string>是否要升级此土地？</string>
   <key>upgradeLand2</key>
   <string>是否要升级此房屋？</string>
+  <key>upgradeLand3</key>
+  <string>是否要豪华装修此房屋？</string>
   <key>payToUpgrade</key>
   <string>需要花费：</string>
 

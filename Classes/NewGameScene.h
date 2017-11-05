@@ -122,7 +122,7 @@ public:
 	void myMenuNo();
 	// 别人的土地
 	void otherLand();
-	void otherMenuClose();
+	void otherMenuClose(string payName, string earnName);
 
 	CREATE_FUNC(NewGameScene);
 };
