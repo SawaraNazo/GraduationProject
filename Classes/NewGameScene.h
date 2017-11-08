@@ -16,36 +16,63 @@ typedef enum _faceForward
 	down,
 	left,
 	up
-}faceForward;
+} faceForward;
 
-// 玩家：名称、图片、图片位置、角色位置、土地位置、朝向、是否在移动、代表颜色
+// 玩家状态正常、停车（2）、监狱（3）
+typedef enum _stateType
+{
+	normal,
+	parking,
+	prison
+} stateType;
+
+// 玩家：名称、图片、图片位置、角色位置、土地位置、朝向、是否在移动、代表颜色、玩家状态
 struct Player
 {
 	string name;
 	Sprite* roleSprite;
 	Vec2 spritePosition;
 	Vec2 rolePosition;
-	Vec2 landPosition;
 	faceForward faceTo;
 	bool isGoing;
 	Color3B color;
 	int money;
+	stateType state;
 };
 
 class NewGameScene : public Scene
 {
 private:
 	// 不同等级地块对应GID
+
+	// 空地
 	const unsigned int empty_land_GID = 110;
+	// 一级建筑
 	const unsigned int level1_land_GID = 454;
+	// 二级建筑
 	const unsigned int level2_land_GID = 451;
+	// 三级建筑
 	const unsigned int level3_land_GID = 466;
-
-	// 不同等级升级花费
 	
-	// 不同等级过路花费
 
+	// 不同道路对应的GID
 
+	// 起始点
+	const unsigned int enterance_road_GID = 390;
+	// 普通道路
+	const unsigned int normal_road_GID = 568;
+	// 监狱入口
+	const unsigned int prisonEnterance_road_GID = 398;
+	// 监狱
+	const unsigned int prison_road_GID = 536;
+	// 停车场
+	const unsigned int parkinglot_road_GID = 1046;
+	// 突发事件
+	const unsigned int emergency_road_GID = 1038;
+	// 交税
+	const unsigned int tax_road_GID = 1459;
+
+	
 	// 初始新游戏，条件选择
 
 	// 游戏玩家数量
@@ -63,7 +90,6 @@ private:
 	// TMX 地图
 	TMXTiledMap* tileMap;
 
-	TMXLayer* background;
 	TMXLayer* road;
 	int landLevelNumber;
 	vector<TMXLayer*> lands;
@@ -91,6 +117,9 @@ private:
 	Menu* noticeMenu;
 	Sprite* menuBoard;
 
+	// 回合数
+	int rounds;
+
 
 public:
 	NewGameScene();
@@ -110,6 +139,8 @@ public:
 
 	void playerGo(float dt);
 
+	// 检查道路
+	void checkRoad(float dt);
 	// 检查土地归属
 	void checkLand(float dt);
 	// 空地
@@ -123,6 +154,8 @@ public:
 	// 别人的土地
 	void otherLand();
 	void otherMenuClose(string payName, string earnName);
+	// 轮换下一位玩家
+	void changePlayer();
 
 	CREATE_FUNC(NewGameScene);
 };

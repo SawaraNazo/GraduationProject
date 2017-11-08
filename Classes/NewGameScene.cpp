@@ -30,11 +30,13 @@ bool NewGameScene::init()
 	// 预设置玩家数量
 	playersNumber = 2;
 
+	// 回合数
+	rounds = 1;
+
 	this->createMap();
 	this->createPlayer();
 	this->createPlayerPro();
-
-
+	
 	return true;
 }
 
@@ -44,7 +46,6 @@ void NewGameScene::createMap()
 
 	this->addChild(tileMap);
 
-	background = tileMap->getLayer("Background");
 	road = tileMap->getLayer("Road");
 	
 	for (int i = 1; i <= landLevelNumber; i++)
@@ -53,6 +54,17 @@ void NewGameScene::createMap()
 		TMXLayer* tl = tileMap->getLayer(s);
 		lands.push_back(tl);
 	}
+
+	// 总回合数
+	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	const char* roundsC = ((String*)ngContent->objectForKey("rounds"))->getCString();
+	Label* roundsL1 = Label::createWithSystemFont(roundsC, "arial", 24);
+	roundsL1->setPosition(visibleSize.width * 3 / 8, visibleSize.height - roundsL1->getContentSize().height);
+	this->addChild(roundsL1,10);
+	
+	Label* roundsL2 = Label::createWithSystemFont(to_string(rounds), "arial", 18);
+	roundsL2->setPosition(visibleSize.width * 3 / 8, roundsL1->getPosition().y - roundsL2->getContentSize().height);
+	this->addChild(roundsL2, 10, "roundsL");;
 }
 
 void NewGameScene::createPlayer()
@@ -71,6 +83,7 @@ void NewGameScene::createPlayer()
 		p.rolePosition = Vec2(4, 4);
 		p.roleSprite = Sprite::create("image/" + p.name + ".png");
 		p.money = startMoney;
+		p.state = stateType::normal;
 		p.spritePosition = Vec2(px + i * 3, py);
 		p.roleSprite->setPosition(p.spritePosition);
 
@@ -124,6 +137,7 @@ void NewGameScene::createPlayerPro()
 		times++;
 	}
 
+	// 骰子按钮
 	Button* diceButton = Button::create("image/diceButtonNormal.png", "image/diceButtonPressed.png");
 	diceButton->setPosition(Vec2(visibleSize.width - diceButton->getContentSize().width / 2,
 		diceButton->getContentSize().height / 2));
@@ -297,11 +311,51 @@ void NewGameScene::playerGo(float dt)
 	}
 }
 
-void NewGameScene::checkLand(float dt)
+void NewGameScene::checkRoad(float dt)
 {
 	// 移除骰子图片
 	this->removeChildByName("dicePoint");
 
+	int n = 1;
+
+	for (auto& p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			if (road->getTileGIDAt(p.rolePosition) == normal_road_GID)
+			{
+
+			}
+			else if (road->getTileGIDAt(p.rolePosition) == prisonEnterance_road_GID)
+			{
+
+			}
+			else if (road->getTileGIDAt(p.rolePosition) == prison_road_GID)
+			{
+
+			}
+			else if (road->getTileGIDAt(p.rolePosition) == parkinglot_road_GID)
+			{
+
+			}
+			else if (road->getTileGIDAt(p.rolePosition) == emergency_road_GID)
+			{
+
+			}
+			else if (road->getTileGIDAt(p.rolePosition) == tax_road_GID)
+			{
+
+			}
+
+			break;
+		}
+
+		n++;
+	}
+}
+
+void NewGameScene::checkLand(float dt)
+{
 	int n = 1;
 
 	for (auto& p : players)
@@ -363,6 +417,9 @@ void NewGameScene::checkLand(float dt)
 				if (nowPlayerNumber > players.size())
 				{
 					nowPlayerNumber = 1;
+
+					rounds++;
+					((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
 				}
 			}
 
@@ -496,12 +553,7 @@ void NewGameScene::emptyMenuYes()
 	noticeMenu->removeFromParentAndCleanup(true);
 	menuBoard->removeFromParentAndCleanup(true);
 
-	// 切换操作玩家
-	nowPlayerNumber++;
-	if (nowPlayerNumber > players.size())
-	{
-		nowPlayerNumber = 1;
-	}
+	this->changePlayer();
 }
 
 void NewGameScene::emptyMenuNo()
@@ -523,12 +575,7 @@ void NewGameScene::emptyMenuNo()
 		n++;
 	}
 
-	// 切换操作玩家
-	nowPlayerNumber++;
-	if (nowPlayerNumber > players.size())
-	{
-		nowPlayerNumber = 1;
-	}
+	this->changePlayer();
 }
 
 void NewGameScene::myLand()
@@ -701,12 +748,7 @@ void NewGameScene::myMenuYes()
 	noticeMenu->removeFromParentAndCleanup(true);
 	menuBoard->removeFromParentAndCleanup(true);
 
-	// 切换操作玩家
-	nowPlayerNumber++;
-	if (nowPlayerNumber > players.size())
-	{
-		nowPlayerNumber = 1;
-	}
+	this->changePlayer();
 }
 
 void NewGameScene::myMenuNo()
@@ -728,12 +770,7 @@ void NewGameScene::myMenuNo()
 		n++;
 	}
 
-	// 切换操作玩家
-	nowPlayerNumber++;
-	if (nowPlayerNumber > players.size())
-	{
-		nowPlayerNumber = 1;
-	}
+	this->changePlayer();
 }
 
 void NewGameScene::otherLand()
@@ -879,10 +916,18 @@ void NewGameScene::otherMenuClose(string payName, string earnName)
 		}
 	}
 
-	// 切换操作玩家
+	this->changePlayer();
+}
+
+void NewGameScene::changePlayer()
+{
 	nowPlayerNumber++;
 	if (nowPlayerNumber > players.size())
 	{
 		nowPlayerNumber = 1;
+
+		// 切换回合数
+		rounds++;
+		((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
 	}
 }
