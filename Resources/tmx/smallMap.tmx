@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="25" height="22" tilewidth="32" tileheight="32" nextobjectid="3">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="25" height="22" tilewidth="32" tileheight="32" nextobjectid="6">
  <tileset firstgid="1" name="ProjectUtumno_supplemental" tilewidth="32" tileheight="32" tilecount="3072" columns="64">
   <image source="ProjectUtumno_supplemental.png" width="2048" height="1536"/>
  </tileset>
@@ -82,7 +82,7 @@
 </data>
  </layer>
  <objectgroup name="Object">
-  <object id="1" name="player" x="136.078" y="132.607" width="2.72166" height="3.66351" rotation="-0.573389"/>
+  <object id="1" name="player" x="136.078" y="132.607" width="2.72166" height="3.66351"/>
  </objectgroup>
  <group name="Land">
   <layer name="Land1" width="25" height="22">

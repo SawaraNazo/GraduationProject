@@ -36,14 +36,32 @@
   <string>确定</string>
 
   <key>rounds</key>
-  <string>回合数</string>
+  <string>回合</string>
 
-  <key>prisonEnterance</key>
-  <string>很抱歉，鉴于你的某些非法行为，将被关入监狱3个回合</string>
-  <key>parkingLot</key>
+  <key>prisonEnterance1</key>
+  <string>很抱歉，鉴于你的某些非法行为，</string>
+  <key>prisonEnterance2</key>
+  <string>将被关入监狱3个回合</string>
+  <key>parkinglot</key>
   <string>无意来到了停车场，将在这里休息2个回合</string>
-  <key>tax</key>
-  <string>由于前不久的偷税漏税行为被举报，/n 你需要补交所得税700元</string>
+  <key>tax1</key>
+  <string>由于前不久的偷税漏税行为被举报,</string>
+  <key>tax2</key>
+  <string>你需要补交所得税700元</string>
+  
+  <key>roundsToStayInParkinglot1</key>
+  <string>还需要继续在停车场和看车大爷谈笑风生，</string>
+  <key>roundsToStayInParkinglot2</key>
+  <string>剩余回合数：</string>
+  <key>roundsToStayInPrison1</key>
+  <string>还需要继续在监狱里被优雅的狱友传授</string>
+  <key>roundsToStayInPrison2</key>
+  <string>一点人生的经验，剩余回合数：</string>
+
+  <key>outOfParkinglot</key>
+  <string>恭喜你，可以驶离停车场了！</string>
+  <key>outOfPrison</key>
+  <string>恭喜你，出狱了！</string>
 
   <key>emergencyEvent1</key>
   <string>在路上散步时，一个不小心，被路过的扒手摸走了100元</string>

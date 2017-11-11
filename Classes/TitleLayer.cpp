@@ -82,7 +82,7 @@ void TitleLayer::newGameCallback(Ref* pSender)
 {
 	SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
 	NewGameScene* ngs = NewGameScene::create();
-	Director::getInstance()->replaceScene(ngs);
+	Director::getInstance()->pushScene(ngs);
 }
 
 void TitleLayer::loadGameCallback(Ref* pSender)

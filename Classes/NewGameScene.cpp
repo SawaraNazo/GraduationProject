@@ -164,36 +164,43 @@ void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
 			{
 				if (p.isGoing == false)
 				{
-					int i = random(1, 6);
-
-					switch (i)
+					if (this->checkState())
 					{
-					case 1:
-						dicePointS = Sprite::create("image/point1.png");
-						break;
-					case 2:
-						dicePointS = Sprite::create("image/point2.png");
-						break;
-					case 3:
-						dicePointS = Sprite::create("image/point3.png");
-						break;
-					case 4:
-						dicePointS = Sprite::create("image/point4.png");
-						break;
-					case 5:
-						dicePointS = Sprite::create("image/point5.png");
-						break;
-					case 6:
-						dicePointS = Sprite::create("image/point6.png");
-						break;
+						int i = random(1, 6);
+
+						switch (i)
+						{
+						case 1:
+							dicePointS = Sprite::create("image/point1.png");
+							break;
+						case 2:
+							dicePointS = Sprite::create("image/point2.png");
+							break;
+						case 3:
+							dicePointS = Sprite::create("image/point3.png");
+							break;
+						case 4:
+							dicePointS = Sprite::create("image/point4.png");
+							break;
+						case 5:
+							dicePointS = Sprite::create("image/point5.png");
+							break;
+						case 6:
+							dicePointS = Sprite::create("image/point6.png");
+							break;
+						}
+						dicePointS->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+						this->addChild(dicePointS, 5, "dicePoint");
+
+						p.isGoing = true;
+
+						this->schedule(schedule_selector(NewGameScene::playerGo), 0.5, i - 1, 0);
+						this->scheduleOnce(schedule_selector(NewGameScene::checkRoad), i*0.5);
 					}
-					dicePointS->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-					this->addChild(dicePointS, 5, "dicePoint");
-
-					p.isGoing = true;
-
-					this->schedule(schedule_selector(NewGameScene::playerGo), 0.5, i - 1, 0);
-					this->scheduleOnce(schedule_selector(NewGameScene::checkLand), i*0.5);
+					else
+					{
+						// (☆-ｖ-)
+					}
 				}
 
 				break;
@@ -311,11 +318,183 @@ void NewGameScene::playerGo(float dt)
 	}
 }
 
+bool NewGameScene::checkState()
+{
+	// 字儿们
+	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+
+	int n = 1;
+
+	for (auto& p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			if (p.state == stateType::normal)
+			{
+				// 正常行走
+				return true;
+			}
+			else if (p.state == stateType::parking && p.stayRound > 0)
+			{
+				// 继续待在停车场
+
+				p.stayRound--;
+
+				// 菜单面板图片
+				menuBoard = Sprite::create("image/Popup.png");
+				menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+				this->addChild(menuBoard);
+				
+				// 菜单：确定
+				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+					"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::cleanAndChange, this));
+				okM->setPosition(0, -visibleSize.height / 5);
+
+				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				okM->addChild(okL);
+				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+				okL->setTextColor(Color4B::BLACK);
+
+				// 菜单主要内容
+				const char* roundsToStayInParkinglot1 = ((String*)ngContent->objectForKey("roundsToStayInParkinglot1"))->getCString();
+				const char* roundsToStayInParkinglot2 = ((String*)ngContent->objectForKey("roundsToStayInParkinglot2"))->getCString();
+				string blank = " ";
+				string s = roundsToStayInParkinglot1 + blank + "\n" + roundsToStayInParkinglot2 + to_string(p.stayRound);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+				
+				menuBoard->addChild(noticeL);
+				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+				noticeL->setTextColor(Color4B::BLACK);
+				noticeL->setMaxLineWidth(520);
+
+				noticeMenu = Menu::create(okM, NULL);
+				this->addChild(noticeMenu);
+				
+				return false;
+			}
+			else if (p.state == stateType::prison && p.stayRound > 0)
+			{
+				// 继续待在监狱
+				
+				p.stayRound--;
+				
+				// 菜单面板图片
+				menuBoard = Sprite::create("image/Popup.png");
+				menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+				this->addChild(menuBoard);
+
+				// 菜单：确定
+				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+					"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::cleanAndChange, this));
+				okM->setPosition(0, -visibleSize.height / 5);
+
+				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				okM->addChild(okL);
+				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+				okL->setTextColor(Color4B::BLACK);
+
+				// 菜单主要内容
+				const char* roundsToStayInPrison1 = ((String*)ngContent->objectForKey("roundsToStayInPrison1"))->getCString();
+				const char* roundsToStayInPrison2 = ((String*)ngContent->objectForKey("roundsToStayInPrison2"))->getCString();
+				string blank = " ";
+				string s = roundsToStayInPrison1 + blank + "\n" + roundsToStayInPrison2 + to_string(p.stayRound);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+				menuBoard->addChild(noticeL);
+				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+				noticeL->setTextColor(Color4B::BLACK);
+				noticeL->setMaxLineWidth(520);
+
+				noticeMenu = Menu::create(okM, NULL);
+				this->addChild(noticeMenu);
+
+				return false;
+			}
+			else if (p.state == stateType::parking && p.stayRound == 0)
+			{
+				// 停车场时间到，出发
+
+				p.state = stateType::normal;
+
+				// 菜单面板图片
+				menuBoard = Sprite::create("image/Popup.png");
+				menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+				this->addChild(menuBoard);
+
+				// 菜单：确定
+				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+					"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::cleanMenu, this));
+				okM->setPosition(0, -visibleSize.height / 5);
+
+				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				okM->addChild(okL);
+				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+				okL->setTextColor(Color4B::BLACK);
+
+				// 菜单主要内容
+				const char* outOfParkinglot = ((String*)ngContent->objectForKey("outOfParkinglot"))->getCString();
+				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "arial", 30);
+
+				menuBoard->addChild(noticeL);
+				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+				noticeL->setTextColor(Color4B::BLACK);
+
+				noticeMenu = Menu::create(okM, NULL);
+				this->addChild(noticeMenu);
+
+				return true;
+			}
+			else if (p.state == stateType::prison && p.stayRound == 0)
+			{
+				// 囹圄时间到，出狱
+
+				p.state = stateType::normal;
+
+				// 菜单面板图片
+				menuBoard = Sprite::create("image/Popup.png");
+				menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+				this->addChild(menuBoard);
+
+				// 菜单：确定
+				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+					"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::cleanMenu, this));
+				okM->setPosition(0, -visibleSize.height / 5);
+
+				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				okM->addChild(okL);
+				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+				okL->setTextColor(Color4B::BLACK);
+
+				// 菜单主要内容
+				const char* outOfPrison = ((String*)ngContent->objectForKey("outOfPrison"))->getCString();
+				Label* noticeL = Label::createWithSystemFont(outOfPrison, "arial", 30);
+
+				menuBoard->addChild(noticeL);
+				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+				noticeL->setTextColor(Color4B::BLACK);
+
+				noticeMenu = Menu::create(okM, NULL);
+				this->addChild(noticeMenu);
+
+				return true;
+			}			
+		}
+
+		n++;
+	}
+}
+
 void NewGameScene::checkRoad(float dt)
 {
-	// 移除骰子图片
+	// 清除骰子图片
 	this->removeChildByName("dicePoint");
 
+	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	
 	int n = 1;
 
 	for (auto& p : players)
@@ -324,29 +503,133 @@ void NewGameScene::checkRoad(float dt)
 		{
 			if (road->getTileGIDAt(p.rolePosition) == normal_road_GID)
 			{
-
+				// 正常通过
+				this->scheduleOnce(schedule_selector(NewGameScene::checkLand), 0.2);
 			}
 			else if (road->getTileGIDAt(p.rolePosition) == prisonEnterance_road_GID)
 			{
+				// 蹲监狱
 
+				// 修改当前玩家的状态、位置和图片位置
+				p.state = stateType::prison;
+				p.rolePosition = Vec2(4, 17);
+				p.spritePosition.x -= 17 * 30;
+				p.spritePosition.y -= 14 * 30;
+				p.roleSprite->setPosition(p.spritePosition);
+				p.faceTo = faceForward::up;
+				p.stayRound = 3;
+
+				// 菜单面板图片
+				menuBoard = Sprite::create("image/Popup.png");
+				menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+				this->addChild(menuBoard);
+
+				// 菜单：确定
+				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+					"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::cleanAndChange, this));
+				okM->setPosition(0, -visibleSize.height / 5);
+
+				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				okM->addChild(okL);
+				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+				okL->setTextColor(Color4B::BLACK);
+
+				// 菜单主要内容
+				const char* prisonEnterance1 = ((String*)ngContent->objectForKey("prisonEnterance1"))->getCString();
+				const char* prisonEnterance2 = ((String*)ngContent->objectForKey("prisonEnterance2"))->getCString();
+				string blank = " ";
+				string s = prisonEnterance1 + blank + "\n" + prisonEnterance2;
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+				menuBoard->addChild(noticeL);
+				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+				noticeL->setTextColor(Color4B::BLACK);
+				noticeL->setMaxLineWidth(520);
+
+				noticeMenu = Menu::create(okM, NULL);
+				this->addChild(noticeMenu);
 			}
 			else if (road->getTileGIDAt(p.rolePosition) == prison_road_GID)
 			{
-
+				// 一般通过监狱
+				this->scheduleOnce(schedule_selector(NewGameScene::checkLand), 0.2);
 			}
 			else if (road->getTileGIDAt(p.rolePosition) == parkinglot_road_GID)
 			{
+				// 困在停车场
+				p.state = stateType::parking;
+				p.stayRound = 2;
 
+				// 菜单面板图片
+				menuBoard = Sprite::create("image/Popup.png");
+				menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+				this->addChild(menuBoard);
+
+				// 菜单：确定
+				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+					"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::cleanAndChange, this));
+				okM->setPosition(0, -visibleSize.height / 5);
+
+				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				okM->addChild(okL);
+				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+				okL->setTextColor(Color4B::BLACK);
+
+				// 菜单主要内容
+				const char* parkinglot = ((String*)ngContent->objectForKey("parkinglot"))->getCString();
+				Label* noticeL = Label::createWithSystemFont(parkinglot, "arial", 30);
+
+				menuBoard->addChild(noticeL);
+				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+				noticeL->setTextColor(Color4B::BLACK);
+				noticeL->setMaxLineWidth(520);
+
+				noticeMenu = Menu::create(okM, NULL);
+				this->addChild(noticeMenu);
 			}
 			else if (road->getTileGIDAt(p.rolePosition) == emergency_road_GID)
 			{
-
+				// 突发事件
+				this->changePlayer();
 			}
 			else if (road->getTileGIDAt(p.rolePosition) == tax_road_GID)
 			{
+				// 交小费
 
+				// 菜单面板图片
+				menuBoard = Sprite::create("image/Popup.png");
+				menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+				this->addChild(menuBoard);
+
+				// 菜单：确定
+				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+					"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::payTax, this, p.name));
+				okM->setPosition(0, -visibleSize.height / 5);
+
+				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				okM->addChild(okL);
+				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+				okL->setTextColor(Color4B::BLACK);
+
+				// 菜单主要内容
+				const char* tax1 = ((String*)ngContent->objectForKey("tax1"))->getCString();
+				const char* tax2 = ((String*)ngContent->objectForKey("tax2"))->getCString();
+				string blank = " ";
+				string s = tax1 + blank + "\n" + tax2;
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+
+				menuBoard->addChild(noticeL);
+				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+				noticeL->setTextColor(Color4B::BLACK);
+
+				noticeMenu = Menu::create(okM, NULL);
+				this->addChild(noticeMenu);
 			}
-
+			
 			break;
 		}
 
@@ -409,18 +692,7 @@ void NewGameScene::checkLand(float dt)
 			}
 			else
 			{
-				// 设置角色可以移动
-				p.isGoing = false;
-
-				// 切换操作玩家
-				nowPlayerNumber++;
-				if (nowPlayerNumber > players.size())
-				{
-					nowPlayerNumber = 1;
-
-					rounds++;
-					((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
-				}
+				this->changePlayer();
 			}
 
 			break;
@@ -445,7 +717,6 @@ void NewGameScene::emptyLand()
 
 		n++;
 	}
-
 
 	// 菜单面板图片
 	menuBoard = Sprite::create("image/Popup.png");
@@ -541,41 +812,18 @@ void NewGameScene::emptyMenuYes()
 
 			((Label*)this->getChildByName(p.name + blank + "money"))->setString(s);
 
-			// 设置角色可以移动
-			p.isGoing = false;
-
 			break;
 		}
 
 		n++;
 	}
 
-	noticeMenu->removeFromParentAndCleanup(true);
-	menuBoard->removeFromParentAndCleanup(true);
-
-	this->changePlayer();
+	this->cleanAndChange();
 }
 
 void NewGameScene::emptyMenuNo()
 {
-	noticeMenu->removeFromParentAndCleanup(true);
-	menuBoard->removeFromParentAndCleanup(true);
-
-	int n = 1;
-
-	for (auto& p : players)
-	{
-		if (n == nowPlayerNumber)
-		{
-			// 设置角色可以移动
-			p.isGoing = false;
-			break;
-		}
-
-		n++;
-	}
-
-	this->changePlayer();
+	this->cleanAndChange();
 }
 
 void NewGameScene::myLand()
@@ -735,42 +983,19 @@ void NewGameScene::myMenuYes()
 			string s = rmb + blank + to_string(p.money);
 
 			((Label*)this->getChildByName(p.name + blank + "money"))->setString(s);
-
-			// 设置角色可以移动
-			p.isGoing = false;
-
+			
 			break;
 		}
 
 		n++;
 	}
 
-	noticeMenu->removeFromParentAndCleanup(true);
-	menuBoard->removeFromParentAndCleanup(true);
-
-	this->changePlayer();
+	this->cleanAndChange();
 }
 
 void NewGameScene::myMenuNo()
 {
-	noticeMenu->removeFromParentAndCleanup(true);
-	menuBoard->removeFromParentAndCleanup(true);
-
-	int n = 1;
-
-	for (auto& p : players)
-	{
-		if (n == nowPlayerNumber)
-		{
-			// 设置角色可以移动
-			p.isGoing = false;
-			break;
-		}
-
-		n++;
-	}
-
-	this->changePlayer();
+	this->cleanAndChange();
 }
 
 void NewGameScene::otherLand()
@@ -859,11 +1084,8 @@ void NewGameScene::otherLand()
 }
 
 void NewGameScene::otherMenuClose(string payName, string earnName)
-{
-	noticeMenu->removeFromParentAndCleanup(true);
-	menuBoard->removeFromParentAndCleanup(true);
-	
-	// 找出对应的两个玩家，进行金（P）钱（Y）交易
+{	
+	// 找出对应的两个玩家，进行金钱交易
 	for (auto& p : players)
 	{
 		for (auto& e : players)
@@ -909,18 +1131,58 @@ void NewGameScene::otherMenuClose(string payName, string earnName)
 				((Label*)this->getChildByName(payName + blank + "money"))->setString(sp);
 				((Label*)this->getChildByName(earnName + blank + "money"))->setString(se);
 
-				// 设置角色可以移动
-				p.isGoing = false;
 				break;
 			}
 		}
 	}
 
-	this->changePlayer();
+	this->cleanAndChange();
+}
+
+void NewGameScene::payTax(string payName)
+{
+	for (auto& p : players)
+	{
+		if (p.name == payName)
+		{
+			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+			const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+			string blank = " ";
+			p.money -= 700;
+
+			string sp = rmb + blank + to_string(p.money);
+
+			((Label*)this->getChildByName(payName + blank + "money"))->setString(sp);
+
+			break;
+		}
+	}
+
+	this->cleanAndChange();
+}
+
+void NewGameScene::cleanMenu()
+{
+	noticeMenu->removeFromParentAndCleanup(true);
+	menuBoard->removeFromParentAndCleanup(true);
 }
 
 void NewGameScene::changePlayer()
 {
+	int n = 1;
+
+	for (auto& p : players)
+	{
+		if (n == nowPlayerNumber)
+		{
+			p.isGoing = false;
+
+			break;
+		}
+
+		n++;
+	}
+
 	nowPlayerNumber++;
 	if (nowPlayerNumber > players.size())
 	{
@@ -930,4 +1192,10 @@ void NewGameScene::changePlayer()
 		rounds++;
 		((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
 	}
+}
+
+void NewGameScene::cleanAndChange()
+{
+	this->cleanMenu();
+	this->changePlayer();
 }

@@ -38,6 +38,7 @@ struct Player
 	Color3B color;
 	int money;
 	stateType state;
+	int stayRound;
 };
 
 class NewGameScene : public Scene
@@ -65,12 +66,12 @@ private:
 	const unsigned int prisonEnterance_road_GID = 398;
 	// 监狱
 	const unsigned int prison_road_GID = 536;
-	// 停车场
-	const unsigned int parkinglot_road_GID = 1046;
 	// 突发事件
 	const unsigned int emergency_road_GID = 1038;
+	// 停车场
+	const unsigned int parkinglot_road_GID = 1046;
 	// 交税
-	const unsigned int tax_road_GID = 1459;
+	const unsigned int tax_road_GID = 1460;
 
 	
 	// 初始新游戏，条件选择
@@ -134,11 +135,13 @@ public:
 	void createPlayer();
 	// 创建游戏面板
 	void createPlayerPro();
-
+	// 掷骰子
 	void diceEvent(Ref* pSender, Widget::TouchEventType type);
-
+	// 走两步
 	void playerGo(float dt);
 
+	// 检查玩家状态
+	bool checkState();
 	// 检查道路
 	void checkRoad(float dt);
 	// 检查土地归属
@@ -154,8 +157,14 @@ public:
 	// 别人的土地
 	void otherLand();
 	void otherMenuClose(string payName, string earnName);
+	// 交税
+	void payTax(string payName);
+	// 清除面板
+	void cleanMenu();
 	// 轮换下一位玩家
 	void changePlayer();
+	// 清楚面板并走
+	void cleanAndChange();
 
 	CREATE_FUNC(NewGameScene);
 };
