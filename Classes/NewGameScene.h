@@ -82,6 +82,8 @@ private:
 	int startMoney;
 	// 胜利条件
 
+	// 突发事件数量
+	int emEventNumber;
 
 	// 显示尺寸
 	Size visibleSize;
@@ -158,7 +160,7 @@ public:
 	void otherLand();
 	void otherMenuClose(string payName, string earnName);
 	// 交税
-	void payTax(string payName);
+	void payLoss(string payName, int loss);
 	// 清除面板
 	void cleanMenu();
 	// 轮换下一位玩家
