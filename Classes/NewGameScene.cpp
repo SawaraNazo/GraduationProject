@@ -86,7 +86,7 @@ void NewGameScene::createPlayer()
 		p.isGoing = false;
 		p.faceTo = faceForward::right;
 		p.rolePosition = Vec2(4, 4);
-		p.roleSprite = Sprite::create("image/" + p.name + ".png");
+		p.roleSprite = Sprite::create("image/" + p.name + "_right.png");
 		p.money = startMoney;
 		p.state = stateType::normal;
 		p.spritePosition = Vec2(px + i * 3, py);
@@ -247,12 +247,14 @@ void NewGameScene::playerGo(float dt)
 						nowPlayer.rolePosition.y--;
 						nowPlayer.spritePosition.y += 30;
 						nowPlayer.faceTo = faceForward::up;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_up.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y + 1)))
 					{
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_down.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::down)
@@ -267,12 +269,14 @@ void NewGameScene::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_left.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::left)
@@ -287,12 +291,14 @@ void NewGameScene::playerGo(float dt)
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_down.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
 					{
 						nowPlayer.rolePosition.y--;
 						nowPlayer.spritePosition.y += 30;
 						nowPlayer.faceTo = faceForward::up;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_up.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::up)
@@ -307,12 +313,14 @@ void NewGameScene::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
+						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_left.png");
 					}
 				}
 			}
@@ -523,6 +531,7 @@ void NewGameScene::checkRoad(float dt)
 				p.spritePosition.x -= 17 * 30;
 				p.spritePosition.y -= 14 * 30;
 				p.roleSprite->setPosition(p.spritePosition);
+				p.roleSprite->setTexture("image/" + p.name + "_up.png");
 				p.faceTo = faceForward::up;
 				p.stayRound = 3;
 
@@ -1134,6 +1143,7 @@ void NewGameScene::myMenuNo()
 void NewGameScene::otherLand()
 {
 	string payName, earnName;
+	faceForward nowF;
 	int n = 1;
 
 	for (auto p : players)
@@ -1141,6 +1151,7 @@ void NewGameScene::otherLand()
 		if (n == nowPlayerNumber)
 		{
 			payName = p.name;
+			nowF = p.faceTo;
 		}
 		if (p.color == sLand->getColor())
 		{
@@ -1157,18 +1168,7 @@ void NewGameScene::otherLand()
 
 	// 字儿们
 	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-
-	// 菜单：确定
-	MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-		"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::otherMenuClose, this, payName, earnName));
-	okM->setPosition(0, -visibleSize.height / 5);
-
-	const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
-	Label* okL = Label::createWithSystemFont(okC, "arial", 20);
-	okM->addChild(okL);
-	okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
-	okL->setTextColor(Color4B::BLACK);
-
+	
 	// 提示框内容
 	Label* noticeL;
 	const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
@@ -1178,12 +1178,130 @@ void NewGameScene::otherLand()
 	const char* payC = ((String*)ngContent->objectForKey(payName))->getCString();
 	const char* payLand = ((String*)ngContent->objectForKey("payLand"))->getCString();
 
-	int price;
+	int price, rateTimes;
+	int rateTimes1 = 1;
+	int rateTimes2 = 1;
+	int rate = 0;
 
 	for (auto l : lands)
 	{
 		if (l->getTileAt(nowLand))
 		{
+			// 相邻有相同玩家的地，2块+5%，3块+10%，4块+20%，5块+50%,6块+100%
+
+			if (nowF == faceForward::down || nowF == faceForward::up)
+			{
+				// 向上
+				for (;;)
+				{
+					if (l->getTileAt(Vec2(nowLand.x, nowLand.y - rateTimes1)))
+					{
+						if (l->getTileAt(Vec2(nowLand.x, nowLand.y - rateTimes1))->getColor() ==
+							l->getTileAt(nowLand)->getColor())
+						{
+							rateTimes1++;
+						}
+						else
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				// 向下
+				for (;;)
+				{
+					if (l->getTileAt(Vec2(nowLand.x, nowLand.y + rateTimes2)))
+					{
+						if (l->getTileAt(Vec2(nowLand.x, nowLand.y + rateTimes2))->getColor() ==
+							l->getTileAt(nowLand)->getColor())
+						{
+							rateTimes2++;
+						}
+						else
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			else if (nowF == faceForward::right || nowF == faceForward::left)
+			{
+				// 向左
+				for (;;)
+				{
+					if (l->getTileAt(Vec2(nowLand.x - rateTimes1, nowLand.y)))
+					{
+						if (l->getTileAt(Vec2(nowLand.x - rateTimes1, nowLand.y))->getColor() ==
+							l->getTileAt(nowLand)->getColor())
+						{
+							rateTimes1++;
+						}
+						else
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				// 向右
+				for (;;)
+				{
+					if (l->getTileAt(Vec2(nowLand.x + rateTimes2, nowLand.y)))
+					{
+						if (l->getTileAt(Vec2(nowLand.x + rateTimes2, nowLand.y))->getColor() ==
+							l->getTileAt(nowLand)->getColor())
+						{
+							rateTimes2++;
+						}
+						else
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+
+			// 根据不同的占地数量，收取不同的费用
+			rateTimes = rateTimes1 + rateTimes2;
+			switch (rateTimes)
+			{
+			case 2:
+				rate = 0;
+				break;
+			case 3:
+				rate = 5;
+				break;
+			case 4:
+				rate = 10;
+				break;
+			case 5:
+				rate = 20;
+				break;
+			case 6:
+				rate = 50;
+				break;
+			case 7:
+				rate = 100;
+				break;
+			}
+
 			if (gLand == empty_land_GID)
 			{
 				price = l->getProperty("emptyValue").asInt();
@@ -1200,23 +1318,47 @@ void NewGameScene::otherLand()
 			{
 				price = l->getProperty("level3Value").asInt();
 			}
+
+			price += price*(rate / 100);
 		}
 	}
 
 	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
-	string s = belongLand + blank + earnC + comma + payC + "\n" +
-		payLand + blank + to_string(price) + yuan;
+
+	string s;
+	if (rate == 0)
+	{
+		s = belongLand + blank + earnC + comma + payC + "\n" +
+			payLand + blank + to_string(price) + yuan;
+	}
+	else
+	{
+		s = belongLand + blank + earnC + comma + payC + "\n" +
+			payLand + blank + to_string(price) + yuan + "(+" + to_string(rate) + "%)";
+	}
+
 	noticeL = Label::createWithSystemFont(s, "arial", 30);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
 	noticeL->setTextColor(Color4B::BLACK);
 
+	// 菜单：确定
+	MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+		"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::otherMenuClose, this, payName, earnName,price));
+	okM->setPosition(0, -visibleSize.height / 5);
+
+	const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+	Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+	okM->addChild(okL);
+	okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+	okL->setTextColor(Color4B::BLACK);
+
 	noticeMenu = Menu::create(okM, NULL);
 	this->addChild(noticeMenu);
 }
 
-void NewGameScene::otherMenuClose(string payName, string earnName)
+void NewGameScene::otherMenuClose(string payName, string earnName,int price)
 {	
 	// 找出对应的两个玩家，进行金钱交易
 	for (auto& p : players)
@@ -1225,33 +1367,6 @@ void NewGameScene::otherMenuClose(string payName, string earnName)
 		{
 			if (p.name == payName && e.name == earnName)
 			{
-				int price;
-
-				for (auto l : lands)
-				{
-					if (l->getTileAt(nowLand))
-					{
-						if (gLand == empty_land_GID)
-						{
-							price = l->getProperty("emptyValue").asInt();
-						}
-						else if (gLand == level1_land_GID)
-						{
-							price = l->getProperty("level1Value").asInt();
-						}
-						else if (gLand == level2_land_GID)
-						{
-							price = l->getProperty("level2Value").asInt();
-						}
-						else if (gLand == level3_land_GID)
-						{
-							price = l->getProperty("level3Value").asInt();
-						}
-
-						break;
-					}
-				}
-
 				p.money -= price;
 				e.money += price;
 

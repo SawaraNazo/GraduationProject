@@ -158,7 +158,7 @@ public:
 	void myMenuNo();
 	// 别人的土地
 	void otherLand();
-	void otherMenuClose(string payName, string earnName);
+	void otherMenuClose(string payName, string earnName,int price);
 	// 交税
 	void payLoss(string payName, int loss);
 	// 清除面板
