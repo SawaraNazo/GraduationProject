@@ -4,6 +4,10 @@
   <string>玩家一</string>
   <key>player2</key>
   <string>玩家二</string>
+  <key>player3</key>
+  <string>玩家三</string>
+  <key>player4</key>
+  <string>玩家四</string>
 
   <key>upgradeLand0</key>
   <string>是否要购买此空地？</string>
@@ -75,4 +79,9 @@
   <string>st**m商城促销90%，你顺势清空了购物车，损失了1000元</string>
   <key>emergencyEvent5</key>
   <string>长时间没做好事手痒，搀扶摔倒的老夫妇，被坑掉了2000元</string>
+
+  <key>eliminate</key>
+  <string>的资产为负，淘汰出局！</string>
+  <key>win</key>
+  <string>是最后的胜利者！恭喜你！</string>
 </dict>

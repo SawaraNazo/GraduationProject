@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "extensions\cocos-ext.h"
 #include "SimpleAudioEngine.h"
+#include "TitleScene.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -65,7 +66,7 @@ private:
 	// 监狱入口
 	const unsigned int prisonEnterance_road_GID = 398;
 	// 监狱
-	const unsigned int prison_road_GID = 536;
+	const unsigned int prison_road_GID = 436;
 	// 突发事件
 	const unsigned int emergency_road_GID = 1038;
 	// 停车场
@@ -165,8 +166,12 @@ public:
 	void cleanMenu();
 	// 轮换下一位玩家
 	void changePlayer();
-	// 清楚面板并走
+	// 清除无资金玩家
+	void removePlayer(int number);
+	// 清楚面板轮换玩家
 	void cleanAndChange();
+	// 结束游戏
+	void endGame();
 
 	CREATE_FUNC(NewGameScene);
 };

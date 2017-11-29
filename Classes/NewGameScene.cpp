@@ -22,7 +22,7 @@ bool NewGameScene::init()
 	nowPlayerNumber = 1;
 
 	// 预设置开始金钱为10000元
-	startMoney = 10000;
+	startMoney = 1000;
 
 	// 初始化突发事件数量
 	emEventNumber = 5;
@@ -1433,14 +1433,184 @@ void NewGameScene::changePlayer()
 		n++;
 	}
 
-	nowPlayerNumber++;
-	if (nowPlayerNumber > players.size())
-	{
-		nowPlayerNumber = 1;
+	// 如果玩家金钱小于0，则踢出游戏
+	n = 0;
+	bool flag = false;
 
-		// 切换回合数
-		rounds++;
-		((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
+	for (auto& p : players)
+	{
+		if (p.money < 0)
+		{
+			// 菜单面板图片
+			menuBoard = Sprite::create("image/Popup.png");
+			menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+			this->addChild(menuBoard);
+
+			// 字儿们
+			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+
+			// 提示框内容
+			Label* noticeL;
+			const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
+			const char* eliminate = ((String*)ngContent->objectForKey("eliminate"))->getCString();
+			string str = "";
+			string s = "";
+
+			if (n == 0)
+			{
+				const char* player = ((String*)ngContent->objectForKey("player1"))->getCString();
+				s = player + str + eliminate;
+			}
+			else if (n == 1)
+			{
+				const char* player = ((String*)ngContent->objectForKey("player2"))->getCString();
+				s = player + str + eliminate;
+			}
+			else if (n == 2)
+			{
+				const char* player = ((String*)ngContent->objectForKey("player3"))->getCString();
+				s = player + str + eliminate;
+			}
+			else if (n == 3)
+			{
+				const char* player = ((String*)ngContent->objectForKey("player4"))->getCString();
+				s = player + str + eliminate;
+			}
+			
+			noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+			menuBoard->addChild(noticeL);
+			noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+			noticeL->setTextColor(Color4B::BLACK);
+
+			// 菜单：确定
+			MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+				"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::removePlayer, this, n));
+			okM->setPosition(0, -visibleSize.height / 5);
+
+			const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+			Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+			okM->addChild(okL);
+			okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+			okL->setTextColor(Color4B::BLACK);
+
+			noticeMenu = Menu::create(okM, NULL);
+			this->addChild(noticeMenu);
+
+			flag = true;
+			break;
+		}
+		n++;
+	}
+
+	// 如果不存在淘汰玩家，正常轮换
+	if (flag == false)
+	{
+		nowPlayerNumber++;
+		if (nowPlayerNumber > players.size())
+		{
+			nowPlayerNumber = 1;
+
+			// 切换回合数
+			rounds++;
+			((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
+		}
+	}
+}
+
+void NewGameScene::removePlayer(int number)
+{
+	int n = 0;
+	for (auto& p : players)
+	{
+		if (n == number)
+		{
+			this->removeChildByName("player" + to_string(n + 1), true);
+
+			players.erase(players.begin() + number);
+
+			break;
+		}
+		n++;
+	}
+
+	this->cleanMenu();
+
+	// 判断是否只剩一名玩家，若是，则游戏结束
+	bool flag = false;
+
+	if (players.size() == 1)
+	{
+		// 菜单面板图片
+		menuBoard = Sprite::create("image/Popup.png");
+		menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+		this->addChild(menuBoard);
+
+		// 字儿们
+		auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+
+		// 提示框内容
+		Label* noticeL;
+		const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
+		const char* win = ((String*)ngContent->objectForKey("win"))->getCString();
+		string str = "";
+		string s = "";
+
+		if (players[0].name == "player1")
+		{
+			const char* player = ((String*)ngContent->objectForKey("player1"))->getCString();
+			s = player + str + win;
+		}
+		else if (players[0].name == "player2")
+		{
+			const char* player = ((String*)ngContent->objectForKey("player2"))->getCString();
+			s = player + str + win;
+		}
+		else if (players[0].name == "player3")
+		{
+			const char* player = ((String*)ngContent->objectForKey("player3"))->getCString();
+			s = player + str + win;
+		}
+		else if (players[0].name == "player4")
+		{
+			const char* player = ((String*)ngContent->objectForKey("player4"))->getCString();
+			s = player + str + win;
+		}
+
+		noticeL = Label::createWithSystemFont(s, "arial", 30);
+
+		menuBoard->addChild(noticeL);
+		noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
+		noticeL->setTextColor(Color4B::BLACK);
+
+		// 菜单：确定
+		MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
+			"image/OrangePressed.png", CC_CALLBACK_0(NewGameScene::endGame, this));
+		okM->setPosition(0, -visibleSize.height / 5);
+
+		const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+		Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+		okM->addChild(okL);
+		okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
+		okL->setTextColor(Color4B::BLACK);
+
+		noticeMenu = Menu::create(okM, NULL);
+		this->addChild(noticeMenu);
+
+		flag = true;
+	}
+	
+	if (flag == false)
+	{
+		nowPlayerNumber++;
+		if (nowPlayerNumber > players.size())
+		{
+			nowPlayerNumber = 1;
+
+			// 切换回合数
+			rounds++;
+			((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
+		}
 	}
 }
 
@@ -1448,4 +1618,10 @@ void NewGameScene::cleanAndChange()
 {
 	this->cleanMenu();
 	this->changePlayer();
+}
+
+void NewGameScene::endGame()
+{
+	TitleScene* ts = TitleScene::create();
+	Director::getInstance()->pushScene(ts);
 }
