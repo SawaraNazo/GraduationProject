@@ -98,5 +98,6 @@ void TitleLayer::settingCallback(Ref* pSender)
 void TitleLayer::exitCallback(Ref* pSender)
 {
 	auto ep = ExitPopupLayer::create();
-	this->addChild(ep);
+	ep->setSwallowsTouches(true);
+	this->addChild(ep, 100);
 }

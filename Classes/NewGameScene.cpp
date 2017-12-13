@@ -22,7 +22,7 @@ bool NewGameScene::init()
 	nowPlayerNumber = 1;
 
 	// 预设置开始金钱为10000元
-	startMoney = 1000;
+	startMoney = 600;
 
 	// 初始化突发事件数量
 	emEventNumber = 5;
@@ -352,6 +352,7 @@ bool NewGameScene::checkState()
 			else if (p.state == stateType::parking && p.stayRound > 0)
 			{
 				// 继续待在停车场
+				p.isGoing = true;
 
 				p.stayRound--;
 
@@ -391,6 +392,7 @@ bool NewGameScene::checkState()
 			else if (p.state == stateType::prison && p.stayRound > 0)
 			{
 				// 继续待在监狱
+				p.isGoing = true;
 				
 				p.stayRound--;
 				

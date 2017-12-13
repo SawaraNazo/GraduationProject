@@ -54,6 +54,9 @@
     <ClCompile Include="..\Classes\NewGameScene.cpp">
       <Filter>src\新游戏</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\TitleGameSetLayer.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\NewGameScene.h">
       <Filter>src\新游戏</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TitleGameSetLayer.h">
+      <Filter>src\标题界面</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

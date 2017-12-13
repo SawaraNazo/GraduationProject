@@ -20,6 +20,13 @@ bool ExitPopupLayer::init()
 
 	this->createMenu();
 
+	auto callback = [](Touch*, Event*) {return true; };
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->onTouchBegan = callback;
+	listener->setSwallowTouches(true);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+
 	return true;
 }
 

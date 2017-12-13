@@ -154,6 +154,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\TitleAniLayer.cpp" />
     <ClCompile Include="..\Classes\TitleAniScene.cpp" />
     <ClCompile Include="..\Classes\TitleBackgroundLayer.cpp" />
+    <ClCompile Include="..\Classes\TitleGameSetLayer.cpp" />
     <ClCompile Include="..\Classes\TitleLayer.cpp" />
     <ClCompile Include="..\Classes\TitleScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,6 +166,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\TitleAniLayer.h" />
     <ClInclude Include="..\Classes\TitleAniScene.h" />
     <ClInclude Include="..\Classes\TitleBackgroundLayer.h" />
+    <ClInclude Include="..\Classes\TitleGameSetLayer.h" />
     <ClInclude Include="..\Classes\TitleLayer.h" />
     <ClInclude Include="..\Classes\TitleScene.h" />
     <ClInclude Include="main.h" />
