@@ -187,6 +187,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ResourceCompile Include="game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Resources\XML\GameSet.xml" />
     <Xml Include="..\Resources\XML\NewGame.xml" />
     <Xml Include="..\Resources\XML\Title.xml" />
     <Xml Include="..\Resources\XML\TitleAni.XML" />

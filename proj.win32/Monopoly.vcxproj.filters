@@ -105,5 +105,8 @@
     <Xml Include="..\Resources\XML\NewGame.xml">
       <Filter>resource\XML</Filter>
     </Xml>
+    <Xml Include="..\Resources\XML\GameSet.xml">
+      <Filter>resource\XML</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

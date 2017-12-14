@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dict>
+  <key>title</key>
+  <string>游戏设置</string>
+  <key>onOff</key>
+  <string>音乐开关</string>
+  <key>volume</key>
+  <string>音量大小</string>
+  <key>chooseMusic</key>
+  <string>选择背景音乐</string>
+
+  <key>close</key>
+  <string>关闭</string>
+</dict>

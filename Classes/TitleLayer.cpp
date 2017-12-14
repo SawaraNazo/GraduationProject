@@ -92,12 +92,12 @@ void TitleLayer::loadGameCallback(Ref* pSender)
 
 void TitleLayer::settingCallback(Ref* pSender)
 {
-
+	auto sp = TitleGameSetLayer::create();
+	this->addChild(sp, 100);
 }
 
 void TitleLayer::exitCallback(Ref* pSender)
 {
 	auto ep = ExitPopupLayer::create();
-	ep->setSwallowsTouches(true);
 	this->addChild(ep, 100);
 }
