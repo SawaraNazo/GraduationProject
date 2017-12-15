@@ -4,6 +4,7 @@
 #include "extensions\cocos-ext.h"
 #include "SimpleAudioEngine.h"
 #include "TitleScene.h"
+#include "GameSetLayer.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -140,6 +141,8 @@ public:
 	void createPlayerPro();
 	// 掷骰子
 	void diceEvent(Ref* pSender, Widget::TouchEventType type);
+	// 设置
+	void setEvent(Ref* pSender, Widget::TouchEventType type);
 	// 走两步
 	void playerGo(float dt);
 

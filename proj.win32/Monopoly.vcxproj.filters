@@ -10,9 +10,6 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\设置">
-      <UniqueIdentifier>{57d90b9e-6b1f-4b15-9a3c-b689f6c550b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\标题界面">
       <UniqueIdentifier>{750f29a1-d696-4cb9-bbbf-1170639a607a}</UniqueIdentifier>
     </Filter>
@@ -24,6 +21,9 @@
     </Filter>
     <Filter Include="src\新游戏">
       <UniqueIdentifier>{30c92ccc-64dd-4858-85cb-4fbf1cee9acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\游戏设置">
+      <UniqueIdentifier>{75c4f3f5-d34a-430d-bbe6-6f9d1f16a8a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,8 +54,8 @@
     <ClCompile Include="..\Classes\NewGameScene.cpp">
       <Filter>src\新游戏</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\TitleGameSetLayer.cpp">
-      <Filter>src\标题界面</Filter>
+    <ClCompile Include="..\Classes\GameSetLayer.cpp">
+      <Filter>src\游戏设置</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +86,8 @@
     <ClInclude Include="..\Classes\NewGameScene.h">
       <Filter>src\新游戏</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\TitleGameSetLayer.h">
-      <Filter>src\标题界面</Filter>
+    <ClInclude Include="..\Classes\GameSetLayer.h">
+      <Filter>src\游戏设置</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

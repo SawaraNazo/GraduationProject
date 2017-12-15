@@ -9,14 +9,14 @@ using namespace extension;
 using namespace CocosDenshion;
 using namespace std;
 
-class TitleGameSetLayer : public Layer
+class GameSetLayer : public Layer
 {
 private:
 	Size visibleSize;
 	Vec2 origin;
 public:
-	TitleGameSetLayer();
-	~TitleGameSetLayer();
+	GameSetLayer();
+	~GameSetLayer();
 
 	virtual bool init();
 
@@ -28,5 +28,5 @@ public:
 	void changeBGMPre(Ref* pSender, Label* &bgm, ControlSwitch* cs);
 	void changeBGMNext(Ref* pSender, Label* &bgm, ControlSwitch* cs);
 
-	CREATE_FUNC(TitleGameSetLayer);
+	CREATE_FUNC(GameSetLayer);
 };

@@ -92,7 +92,7 @@ void TitleLayer::loadGameCallback(Ref* pSender)
 
 void TitleLayer::settingCallback(Ref* pSender)
 {
-	auto sp = TitleGameSetLayer::create();
+	auto sp = GameSetLayer::create();
 	this->addChild(sp, 100);
 }
 

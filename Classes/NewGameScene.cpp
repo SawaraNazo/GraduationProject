@@ -149,6 +149,14 @@ void NewGameScene::createPlayerPro()
 	diceButton->addTouchEventListener(CC_CALLBACK_2(NewGameScene::diceEvent, this));
 	diceButton->setPressedActionEnabled(true);
 	this->addChild(diceButton, 2);
+
+	// 设置按钮
+	Button* setButton = Button::create("image/set-button-normal.png", "image/set-button-pressed.png");
+	setButton->setPosition(Vec2(setButton->getContentSize().width,
+		visibleSize.height - setButton->getContentSize().height));
+	setButton->addTouchEventListener(CC_CALLBACK_2(NewGameScene::setEvent, this));
+	setButton->setPressedActionEnabled(true);
+	this->addChild(setButton, 2);
 }
 
 // 动作相关函数
@@ -217,6 +225,26 @@ void NewGameScene::diceEvent(Ref* pSender, Widget::TouchEventType type)
 		}
 
 		break;
+	}
+	case Widget::TouchEventType::CANCELED:
+		break;
+	default:
+		break;
+	}
+}
+
+void NewGameScene::setEvent(Ref* pSender, Widget::TouchEventType type)
+{
+	switch (type)
+	{
+	case Widget::TouchEventType::BEGAN:
+		break;
+	case Widget::TouchEventType::MOVED:
+		break;
+	case Widget::TouchEventType::ENDED:
+	{
+		auto gsl = GameSetLayer::create();
+		this->addChild(gsl, 100);
 	}
 	case Widget::TouchEventType::CANCELED:
 		break;

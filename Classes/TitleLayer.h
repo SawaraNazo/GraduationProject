@@ -4,7 +4,7 @@
 #include "ExitPopupLayer.h"
 #include "NewGameScene.h"
 #include "SimpleAudioEngine.h"
-#include "TitleGameSetLayer.h"
+#include "GameSetLayer.h"
 
 using namespace std;
 using namespace cocos2d;
