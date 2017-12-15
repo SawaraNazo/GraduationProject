@@ -60,8 +60,7 @@ void TitleGameSetLayer::createMenu()
 	Sprite* thumbSpriteW = Sprite::create("image/switch-thumb.png");
 	Label* onLabel = Label::createWithSystemFont("ON", "arial", 16);
 	Label* offLabel = Label::createWithSystemFont("OFF", "arial", 16);
-	ControlSwitch* csw = ControlSwitch::create(maskSprite, onSprite, offSprite, thumbSpriteW,
-		onLabel, offLabel);
+	ControlSwitch* csw = ControlSwitch::create(maskSprite, onSprite, offSprite, thumbSpriteW, onLabel, offLabel);
 	csw->addTargetWithActionForControlEvents(this, cccontrol_selector(TitleGameSetLayer::switchStateChanged), Control::EventType::VALUE_CHANGED);
 	csw->setScale(1.2);
 	csw->setPosition(s->getContentSize().width / 4, l2->getPosition().y - l2->getContentSize().height * 2);
@@ -71,7 +70,7 @@ void TitleGameSetLayer::createMenu()
 	auto volume = ((String*)d->objectForKey("volume"))->getCString();
 	Label* l3 = Label::createWithSystemFont(volume, "arial", 23);
 	l3->setTextColor(Color4B::BLACK);
-	l3->setPosition(Vec2(s->getContentSize().width / 4, s->getContentSize().height * 3 / 16 + l3->getContentSize().height));
+	l3->setPosition(Vec2(s->getContentSize().width * 3 / 4, s->getContentSize().height / 2 + l3->getContentSize().height));
 	s->addChild(l3);
 
 	Sprite* backgroundSprite = Sprite::create("image/sliderTracker.png");
@@ -82,15 +81,31 @@ void TitleGameSetLayer::createMenu()
 	csl->setMaximumValue(100);
 	csl->setValue(100);
 	csl->addTargetWithActionForControlEvents(this, cccontrol_selector(TitleGameSetLayer::sliderStateChanged), Control::EventType::VALUE_CHANGED);
-	csl->setPosition(s->getContentSize().width / 4, l3->getPosition().y + l3->getContentSize().height * 2);
+	csl->setPosition(s->getContentSize().width * 3 / 4, l3->getPosition().y - l3->getContentSize().height * 2);
 	s->addChild(csl);
 
-	// ÒôÀÖÑ¡Ôñ
+	// BGMÑ¡Ôñ
 	auto chooseMusic = ((String*)d->objectForKey("chooseMusic"))->getCString();
 	Label* l4 = Label::createWithSystemFont(chooseMusic, "arial", 23);
 	l4->setTextColor(Color4B::BLACK);
-	l4->setPosition(Vec2(s->getContentSize().width * 3 / 4, s->getContentSize().height / 2));
+	l4->setPosition(s->getContentSize().width / 4, s->getContentSize().height / 4 + l4->getContentSize().height);
 	s->addChild(l4);
+
+	Label* bgm = Label::createWithSystemFont("BGM01", "arial", 21);
+	bgm->setTextColor(Color4B::BLACK);
+	bgm->setPosition(s->getContentSize().width * 3 / 4, l4->getPosition().y);
+	s->addChild(bgm);
+
+	Sprite* bnl = Sprite::create("image/button-normal-left.png");
+	Sprite* bpl = Sprite::create("image/button-pressed-left.png");
+	MenuItem* button_left = MenuItemSprite::create(bnl, bpl, CC_CALLBACK_1(TitleGameSetLayer::changeBGMPre, this, bgm, csw));
+	button_left->setPosition(s->getContentSize().width / 4 - bgm->getContentSize().width / 2 - button_left->getContentSize().width, -s->getContentSize().height / 4 + l4->getContentSize().height);
+
+	Sprite* bnr = Sprite::create("image/button-normal-right.png");
+	Sprite* bpr = Sprite::create("image/button-pressed-right.png");
+	MenuItem* button_right = MenuItemSprite::create(bnr, bpr, CC_CALLBACK_1(TitleGameSetLayer::changeBGMNext, this, bgm, csw));
+	button_right->setPosition(s->getContentSize().width / 4 + bgm->getContentSize().width / 2 + button_left->getContentSize().width, -s->getContentSize().height / 4 + l4->getContentSize().height);
+
 
 	// ¹Ø±Õ
 	MenuItem* closeButton = MenuItemImage::create("image/OrangeNormal.png",
@@ -104,7 +119,7 @@ void TitleGameSetLayer::createMenu()
 	closeButton->setScale(1.2);
 	closeButton->setPosition(0, -(s->getContentSize().height / 2) + closeButton->getContentSize().height * 3);
 
-	Menu* m = Menu::create(closeButton, NULL);
+	Menu* m = Menu::create(closeButton, button_left, button_right, NULL);
 	this->addChild(m);
 }
 
@@ -134,4 +149,64 @@ void TitleGameSetLayer::sliderStateChanged(Ref* pSender, Control::EventType cont
 	float volume = controlSlider->getValue();
 	volume /= 100;
 	SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(volume);
+}
+
+void TitleGameSetLayer::changeBGMPre(Ref* pSender , Label* &bgm, ControlSwitch* cs)
+{
+	string s = bgm->getString();
+	int nowNum = atoi(s.substr(3, 2).c_str());
+	--nowNum;
+	if (nowNum == 0)
+	{
+		nowNum = 14;
+	}
+
+	string sp;
+	if (nowNum < 10)
+	{
+		sp = "0" + to_string(nowNum);
+	}
+	else
+	{
+		sp = to_string(nowNum);
+	}
+
+	bgm->setString(s.substr(0, 3) + sp);
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+	string m = "music/rich" + sp + ".mp3";
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(m.c_str(), true);
+	if (!cs->isOn())
+	{
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
+	}
+}
+
+void TitleGameSetLayer::changeBGMNext(Ref* pSender , Label* &bgm, ControlSwitch* cs)
+{
+	string s = bgm->getString();
+	int nowNum = atoi(s.substr(3, 2).c_str());
+	++nowNum;
+	if (nowNum == 15)
+	{
+		nowNum = 1;
+	}
+
+	string sp;
+	if (nowNum < 10)
+	{
+		sp = "0" + to_string(nowNum);
+	}
+	else
+	{
+		sp = to_string(nowNum);
+	}
+
+	bgm->setString(s.substr(0, 3) + sp);
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+	string m = "music/rich" + sp + ".mp3";
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(m.c_str(), true);
+	if (!cs->isOn())
+	{
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
+	}
 }

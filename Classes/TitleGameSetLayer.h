@@ -7,6 +7,7 @@
 using namespace cocos2d;
 using namespace extension;
 using namespace CocosDenshion;
+using namespace std;
 
 class TitleGameSetLayer : public Layer
 {
@@ -24,6 +25,8 @@ public:
 	void closeCallback(Ref* pSender);
 	void switchStateChanged(Ref* pSender, Control::EventType controlEvent);
 	void sliderStateChanged(Ref* pSender, Control::EventType controlEvent);
+	void changeBGMPre(Ref* pSender, Label* &bgm, ControlSwitch* cs);
+	void changeBGMNext(Ref* pSender, Label* &bgm, ControlSwitch* cs);
 
 	CREATE_FUNC(TitleGameSetLayer);
 };
