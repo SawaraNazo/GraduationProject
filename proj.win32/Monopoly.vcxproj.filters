@@ -57,6 +57,15 @@
     <ClCompile Include="..\Classes\GameSetLayer.cpp">
       <Filter>src\游戏设置</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\GameInitLayer.cpp">
+      <Filter>src\新游戏</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameMainLayer.cpp">
+      <Filter>src\新游戏</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp">
+      <Filter>src\新游戏</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -89,6 +98,15 @@
     <ClInclude Include="..\Classes\GameSetLayer.h">
       <Filter>src\游戏设置</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\GameInitLayer.h">
+      <Filter>src\新游戏</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameMainLayer.h">
+      <Filter>src\新游戏</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SelectGameRolesLayer.h">
+      <Filter>src\新游戏</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
@@ -106,6 +124,9 @@
       <Filter>resource\XML</Filter>
     </Xml>
     <Xml Include="..\Resources\XML\GameSet.xml">
+      <Filter>resource\XML</Filter>
+    </Xml>
+    <Xml Include="..\Resources\XML\GameInit.xml">
       <Filter>resource\XML</Filter>
     </Xml>
   </ItemGroup>

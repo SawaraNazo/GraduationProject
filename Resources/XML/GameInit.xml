@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dict>
+  <key>playersNumber</key>
+  <string>玩家数量</string>
+  <key>startMoney</key>
+  <string>初始金钱数</string>
+  <key>mapNumber</key>
+  <string>选择地图</string>
+  <key>playersRoles</key>
+  <string>选择游戏角色</string>
+  <key>ok</key>
+  <string>开始游戏</string>
+  <key>cancel</key>
+  <string>返回主界面</string>
+</dict>

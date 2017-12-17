@@ -150,8 +150,11 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\ExitPopupLayer.cpp" />
+    <ClCompile Include="..\Classes\GameInitLayer.cpp" />
+    <ClCompile Include="..\Classes\GameMainLayer.cpp" />
     <ClCompile Include="..\Classes\GameSetLayer.cpp" />
     <ClCompile Include="..\Classes\NewGameScene.cpp" />
+    <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp" />
     <ClCompile Include="..\Classes\TitleAniLayer.cpp" />
     <ClCompile Include="..\Classes\TitleAniScene.cpp" />
     <ClCompile Include="..\Classes\TitleBackgroundLayer.cpp" />
@@ -162,8 +165,11 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\ExitPopupLayer.h" />
+    <ClInclude Include="..\Classes\GameInitLayer.h" />
+    <ClInclude Include="..\Classes\GameMainLayer.h" />
     <ClInclude Include="..\Classes\GameSetLayer.h" />
     <ClInclude Include="..\Classes\NewGameScene.h" />
+    <ClInclude Include="..\Classes\SelectGameRolesLayer.h" />
     <ClInclude Include="..\Classes\TitleAniLayer.h" />
     <ClInclude Include="..\Classes\TitleAniScene.h" />
     <ClInclude Include="..\Classes\TitleBackgroundLayer.h" />
@@ -187,6 +193,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ResourceCompile Include="game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Resources\XML\GameInit.xml" />
     <Xml Include="..\Resources\XML\GameSet.xml" />
     <Xml Include="..\Resources\XML\NewGame.xml" />
     <Xml Include="..\Resources\XML\Title.xml" />
