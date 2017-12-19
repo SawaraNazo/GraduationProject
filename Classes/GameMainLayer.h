@@ -143,6 +143,9 @@ public:
 	void setPlayersRoles(vector<int> pr);
 	void setMapNumber(int mn);
 
+	// 定时删除
+	void removeParticle(float dt);
+
 	// 初始化
 	virtual bool init();
 	void setParameter(float dt);

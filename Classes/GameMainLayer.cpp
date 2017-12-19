@@ -10,6 +10,7 @@ GameMainLayer::~GameMainLayer()
 
 }
 
+// set 函数集
 void GameMainLayer::setPlayersNumber(int pn)
 {
 	this->playersNumber = pn;
@@ -33,6 +34,13 @@ void GameMainLayer::setMapNumber(int mn)
 	this->mapNumber = mn;
 }
 
+void GameMainLayer::removeParticle(float dt)
+{
+	auto p = this->getChildByName("particle");
+	p->removeFromParentAndCleanup(true);
+}
+
+// init 
 bool GameMainLayer::init()
 {
 	if (!Layer::init())
@@ -295,19 +303,19 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 					}
-					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
-					{
-						nowPlayer.rolePosition.y--;
-						nowPlayer.spritePosition.y += 30;
-						nowPlayer.faceTo = faceForward::up;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_up.png");
-					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y + 1)))
 					{
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
 						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_down.png");
+					}
+					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
+					{
+						nowPlayer.rolePosition.y--;
+						nowPlayer.spritePosition.y += 30;
+						nowPlayer.faceTo = faceForward::up;
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_up.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::down)
@@ -586,7 +594,7 @@ void GameMainLayer::checkRoad(float dt)
 				p.spritePosition.x -= 17 * 30;
 				p.spritePosition.y -= 14 * 30;
 				p.roleSprite->setPosition(p.spritePosition);
-				p.roleSprite->setTexture("image/" + p.name + "_up.png");
+				p.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_up.png");
 				p.faceTo = faceForward::up;
 				p.stayRound = 3;
 
@@ -925,6 +933,32 @@ void GameMainLayer::emptyMenuYes()
 					{
 						l->getTileAt(nowLand)->setColor(p.color);
 
+						// 粒子显示
+						ParticleGalaxy* pg = ParticleGalaxy::create();
+
+						switch (p.faceTo)
+						{
+						case faceForward::left:
+							pg->setPosition(p.spritePosition.x, p.spritePosition.y + 30);
+							break;
+						case faceForward::down:
+							pg->setPosition(p.spritePosition.x - 30, p.spritePosition.y);
+							break;
+						case faceForward::right:
+							pg->setPosition(p.spritePosition.x, p.spritePosition.y - 30);
+							break;
+						case faceForward::up:
+							pg->setPosition(p.spritePosition.x + 30, p.spritePosition.y);
+							break;
+						}
+						pg->setStartColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
+						pg->setEndColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
+						this->addChild(pg, 0, "particle");
+
+						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
+
+						// ここまでだ
+
 						p.money -= emptyBuildCost;
 
 						const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
@@ -1138,6 +1172,32 @@ void GameMainLayer::myMenuYes()
 
 						l->getTileAt(nowLand)->setColor(p.color);
 						p.money -= buildCost;
+						
+						// 粒子显示
+						ParticleGalaxy* pg = ParticleGalaxy::create();
+
+						switch (p.faceTo)
+						{
+						case faceForward::left:
+							pg->setPosition(p.spritePosition.x, p.spritePosition.y + 30);
+							break;
+						case faceForward::down:
+							pg->setPosition(p.spritePosition.x - 30, p.spritePosition.y);
+							break;
+						case faceForward::right:
+							pg->setPosition(p.spritePosition.x, p.spritePosition.y - 30);
+							break;
+						case faceForward::up:
+							pg->setPosition(p.spritePosition.x + 30, p.spritePosition.y);
+							break;
+						}
+						pg->setStartColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
+						pg->setEndColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
+						this->addChild(pg, 0, "particle");
+
+						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
+
+						// ここまでだ
 
 						auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 						const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
