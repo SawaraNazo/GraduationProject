@@ -3,6 +3,10 @@
 #include "cocos2d.h"
 #include <vector>
 
+#include "NewGameScene.h"
+#include "SelectGameRolesLayer.h"
+#include "GameMainLayer.h"
+
 using namespace std;
 using namespace cocos2d;
 
@@ -10,7 +14,6 @@ class GameInitLayer :public Layer
 {
 private:
 	Size visibleSize;
-	Vec2 origin;
 
 	__Dictionary* dict;
 	Menu* m;
@@ -20,33 +23,37 @@ private:
 	int playersNumber = 2;
 	// 地图选择
 	int mapNumber = 1;
-	//初始金钱数
+	// 初始金钱数
 	int startMoney = 500;
-	//游戏角色
-	vector<int> playersRoles;
+	// 游戏角色				可选择Role数量：5
+	vector<int> playersRoles{ 1,2,3,4 };
 
 public :
 	GameInitLayer();
 	~GameInitLayer();
+
+	int getPlayersNumber();
+	vector<int> getPlayersRoles();
+	void setPlayersRoles(vector<int> v);
 
 	virtual bool init();
 
 	void createMenu();
 	void createBackground();
 
-	void setPlayersNumber();
+	void nzPlayersNumber();
 	void playersNumberLeft(Ref* pSender,Label* &l);
 	void playersNumberRight(Ref* pSender,Label* &l);
 
-	void setStartMoney();
+	void nzStartMoney();
 	void startMoneyLeft(Ref* pSender, Label* &l);
 	void startMoneyRight(Ref* pSender, Label* &l);
 
-	void setMapNumber();
-	void mapNumberLeft(Ref* pSender);
-	void mapNumberRight(Ref* pSender);
+	void nzMapNumber();
+	void mapNumberLeft(Ref* pSender, Sprite* &s);
+	void mapNumberRight(Ref* pSender, Sprite* &s);
 
-	void setPlayersRoles();
+	void nzPlayersRoles();
 	void createPRLayer(Ref* pSender);
 
 	void okCallback(Ref* pSender);

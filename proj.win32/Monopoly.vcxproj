@@ -155,6 +155,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\GameSetLayer.cpp" />
     <ClCompile Include="..\Classes\NewGameScene.cpp" />
     <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp" />
+    <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp" />
     <ClCompile Include="..\Classes\TitleAniLayer.cpp" />
     <ClCompile Include="..\Classes\TitleAniScene.cpp" />
     <ClCompile Include="..\Classes\TitleBackgroundLayer.cpp" />
@@ -170,6 +171,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameSetLayer.h" />
     <ClInclude Include="..\Classes\NewGameScene.h" />
     <ClInclude Include="..\Classes\SelectGameRolesLayer.h" />
+    <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h" />
     <ClInclude Include="..\Classes\TitleAniLayer.h" />
     <ClInclude Include="..\Classes\TitleAniScene.h" />
     <ClInclude Include="..\Classes\TitleBackgroundLayer.h" />

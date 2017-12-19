@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "TitleScene.h"
 
 #include "GameInitLayer.h"
 
@@ -10,7 +9,6 @@ using namespace cocos2d;
 
 class NewGameScene : public Scene
 {
-private:
 public:
 	NewGameScene();
 	~NewGameScene();

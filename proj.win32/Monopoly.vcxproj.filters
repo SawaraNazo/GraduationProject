@@ -66,6 +66,9 @@
     <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp">
       <Filter>src\新游戏</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp">
+      <Filter>src\新游戏</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -92,9 +95,6 @@
     <ClInclude Include="..\Classes\ExitPopupLayer.h">
       <Filter>src\标题界面</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\NewGameScene.h">
-      <Filter>src\新游戏</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\GameSetLayer.h">
       <Filter>src\游戏设置</Filter>
     </ClInclude>
@@ -105,6 +105,12 @@
       <Filter>src\新游戏</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SelectGameRolesLayer.h">
+      <Filter>src\新游戏</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NewGameScene.h">
+      <Filter>src\新游戏</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h">
       <Filter>src\新游戏</Filter>
     </ClInclude>
   </ItemGroup>

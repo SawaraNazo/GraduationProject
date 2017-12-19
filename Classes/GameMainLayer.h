@@ -85,7 +85,9 @@ private:
 	int playersNumber;
 	// 初始资金
 	int startMoney;
-	// 胜利条件
+	// 胜利条件  XD
+	// 地图名字
+	int mapNumber;
 
 	// 突发事件数量
 	int emEventNumber;
@@ -103,6 +105,8 @@ private:
 	vector<TMXLayer*> lands;
 	TMXObjectGroup* objectGroup;
 
+	// 玩家角色集合
+	vector<int> roles;
 	// 角色集合
 	vector<Player> players;
 
@@ -131,11 +135,17 @@ private:
 
 public:
 	GameMainLayer();
-	GameMainLayer(int playersNumber, int startMoney, int mapNumber, vector<int> playersRoles);
 	~GameMainLayer();
+
+	// private变量相关
+	void setStartMoney(int sm);
+	void setPlayersNumber(int pn);
+	void setPlayersRoles(vector<int> pr);
+	void setMapNumber(int mn);
 
 	// 初始化
 	virtual bool init();
+	void setParameter(float dt);
 
 	// 创建地图
 	void createMap();
@@ -180,4 +190,5 @@ public:
 	// 结束游戏
 	void endGame();
 
+	CREATE_FUNC(GameMainLayer);
 };

@@ -16,7 +16,7 @@ bool NewGameScene::init()
 	}
 
 	auto gameInitLayer = GameInitLayer::create();
-	this->addChild(gameInitLayer, 2);
+	this->addChild(gameInitLayer, 2, "gameinit");
 
 	return true;
 }

@@ -5,16 +5,32 @@ GameMainLayer::GameMainLayer()
 
 }
 
-GameMainLayer::GameMainLayer(int psn, int sm, int mn, vector<int> psrs)
-{
-	playersNumber = psn;
-	startMoney = sm;
-
-}
-
 GameMainLayer::~GameMainLayer()
 {
 
+}
+
+void GameMainLayer::setPlayersNumber(int pn)
+{
+	this->playersNumber = pn;
+}
+
+void GameMainLayer::setStartMoney(int sm)
+{
+	this->startMoney = sm;
+}
+
+void GameMainLayer::setPlayersRoles(vector<int> pr)
+{
+	for (int i : pr)
+	{
+		this->roles.push_back(i);
+	}
+}
+
+void GameMainLayer::setMapNumber(int mn)
+{
+	this->mapNumber = mn;
 }
 
 bool GameMainLayer::init()
@@ -38,20 +54,25 @@ bool GameMainLayer::init()
 	
 	// 回合数
 	rounds = 1;
-
-	this->createMap();
-	this->createPlayer();
-	this->createPlayerPro();
+		
+	this->scheduleOnce(schedule_selector(GameMainLayer::setParameter), 0.01);
 
 	return true;
 }
 
+void GameMainLayer::setParameter(float dt)
+{
+	this->createMap();
+	this->createPlayer();
+	this->createPlayerPro();
+}
 
 // 初始化相关函数
 
 void GameMainLayer::createMap()
 {
-	tileMap = TMXTiledMap::create("tmx/smallMap.tmx");
+	string str = "tmx/map" + to_string(mapNumber) + ".tmx";
+	tileMap = TMXTiledMap::create(str);
 
 	this->addChild(tileMap);
 
@@ -90,7 +111,7 @@ void GameMainLayer::createPlayer()
 		p.isGoing = false;
 		p.faceTo = faceForward::right;
 		p.rolePosition = Vec2(4, 4);
-		p.roleSprite = Sprite::create("image/" + p.name + "_right.png");
+		p.roleSprite = Sprite::create("image/role" + to_string(roles[i - 1]) + "_right.png");
 		p.money = startMoney;
 		p.state = stateType::normal;
 		p.spritePosition = Vec2(px + i * 3, py);
@@ -106,11 +127,11 @@ void GameMainLayer::createPlayer()
 		}
 		else if (i == 3)
 		{
-			p.color = Color3B::YELLOW;
+			p.color = Color3B::BLACK;
 		}
 		else if (i == 4)
 		{
-			p.color = Color3B::GREEN;
+			p.color = Color3B::MAGENTA;
 		}
 
 		tileMap->addChild(p.roleSprite, tileMap->getChildrenCount(), "player" + to_string(i));
@@ -279,14 +300,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.y--;
 						nowPlayer.spritePosition.y += 30;
 						nowPlayer.faceTo = faceForward::up;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_up.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_up.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y + 1)))
 					{
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_down.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_down.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::down)
@@ -301,14 +322,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_right.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_left.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_left.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::left)
@@ -323,14 +344,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_down.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_down.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
 					{
 						nowPlayer.rolePosition.y--;
 						nowPlayer.spritePosition.y += 30;
 						nowPlayer.faceTo = faceForward::up;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_up.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_up.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::up)
@@ -345,14 +366,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_right.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
-						nowPlayer.roleSprite->setTexture("image/" + nowPlayer.name + "_left.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[n - 1]) + "_left.png");
 					}
 				}
 			}
@@ -903,6 +924,7 @@ void GameMainLayer::emptyMenuYes()
 					if (p.money >= emptyBuildCost)
 					{
 						l->getTileAt(nowLand)->setColor(p.color);
+
 						p.money -= emptyBuildCost;
 
 						const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
@@ -1575,6 +1597,10 @@ void GameMainLayer::removePlayer(int number)
 
 	if (players.size() == 1)
 	{
+		// 放音乐
+		SimpleAudioEngine::getInstance()->playEffect("music/win.mp3", false);
+		SimpleAudioEngine::getInstance()->playBackgroundMusic("music/end.mp3", true);
+
 		// 菜单面板图片
 		menuBoard = Sprite::create("image/Popup.png");
 		menuBoard->setPosition(visibleSize.width / 2, visibleSize.height / 2);
