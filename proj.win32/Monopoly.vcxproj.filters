@@ -25,6 +25,9 @@
     <Filter Include="src\游戏设置">
       <UniqueIdentifier>{75c4f3f5-d34a-430d-bbe6-6f9d1f16a8a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\游戏结束">
+      <UniqueIdentifier>{437f040c-4999-4a5f-9837-2de0dd457cd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,6 +72,9 @@
     <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp">
       <Filter>src\新游戏</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\BackToTitleLayer.cpp">
+      <Filter>src\游戏结束</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -112,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h">
       <Filter>src\新游戏</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BackToTitleLayer.h">
+      <Filter>src\游戏结束</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

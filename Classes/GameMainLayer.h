@@ -6,6 +6,7 @@
 
 #include "GameSetLayer.h"
 #include "TitleScene.h"
+#include "BackToTitleLayer.h"
 
 #include <vector>
 
@@ -64,11 +65,11 @@ private:
 	// 不同道路对应的GID
 
 	// 起始点
-	const unsigned int enterance_road_GID = 390;
+	const unsigned int entrance_road_GID = 390;
 	// 普通道路
 	const unsigned int normal_road_GID = 568;
 	// 监狱入口
-	const unsigned int prisonEnterance_road_GID = 398;
+	const unsigned int prisonEntrance_road_GID = 398;
 	// 监狱
 	const unsigned int prison_road_GID = 436;
 	// 突发事件
@@ -143,8 +144,12 @@ public:
 	void setPlayersRoles(vector<int> pr);
 	void setMapNumber(int mn);
 
-	// 定时删除
+	// 定时删除粒子
 	void removeParticle(float dt);
+	// 加载中 Loading
+	void continueLoading(float dt);
+	// 定时删除 NowLoading
+	void removeLoading(float dt);
 
 	// 初始化
 	virtual bool init();
@@ -160,6 +165,8 @@ public:
 	void diceEvent(Ref* pSender, Widget::TouchEventType type);
 	// 设置
 	void setEvent(Ref* pSender, Widget::TouchEventType type);
+	// 关闭
+	void exitEvent(Ref* pSender, Widget::TouchEventType type);
 	// 走两步
 	void playerGo(float dt);
 
@@ -179,9 +186,14 @@ public:
 	void myMenuNo();
 	// 别人的土地
 	void otherLand();
+	void checkPayPlayerMoney(string payName, string earnName, int price);
+	void checkToClose(Ref* pSender, Widget::TouchEventType type, string payName, string earnName, int price);
 	void otherMenuClose(string payName, string earnName, int price);
 	// 交税
+	void checkPayPlayerMoneyLo(string payName, int loss);
+	void checkToCloseLo(Ref* pSender, Widget::TouchEventType type, string payName, int loss);
 	void payLoss(string payName, int loss);
+
 	// 清除面板
 	void cleanMenu();
 	// 轮换下一位玩家

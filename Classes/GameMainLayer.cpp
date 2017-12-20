@@ -11,6 +11,7 @@ GameMainLayer::~GameMainLayer()
 }
 
 // set 函数集
+
 void GameMainLayer::setPlayersNumber(int pn)
 {
 	this->playersNumber = pn;
@@ -34,13 +35,27 @@ void GameMainLayer::setMapNumber(int mn)
 	this->mapNumber = mn;
 }
 
+// schedule 相关函数
+
 void GameMainLayer::removeParticle(float dt)
 {
 	auto p = this->getChildByName("particle");
 	p->removeFromParentAndCleanup(true);
 }
 
-// init 
+void GameMainLayer::continueLoading(float dt)
+{
+	auto l = (Label*)(this->getChildByName("loading"));
+	l->setString(l->getString() + " .");
+}
+
+void GameMainLayer::removeLoading(float dt)
+{
+	auto a = this->getChildByName("loading");
+	a->removeFromParentAndCleanup(true);
+}
+
+// init
 bool GameMainLayer::init()
 {
 	if (!Layer::init())
@@ -62,8 +77,20 @@ bool GameMainLayer::init()
 	
 	// 回合数
 	rounds = 1;
-		
-	this->scheduleOnce(schedule_selector(GameMainLayer::setParameter), 0.01);
+	
+	// Nowloading
+	Label* loading = Label::create("Now Loading", "arial", 30);
+	loading->enableBold();
+	loading->setPosition(visibleSize / 2);
+	this->addChild(loading, 5, "loading");
+
+	this->schedule(schedule_selector(GameMainLayer::continueLoading), 0.5, 3, 0.5);
+
+	this->scheduleOnce(schedule_selector(GameMainLayer::removeLoading), 2);
+	// ここまでだ
+
+	// 开始主函数
+	this->scheduleOnce(schedule_selector(GameMainLayer::setParameter), 2);
 
 	return true;
 }
@@ -160,6 +187,7 @@ void GameMainLayer::createPlayerPro()
 		const char* pc = ((String*)ng->objectForKey(p.name))->getCString();
 		Label* l1 = Label::createWithSystemFont(pc, "arial", 20);
 		l1->setColor(p.color);
+		l1->enableBold();
 		l1->setPosition(visibleSize.width * 6 / 7,
 			visibleSize.height - visibleSize.height * 3 * times / 16 - l1->getContentSize().height / 2);
 		this->addChild(l1, 2, pc);
@@ -169,6 +197,7 @@ void GameMainLayer::createPlayerPro()
 		string m = rmb + to_string(p.money);
 		string blank = " ";
 		Label* l2 = Label::createWithSystemFont(m, "arial", 18);
+		l2->enableBold();
 		l2->setPosition(visibleSize.width * 6 / 7, l1->getPosition().y - 2 * l1->getContentSize().height);
 		this->addChild(l2, 2, p.name + blank + "money");
 
@@ -184,16 +213,32 @@ void GameMainLayer::createPlayerPro()
 	this->addChild(diceButton, 2);
 
 	// 设置按钮
-	Button* setButton = Button::create("image/set-button-normal.png", "image/set-button-pressed.png");
+	Button* setButton = Button::create("image/settingButtonNormal.png", "image/settingButtonPressed.png");
 	setButton->setPosition(Vec2(setButton->getContentSize().width,
 		visibleSize.height - setButton->getContentSize().height));
 	setButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::setEvent, this));
 	setButton->setPressedActionEnabled(true);
 	this->addChild(setButton, 2);
+
+	// 关闭按钮
+	Button* exitButton = Button::create("image/exitButtonNormal.png", "image/exitButtonPressed.png");
+	exitButton->setPosition(Vec2(exitButton->getContentSize().width,
+		visibleSize.height - exitButton->getContentSize().height * 2.5));
+	exitButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::exitEvent, this));
+	exitButton->setPressedActionEnabled(true);
+	this->addChild(exitButton, 2);
+
+	/*
+	// 问题按钮
+	Button* questionButton = Button::create("image/settingButtonNormal.png", "image/settingButtonPressed.png");
+	questionButton->setPosition(Vec2(questionButton->getContentSize().width,
+		visibleSize.height - questionButton->getContentSize().height * 3));
+	questionButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::setEvent, this));
+	questionButton->setPressedActionEnabled(true);
+	this->addChild(questionButton, 2);*/
 }
 
 // 动作相关函数
-
 void GameMainLayer::diceEvent(Ref* pSender, Widget::TouchEventType type)
 {
 	switch (type)
@@ -278,6 +323,26 @@ void GameMainLayer::setEvent(Ref* pSender, Widget::TouchEventType type)
 	{
 		auto gsl = GameSetLayer::create();
 		this->addChild(gsl, 100);
+	}
+	case Widget::TouchEventType::CANCELED:
+		break;
+	default:
+		break;
+	}
+}
+
+void GameMainLayer::exitEvent(Ref* pSender, Widget::TouchEventType type)
+{
+	switch (type)
+	{
+	case Widget::TouchEventType::BEGAN:
+		break;
+	case Widget::TouchEventType::MOVED:
+		break;
+	case Widget::TouchEventType::ENDED:
+	{
+		auto btt = BackToTitleLayer::create();
+		this->addChild(btt, 100);
 	}
 	case Widget::TouchEventType::CANCELED:
 		break;
@@ -584,7 +649,7 @@ void GameMainLayer::checkRoad(float dt)
 				// 正常通过
 				this->scheduleOnce(schedule_selector(GameMainLayer::checkLand), 0.1);
 			}
-			else if (road->getTileGIDAt(p.rolePosition) == prisonEnterance_road_GID)
+			else if (road->getTileGIDAt(p.rolePosition) == prisonEntrance_road_GID)
 			{
 				// 蹲监狱
 
@@ -702,7 +767,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::payLoss, this, p.name, loss));
+					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoneyLo, this, p.name, loss));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -733,7 +798,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::payLoss, this, p.name, 700));
+					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoneyLo, this, p.name, 700));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -756,6 +821,11 @@ void GameMainLayer::checkRoad(float dt)
 
 				noticeMenu = Menu::create(okM, NULL);
 				this->addChild(noticeMenu);
+			}
+			else if (road->getTileGIDAt(p.rolePosition) == entrance_road_GID)
+			{
+				// 一般通过起始位置
+				this->changePlayer();
 			}
 
 			break;
@@ -832,6 +902,7 @@ void GameMainLayer::checkLand(float dt)
 
 // Land相关函数
 
+// 空地
 void GameMainLayer::emptyLand()
 {
 	string name;
@@ -952,7 +1023,7 @@ void GameMainLayer::emptyMenuYes()
 							break;
 						}
 						pg->setStartColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
-						pg->setEndColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
+						pg->setEndColor(Color4F::Color4F(0, 0, 0, 0));
 						this->addChild(pg, 0, "particle");
 
 						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
@@ -1017,6 +1088,7 @@ void GameMainLayer::emptyMenuNo()
 	this->cleanAndChange();
 }
 
+// 我的
 void GameMainLayer::myLand()
 {
 	string name;
@@ -1192,7 +1264,7 @@ void GameMainLayer::myMenuYes()
 							break;
 						}
 						pg->setStartColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
-						pg->setEndColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
+						pg->setEndColor(Color4F::Color4F(0, 0, 0, 0));
 						this->addChild(pg, 0, "particle");
 
 						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
@@ -1255,6 +1327,8 @@ void GameMainLayer::myMenuNo()
 {
 	this->cleanAndChange();
 }
+
+// 他们的
 
 void GameMainLayer::otherLand()
 {
@@ -1461,7 +1535,7 @@ void GameMainLayer::otherLand()
 
 	// 菜单：确定
 	MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-		"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::otherMenuClose, this, payName, earnName, price));
+		"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoney, this, payName, earnName, price));
 	okM->setPosition(0, -visibleSize.height / 5);
 
 	const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -1472,6 +1546,168 @@ void GameMainLayer::otherLand()
 
 	noticeMenu = Menu::create(okM, NULL);
 	this->addChild(noticeMenu);
+}
+
+void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int price)
+{
+	// 暴力检查
+
+	for (auto& p : players)
+	{
+		if (p.name == payName)
+		{
+			if (p.money >= price)
+			{
+				this->otherMenuClose(payName, earnName, price);
+			}
+			else
+			{
+				bool sellFlag = false;
+				bool thisTimeFlag = false;
+				int sellNumber = 0;
+
+				int sellMoney = 0;
+				int wholeSellMoney = 0;
+
+				int landNumbers = 0;
+
+				while (p.money < price)
+				{
+					int endX = 24;
+					int endY = 21;
+
+					sellMoney = 0;
+					landNumbers = 0;
+					thisTimeFlag = false;
+
+					for (auto l : lands)
+					{
+						++landNumbers;
+
+						for (int y = 0; y < endY; ++y)
+						{
+							for (int x = 0; x < endX; ++x)
+							{
+								if (l->getTileAt(Vec2(x, y)))
+								{
+									if (l->getTileAt(Vec2(x, y))->getColor() == p.color)
+									{
+										sellFlag = true;
+										thisTimeFlag = true;
+										++sellNumber;
+
+										if (l->getTileGIDAt(Vec2(x, y)) == empty_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt();
+										}
+										else if (l->getTileGIDAt(Vec2(x, y)) == level1_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt()
+												+ l->getProperty("level1BuildCost").asInt();
+										}
+										else if (l->getTileGIDAt(Vec2(x, y)) == level2_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt()
+												+ l->getProperty("level1BuildCost").asInt()
+												+ l->getProperty("level2BuildCost").asInt();
+										}
+										else if (l->getTileGIDAt(Vec2(x, y)) == level3_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt()
+												+ l->getProperty("level1BuildCost").asInt()
+												+ l->getProperty("level2BuildCost").asInt()
+												+ l->getProperty("level3BuildCost").asInt();
+										}
+
+										// 把土地回归本真
+										l->setTileGID(empty_land_GID, Vec2(x, y));
+										l->getTileAt(Vec2(x, y))->setColor(Color3B::WHITE);
+
+										break;
+									}
+								}
+							}
+
+							if (thisTimeFlag == true)
+							{
+								break;
+							}
+						}
+
+						if (thisTimeFlag == true)
+						{
+							break;
+						}
+					}
+
+					wholeSellMoney += sellMoney;
+					p.money += sellMoney;
+
+					if (thisTimeFlag == false && landNumbers == lands.size() && sellMoney == 0)
+					{
+						break;
+					}
+				}
+
+				if (sellFlag == true)
+				{
+					Sprite* s = Sprite::create("image/Popup.png");
+					s->setPosition(visibleSize / 2);
+
+					string str = "Now the money is not enough, so you have to \n sell " + to_string(sellNumber) + " houses."
+						+ " The whole money you get is " + to_string(wholeSellMoney) + " \n and now your money is " + to_string(p.money);
+					Label* la = Label::create(str, "arial", 25);
+					la->setTextColor(Color4B::BLACK);
+					la->setPosition(s->getContentSize().width / 2,
+						s->getContentSize().height * 3 / 4);
+					s->addChild(la);
+
+					Button* btn = Button::create("image/GreenNormal.png", "image/GreenPressed.png");
+					btn->setPosition(Vec2(s->getContentSize().width / 2,
+						btn->getContentSize().height * 2));
+					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToClose, this, payName, earnName, price));
+					btn->setPressedActionEnabled(true);
+
+					Label* ok = Label::create("OK", "arial", 20);
+					ok->setColor(Color3B::BLACK);
+					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
+					btn->addChild(ok);
+
+					s->addChild(btn);
+										
+					this->addChild(s, 50, "RUA");
+				}
+				else
+				{
+					this->otherMenuClose(payName, earnName, price);
+				}
+			}
+			
+			break;
+		}
+	}
+}
+
+void GameMainLayer::checkToClose(Ref* pSender, Widget::TouchEventType type, string payName, string earnName, int price)
+{
+	switch (type)
+	{
+	case Widget::TouchEventType::BEGAN:
+		break;
+	case Widget::TouchEventType::MOVED:
+		break;
+	case Widget::TouchEventType::ENDED:
+	{
+		auto a = this->getChildByName("RUA");
+		a->removeFromParentAndCleanup(true);
+
+		this->otherMenuClose(payName, earnName, price);
+	}
+	case Widget::TouchEventType::CANCELED:
+		break;
+	default:
+		break;
+	}
 }
 
 void GameMainLayer::otherMenuClose(string payName, string earnName, int price)
@@ -1501,6 +1737,170 @@ void GameMainLayer::otherMenuClose(string payName, string earnName, int price)
 	}
 
 	this->cleanAndChange();
+}
+
+// 丢钱了
+
+void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
+{
+	// 暴力检查
+
+	for (auto& p : players)
+	{
+		if (p.name == payName)
+		{
+			if (p.money >= loss)
+			{
+				this->payLoss(payName, loss);
+			}
+			else
+			{
+				bool sellFlag = false;
+				bool thisTimeFlag = false;
+				int sellNumber = 0;
+
+				int sellMoney = 0;
+				int wholeSellMoney = 0;
+
+				int landNumbers = 0;
+
+				while (p.money < loss)
+				{
+					int endX = 24;
+					int endY = 21;
+
+					sellMoney = 0;
+					landNumbers = 0;
+					thisTimeFlag = false;
+
+					for (auto l : lands)
+					{
+						++landNumbers;
+
+						for (int y = 0; y < endY; ++y)
+						{
+							for (int x = 0; x < endX; ++x)
+							{
+								if (l->getTileAt(Vec2(x, y)))
+								{
+									if (l->getTileAt(Vec2(x, y))->getColor() == p.color)
+									{
+										sellFlag = true;
+										++sellNumber;
+										thisTimeFlag = true;
+
+										if (l->getTileGIDAt(Vec2(x, y)) == empty_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt();
+										}
+										else if (l->getTileGIDAt(Vec2(x, y)) == level1_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt()
+												+ l->getProperty("level1BuildCost").asInt();
+										}
+										else if (l->getTileGIDAt(Vec2(x, y)) == level2_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt()
+												+ l->getProperty("level1BuildCost").asInt()
+												+ l->getProperty("level2BuildCost").asInt();
+										}
+										else if (l->getTileGIDAt(Vec2(x, y)) == level3_land_GID)
+										{
+											sellMoney = l->getProperty("emptyBuildCost").asInt()
+												+ l->getProperty("level1BuildCost").asInt()
+												+ l->getProperty("level2BuildCost").asInt()
+												+ l->getProperty("level3BuildCost").asInt();
+										}
+
+										// 把土地回归本真
+										l->setTileGID(empty_land_GID, Vec2(x, y));
+										l->getTileAt(Vec2(x, y))->setColor(Color3B::WHITE);
+
+										break;
+									}
+								}
+							}
+
+							if (thisTimeFlag == true)
+							{
+								break;
+							}
+						}
+
+						if (thisTimeFlag == true)
+						{
+							break;
+						}
+					}
+
+					wholeSellMoney += sellMoney;
+					p.money += sellMoney;
+
+					if (thisTimeFlag == false && landNumbers == lands.size() && sellMoney == 0)
+					{
+						break;
+					}
+				}
+
+				if (sellFlag == true)
+				{
+					Sprite* s = Sprite::create("image/Popup.png");
+					s->setPosition(visibleSize / 2);
+
+					string str = "Now the money is not enough, so you have to \n sell " + to_string(sellNumber) + " houses."
+						+ " The whole money you get is " + to_string(wholeSellMoney) + " \n and now your money is " + to_string(p.money);
+					Label* la = Label::create(str, "arial", 25);
+					la->setTextColor(Color4B::BLACK);
+					la->setPosition(s->getContentSize().width / 2,
+						s->getContentSize().height * 3 / 4);
+					s->addChild(la);
+
+					Button* btn = Button::create("image/GreenNormal.png", "image/GreenPressed.png");
+					btn->setPosition(Vec2(s->getContentSize().width / 2,
+						btn->getContentSize().height * 2));
+					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToCloseLo, this, payName, loss));
+					btn->setPressedActionEnabled(true);
+
+					Label* ok = Label::create("OK", "arial", 20);
+					ok->setColor(Color3B::BLACK);
+					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
+					btn->addChild(ok);
+
+					s->addChild(btn);
+
+					this->addChild(s, 50, "RUA");
+				}
+				else
+				{
+					this->payLoss(payName, loss);
+				}
+			}
+
+			break;
+		}
+	}
+}
+
+void GameMainLayer::checkToCloseLo(Ref* pSender, Widget::TouchEventType type, string payName, int loss)
+{
+	switch (type)
+	{
+	case Widget::TouchEventType::BEGAN:
+		break;
+	case Widget::TouchEventType::MOVED:
+		break;
+	case Widget::TouchEventType::ENDED:
+	{
+		auto a = this->getChildByName("RUA");
+		a->removeFromParentAndCleanup(true);
+
+		this->payLoss(payName, loss);
+	}
+	case Widget::TouchEventType::CANCELED:
+		break;
+	default:
+		break;
+	}
 }
 
 void GameMainLayer::payLoss(string payName, int loss)
