@@ -41,6 +41,7 @@ void ExitPopupLayer::createMenu()
 	// ÌáÊ¾Óï
 	auto epT1 = ((String*)d->objectForKey("exitPopupT1"))->getCString();
 	Label* T1 = Label::createWithSystemFont(epT1, "arial", 38);
+	T1->enableBold();
 	T1->setTextColor(Color4B::BLACK);
 	T1->setPosition(Vec2(s->getContentSize().width / 2, s->getContentSize().height * 3 / 4));
 	s->addChild(T1);

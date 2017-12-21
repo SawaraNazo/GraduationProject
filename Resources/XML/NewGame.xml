@@ -70,16 +70,25 @@
   <string>恭喜你，出狱了！</string>
 
   <key>emergencyEvent1</key>
-  <string>在路上散步时，一个不小心，被路过的扒手摸走了100元</string>
+  <string>在路上散步时，被路过的扒手偷走了100元</string>
   <key>emergencyEvent2</key>
-  <string>向路边丢了300元，捡起来交给警察，得到了“拾金不昧”的光荣称号</string>
+  <string>你被不明坠落物砸伤，花费医疗费用300元</string>
   <key>emergencyEvent3</key>
-  <string>你所喜爱的某网站称无钱运营，你为了用爱发电，赞助了500元</string>
+  <string>你为喜爱的称无资金运营的某B网站赞助了500元</string>
   <key>emergencyEvent4</key>
-  <string>s**m商城促销90%，你顺势清空了购物车，损失了1000元</string>
+  <string>某S游戏商城大促销，你花费1000元清空购物车</string>
   <key>emergencyEvent5</key>
-  <string>长时间没做好事手痒，搀扶摔倒的老夫妇，被坑掉了2000元</string>
+  <string>搀扶摔倒在地的老夫妇，反被诬陷损失2000元</string>
 
+  <key>sellLand1</key>
+  <string>由于您的资金不足，故以70%的折扣价</string>
+  <key>sellLand2</key>
+  <string>售出了您的</string>
+  <key>sellLand3</key>
+  <string>所房屋，销售总获得</string>
+  <key>sellLand4</key>
+  <string>您现在拥有的资金为</string>
+  
   <key>eliminate</key>
   <string>的资产为负，淘汰出局！</string>
   <key>win</key>

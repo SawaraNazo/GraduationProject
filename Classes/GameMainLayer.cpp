@@ -124,10 +124,12 @@ void GameMainLayer::createMap()
 	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 	const char* roundsC = ((String*)ngContent->objectForKey("rounds"))->getCString();
 	Label* roundsL1 = Label::createWithSystemFont(roundsC, "arial", 24);
+	roundsL1->enableBold();
 	roundsL1->setPosition(visibleSize.width * 3 / 8, visibleSize.height - roundsL1->getContentSize().height);
 	this->addChild(roundsL1, 10);
 
 	Label* roundsL2 = Label::createWithSystemFont(to_string(rounds), "arial", 18);
+	roundsL2->enableBold();
 	roundsL2->setPosition(visibleSize.width * 3 / 8, roundsL1->getPosition().y - roundsL2->getContentSize().height);
 	this->addChild(roundsL2, 10, "roundsL");;
 }
@@ -503,7 +505,7 @@ bool GameMainLayer::checkState()
 				const char* roundsToStayInParkinglot2 = ((String*)ngContent->objectForKey("roundsToStayInParkinglot2"))->getCString();
 				string blank = " ";
 				string s = roundsToStayInParkinglot1 + blank + "\n" + roundsToStayInParkinglot2 + to_string(p.stayRound);
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -543,7 +545,7 @@ bool GameMainLayer::checkState()
 				const char* roundsToStayInPrison2 = ((String*)ngContent->objectForKey("roundsToStayInPrison2"))->getCString();
 				string blank = " ";
 				string s = roundsToStayInPrison1 + blank + "\n" + roundsToStayInPrison2 + to_string(p.stayRound);
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -579,7 +581,7 @@ bool GameMainLayer::checkState()
 
 				// 菜单主要内容
 				const char* outOfParkinglot = ((String*)ngContent->objectForKey("outOfParkinglot"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "arial", 30);
+				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "arial", 25);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -614,7 +616,7 @@ bool GameMainLayer::checkState()
 
 				// 菜单主要内容
 				const char* outOfPrison = ((String*)ngContent->objectForKey("outOfPrison"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(outOfPrison, "arial", 30);
+				Label* noticeL = Label::createWithSystemFont(outOfPrison, "arial", 25);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -684,7 +686,7 @@ void GameMainLayer::checkRoad(float dt)
 				const char* prisonEnterance2 = ((String*)ngContent->objectForKey("prisonEnterance2"))->getCString();
 				string blank = " ";
 				string s = prisonEnterance1 + blank + "\n" + prisonEnterance2;
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -723,7 +725,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单主要内容
 				const char* parkinglot = ((String*)ngContent->objectForKey("parkinglot"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(parkinglot, "arial", 30);
+				Label* noticeL = Label::createWithSystemFont(parkinglot, "arial", 25);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -778,7 +780,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单主要内容
 				const char* emergencyEvent = ((String*)ngContent->objectForKey("emergencyEvent" + to_string(i)))->getCString();
-				Label* noticeL = Label::createWithSystemFont(emergencyEvent, "arial", 20);
+				Label* noticeL = Label::createWithSystemFont(emergencyEvent, "arial", 25);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -812,7 +814,7 @@ void GameMainLayer::checkRoad(float dt)
 				const char* tax2 = ((String*)ngContent->objectForKey("tax2"))->getCString();
 				string blank = " ";
 				string s = tax1 + blank + "\n" + tax2;
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 30);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 
 				menuBoard->addChild(noticeL);
@@ -973,7 +975,7 @@ void GameMainLayer::emptyLand()
 	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
 	string s = nc + blank + comma + upgradeLand0 + "\n" +
 		payToUpgrade + blank + to_string(emptyBuildCost) + yuan;
-	noticeL = Label::createWithSystemFont(s, "arial", 30);
+	noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1062,7 +1064,7 @@ void GameMainLayer::emptyMenuYes()
 
 						// 菜单主要内容
 						const char* lackOfMoney = ((String*)ngContent->objectForKey("lackOfMoney"))->getCString();
-						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 30);
+						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 25);
 
 						menuBoard->addChild(noticeL);
 						noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1189,7 +1191,7 @@ void GameMainLayer::myLand()
 
 	string s = nc + blank + comma + upgradeLand + "\n" +
 		payToUpgrade + blank + to_string(price) + yuan;
-	noticeL = Label::createWithSystemFont(s, "arial", 30);
+	noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1302,7 +1304,7 @@ void GameMainLayer::myMenuYes()
 
 						// 菜单主要内容
 						const char* lackOfMoney = ((String*)ngContent->objectForKey("lackOfMoney"))->getCString();
-						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 30);
+						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 25);
 
 						menuBoard->addChild(noticeL);
 						noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1527,7 +1529,7 @@ void GameMainLayer::otherLand()
 			payLand + blank + to_string(price) + yuan + "(+" + to_string(rate) + "%)";
 	}
 
-	noticeL = Label::createWithSystemFont(s, "arial", 30);
+	noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1651,11 +1653,20 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 
 				if (sellFlag == true)
 				{
+					auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+					const char* selll1 = ((String*)ngContent->objectForKey("sellLand1"))->getCString();
+					const char* selll2 = ((String*)ngContent->objectForKey("sellLand2"))->getCString();
+					const char* selll3 = ((String*)ngContent->objectForKey("sellLand3"))->getCString();
+					const char* selll4 = ((String*)ngContent->objectForKey("sellLand4"))->getCString();
+					const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+					const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+					string blank = "";
 					Sprite* s = Sprite::create("image/Popup.png");
 					s->setPosition(visibleSize / 2);
 
-					string str = "Now the money is not enough, so you have to \n sell " + to_string(sellNumber) + " houses."
-						+ " The whole money you get is " + to_string(wholeSellMoney) + " \n and now your money is " + to_string(p.money);
+					string str = blank + selll1  + "\n"
+						+ selll2 + to_string(sellNumber) + selll3 + to_string(wholeSellMoney) + yuan + comma + "\n"
+						+ selll4 + to_string(p.money) + yuan;
 					Label* la = Label::create(str, "arial", 25);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
@@ -1664,7 +1675,7 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 
 					Button* btn = Button::create("image/GreenNormal.png", "image/GreenPressed.png");
 					btn->setPosition(Vec2(s->getContentSize().width / 2,
-						btn->getContentSize().height * 2));
+						s->getContentSize().height / 4 - btn->getContentSize().height));
 					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToClose, this, payName, earnName, price));
 					btn->setPressedActionEnabled(true);
 
@@ -1844,11 +1855,20 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 
 				if (sellFlag == true)
 				{
+					auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+					const char* selll1 = ((String*)ngContent->objectForKey("sellLand1"))->getCString();
+					const char* selll2 = ((String*)ngContent->objectForKey("sellLand2"))->getCString();
+					const char* selll3 = ((String*)ngContent->objectForKey("sellLand3"))->getCString();
+					const char* selll4 = ((String*)ngContent->objectForKey("sellLand4"))->getCString();
+					const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+					const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+					string blank = "";
 					Sprite* s = Sprite::create("image/Popup.png");
 					s->setPosition(visibleSize / 2);
 
-					string str = "Now the money is not enough, so you have to \n sell " + to_string(sellNumber) + " houses."
-						+ " The whole money you get is " + to_string(wholeSellMoney) + " \n and now your money is " + to_string(p.money);
+					string str = blank + selll1 + "\n"
+						+ selll2 + to_string(sellNumber) + selll3 + to_string(wholeSellMoney) + yuan + comma + "\n"
+						+ selll4 + to_string(p.money) + yuan;
 					Label* la = Label::create(str, "arial", 25);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
@@ -1857,7 +1877,7 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 
 					Button* btn = Button::create("image/GreenNormal.png", "image/GreenPressed.png");
 					btn->setPosition(Vec2(s->getContentSize().width / 2,
-						btn->getContentSize().height * 2));
+						s->getContentSize().height / 4 - btn->getContentSize().height));
 					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToCloseLo, this, payName, loss));
 					btn->setPressedActionEnabled(true);
 
@@ -1993,7 +2013,7 @@ void GameMainLayer::changePlayer()
 				s = player + str + eliminate;
 			}
 
-			noticeL = Label::createWithSystemFont(s, "arial", 30);
+			noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 			menuBoard->addChild(noticeL);
 			noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -2097,7 +2117,7 @@ void GameMainLayer::removePlayer(int number)
 			s = player + str + win;
 		}
 
-		noticeL = Label::createWithSystemFont(s, "arial", 30);
+		noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 		menuBoard->addChild(noticeL);
 		noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
