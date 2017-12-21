@@ -17,42 +17,9 @@ using namespace cocos2d;
 using namespace cocos2d::ui;
 using namespace CocosDenshion;
 
-// 朝向：右、下、左、上
-typedef enum _faceForward
+class ContinueMainLayer : public Layer
 {
-	right,
-	down,
-	left,
-	up
-} faceForward;
-
-// 玩家状态正常、停车（2）、监狱（3）
-typedef enum _stateType
-{
-	normal,
-	parking,
-	prison
-} stateType;
-
-// 玩家：名称、图片、图片位置、角色位置、土地位置、朝向、是否在移动、代表颜色、玩家状态
-struct Player
-{
-	string name;
-	int serialNumber;
-	Sprite* roleSprite;
-	Vec2 spritePosition;
-	Vec2 rolePosition;
-	faceForward faceTo;
-	bool isGoing;
-	Color3B color;
-	int money;
-	stateType state;
-	int stayRound;
-};
-
-class GameMainLayer : public Layer
-{
-private :
+private:
 	// 不同等级地块对应GID
 
 	// 空地
@@ -136,9 +103,9 @@ private :
 	// 回合数
 	int rounds;
 
-public :
-	GameMainLayer();
-	~GameMainLayer();
+public:
+	ContinueMainLayer();
+	~ContinueMainLayer();
 
 	// private变量相关
 	void setStartMoney(int sm);

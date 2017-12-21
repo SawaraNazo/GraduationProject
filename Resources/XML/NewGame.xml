@@ -79,6 +79,12 @@
   <string>某S游戏商城大促销，你花费1000元清空购物车</string>
   <key>emergencyEvent5</key>
   <string>搀扶摔倒在地的老夫妇，反被诬陷损失2000元</string>
+  <key>emergencyEvent6</key>
+  <string>为所在的公司通宵爆肝，老板奖励400元</string>
+  <key>emergencyEvent7</key>
+  <string>和某不良主播对簿公堂，胜诉收获800元</string>
+  <key>emergencyEvent8</key>
+  <string>在路上捡到1200元，选择据为己有</string>
 
   <key>sellLand1</key>
   <string>由于您的资金不足，故以70%的折扣价</string>

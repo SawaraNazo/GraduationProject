@@ -150,11 +150,15 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BackToTitleLayer.cpp" />
+    <ClCompile Include="..\Classes\ContinueGameScene.cpp" />
+    <ClCompile Include="..\Classes\ContinueMainLayer.cpp" />
     <ClCompile Include="..\Classes\ExitPopupLayer.cpp" />
     <ClCompile Include="..\Classes\GameInitLayer.cpp" />
     <ClCompile Include="..\Classes\GameMainLayer.cpp" />
     <ClCompile Include="..\Classes\GameSetLayer.cpp" />
     <ClCompile Include="..\Classes\NewGameScene.cpp" />
+    <ClCompile Include="..\Classes\SaveGameCoverLayer.cpp" />
+    <ClCompile Include="..\Classes\SaveGameLayer.cpp" />
     <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp" />
     <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp" />
     <ClCompile Include="..\Classes\TitleAniLayer.cpp" />
@@ -167,11 +171,15 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BackToTitleLayer.h" />
+    <ClInclude Include="..\Classes\ContinueGameScene.h" />
+    <ClInclude Include="..\Classes\ContinueMainLayer.h" />
     <ClInclude Include="..\Classes\ExitPopupLayer.h" />
     <ClInclude Include="..\Classes\GameInitLayer.h" />
     <ClInclude Include="..\Classes\GameMainLayer.h" />
     <ClInclude Include="..\Classes\GameSetLayer.h" />
     <ClInclude Include="..\Classes\NewGameScene.h" />
+    <ClInclude Include="..\Classes\SaveGameCoverLayer.h" />
+    <ClInclude Include="..\Classes\SaveGameLayer.h" />
     <ClInclude Include="..\Classes\SelectGameRolesLayer.h" />
     <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h" />
     <ClInclude Include="..\Classes\TitleAniLayer.h" />

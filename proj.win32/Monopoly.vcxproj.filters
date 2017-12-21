@@ -19,14 +19,23 @@
     <Filter Include="resource\XML">
       <UniqueIdentifier>{4d9ef816-c74f-484b-a969-d504ae781ea2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\新游戏">
-      <UniqueIdentifier>{30c92ccc-64dd-4858-85cb-4fbf1cee9acd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\游戏设置">
       <UniqueIdentifier>{75c4f3f5-d34a-430d-bbe6-6f9d1f16a8a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\游戏结束">
+    <Filter Include="src\结束游戏">
       <UniqueIdentifier>{437f040c-4999-4a5f-9837-2de0dd457cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\保存游戏进度">
+      <UniqueIdentifier>{c6eaa6b3-f918-4294-9d46-c6dd60f3cd24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\加载游戏进度">
+      <UniqueIdentifier>{de1ebf9e-6289-4b85-909c-3574e6b7a9cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\选择游戏角色">
+      <UniqueIdentifier>{3c520326-69ad-48ff-8bba-1fe09dc6dc14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\开始新游戏">
+      <UniqueIdentifier>{30c92ccc-64dd-4858-85cb-4fbf1cee9acd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -55,25 +64,37 @@
       <Filter>src\标题界面</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\NewGameScene.cpp">
-      <Filter>src\新游戏</Filter>
+      <Filter>src\开始新游戏</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameSetLayer.cpp">
       <Filter>src\游戏设置</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameInitLayer.cpp">
-      <Filter>src\新游戏</Filter>
+      <Filter>src\开始新游戏</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameMainLayer.cpp">
-      <Filter>src\新游戏</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp">
-      <Filter>src\新游戏</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp">
-      <Filter>src\新游戏</Filter>
+      <Filter>src\开始新游戏</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\BackToTitleLayer.cpp">
-      <Filter>src\游戏结束</Filter>
+      <Filter>src\结束游戏</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ContinueGameScene.cpp">
+      <Filter>src\加载游戏进度</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ContinueMainLayer.cpp">
+      <Filter>src\加载游戏进度</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SaveGameLayer.cpp">
+      <Filter>src\保存游戏进度</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SaveGameCoverLayer.cpp">
+      <Filter>src\保存游戏进度</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp">
+      <Filter>src\选择游戏角色</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp">
+      <Filter>src\选择游戏角色</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,22 +126,34 @@
       <Filter>src\游戏设置</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameInitLayer.h">
-      <Filter>src\新游戏</Filter>
+      <Filter>src\开始新游戏</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameMainLayer.h">
-      <Filter>src\新游戏</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SelectGameRolesLayer.h">
-      <Filter>src\新游戏</Filter>
+      <Filter>src\开始新游戏</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\NewGameScene.h">
-      <Filter>src\新游戏</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h">
-      <Filter>src\新游戏</Filter>
+      <Filter>src\开始新游戏</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\BackToTitleLayer.h">
-      <Filter>src\游戏结束</Filter>
+      <Filter>src\结束游戏</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ContinueGameScene.h">
+      <Filter>src\加载游戏进度</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ContinueMainLayer.h">
+      <Filter>src\加载游戏进度</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SaveGameLayer.h">
+      <Filter>src\保存游戏进度</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SaveGameCoverLayer.h">
+      <Filter>src\保存游戏进度</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SelectGameRolesLayer.h">
+      <Filter>src\选择游戏角色</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h">
+      <Filter>src\选择游戏角色</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

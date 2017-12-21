@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cocos2d.h"
-
 #include "GameInitLayer.h"
 
 using namespace std;

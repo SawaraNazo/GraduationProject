@@ -1,0 +1,1 @@
+The default path of save is "AppDate\Local\Monopoly\UserDefault.xml" on win32.

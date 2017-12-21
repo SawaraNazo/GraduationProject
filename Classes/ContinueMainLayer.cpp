@@ -1,28 +1,28 @@
-#include "GameMainLayer.h"
+#include "ContinueMainLayer.h"
 
-GameMainLayer::GameMainLayer()
+ContinueMainLayer::ContinueMainLayer()
 {
 
 }
 
-GameMainLayer::~GameMainLayer()
+ContinueMainLayer::~ContinueMainLayer()
 {
 
 }
 
 // set 函数集
 
-void GameMainLayer::setPlayersNumber(int pn)
+void ContinueMainLayer::setPlayersNumber(int pn)
 {
 	this->playersNumber = pn;
 }
 
-void GameMainLayer::setStartMoney(int sm)
+void ContinueMainLayer::setStartMoney(int sm)
 {
 	this->startMoney = sm;
 }
 
-void GameMainLayer::setPlayersRoles(vector<int> pr)
+void ContinueMainLayer::setPlayersRoles(vector<int> pr)
 {
 	for (int i : pr)
 	{
@@ -30,68 +30,68 @@ void GameMainLayer::setPlayersRoles(vector<int> pr)
 	}
 }
 
-void GameMainLayer::setMapNumber(int mn)
+void ContinueMainLayer::setMapNumber(int mn)
 {
 	this->mapNumber = mn;
 }
 
 // get 函数集
 
-int GameMainLayer::getPlayersNumber()
+int ContinueMainLayer::getPlayersNumber()
 {
 	return this->playersNumber;
 }
 
-int GameMainLayer::getStartMoney()
+int ContinueMainLayer::getStartMoney()
 {
 	return this->startMoney;
 }
 
-int GameMainLayer::getMapNumber()
+int ContinueMainLayer::getMapNumber()
 {
 	return this->mapNumber;
 }
 
-int GameMainLayer::getEmEventNumber()
+int ContinueMainLayer::getEmEventNumber()
 {
 	return this->emEventNumber;
 }
 
-int GameMainLayer::getRounds()
+int ContinueMainLayer::getRounds()
 {
 	return this->rounds;
 }
 
-int GameMainLayer::getNowPlayerNumber()
+int ContinueMainLayer::getNowPlayerNumber()
 {
 	return this->nowPlayerNumber;
 }
 
-vector<int> GameMainLayer::getRoles()
+vector<int> ContinueMainLayer::getRoles()
 {
 	return this->roles;
 }
 
-vector<Player> GameMainLayer::getPlayers()
+vector<Player> ContinueMainLayer::getPlayers()
 {
 	return this->players;
 }
 
 // schedule 相关函数
 
-void GameMainLayer::removeParticle(float dt)
+void ContinueMainLayer::removeParticle(float dt)
 {
 	auto p = this->getChildByName("particle");
 	p->removeFromParentAndCleanup(true);
 }
 
-void GameMainLayer::continueLoading(float dt)
+void ContinueMainLayer::continueLoading(float dt)
 {
 	auto l = (Label*)(this->getChildByName("loading"));
 	l->setString(l->getString() + " .");
 }
 
-void GameMainLayer::removeLoading(float dt)
+void ContinueMainLayer::removeLoading(float dt)
 {
 	auto a = this->getChildByName("loading");
 	a->removeFromParentAndCleanup(true);
@@ -99,7 +99,7 @@ void GameMainLayer::removeLoading(float dt)
 
 // init
 
-bool GameMainLayer::init()
+bool ContinueMainLayer::init()
 {
 	if (!Layer::init())
 	{
@@ -117,28 +117,28 @@ bool GameMainLayer::init()
 
 	// 预设置开始的土地等级数
 	landLevelNumber = 8;
-	
+
 	// 回合数
 	rounds = 1;
-	
+
 	// Nowloading
 	Label* loading = Label::create("Now Loading", "arial", 30);
 	loading->enableBold();
 	loading->setPosition(visibleSize / 2);
 	this->addChild(loading, 5, "loading");
 
-	this->schedule(schedule_selector(GameMainLayer::continueLoading), 0.5, 3, 0.5);
+	this->schedule(schedule_selector(ContinueMainLayer::continueLoading), 0.5, 3, 0.5);
 
-	this->scheduleOnce(schedule_selector(GameMainLayer::removeLoading), 2);
+	this->scheduleOnce(schedule_selector(ContinueMainLayer::removeLoading), 2);
 	// ここまでだ
 
 	// 开始主函数
-	this->scheduleOnce(schedule_selector(GameMainLayer::setParameter), 2);
+	this->scheduleOnce(schedule_selector(ContinueMainLayer::setParameter), 2);
 
 	return true;
 }
 
-void GameMainLayer::setParameter(float dt)
+void ContinueMainLayer::setParameter(float dt)
 {
 	this->createMap();
 	this->createPlayer();
@@ -151,7 +151,7 @@ void GameMainLayer::setParameter(float dt)
 
 // 初始化相关函数
 
-void GameMainLayer::createMap()
+void ContinueMainLayer::createMap()
 {
 	string str = "tmx/map" + to_string(mapNumber) + ".tmx";
 	tileMap = TMXTiledMap::create(str);
@@ -181,7 +181,7 @@ void GameMainLayer::createMap()
 	this->addChild(roundsL2, 10, "roundsL");;
 }
 
-void GameMainLayer::createPlayer()
+void ContinueMainLayer::createPlayer()
 {
 	objectGroup = tileMap->getObjectGroup("Object");
 	auto player = objectGroup->getObject("player");
@@ -226,7 +226,7 @@ void GameMainLayer::createPlayer()
 	}
 }
 
-void GameMainLayer::createPlayerPro()
+void ContinueMainLayer::createPlayerPro()
 {
 	auto ng = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
@@ -259,7 +259,7 @@ void GameMainLayer::createPlayerPro()
 	Button* diceButton = Button::create("image/diceButtonNormal.png", "image/diceButtonPressed.png");
 	diceButton->setPosition(Vec2(visibleSize.width - diceButton->getContentSize().width / 2,
 		diceButton->getContentSize().height / 2));
-	diceButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::diceEvent, this));
+	diceButton->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::diceEvent, this));
 	diceButton->setPressedActionEnabled(true);
 	this->addChild(diceButton, 2);
 
@@ -267,7 +267,7 @@ void GameMainLayer::createPlayerPro()
 	Button* setButton = Button::create("image/settingButtonNormal.png", "image/settingButtonPressed.png");
 	setButton->setPosition(Vec2(setButton->getContentSize().width,
 		visibleSize.height - setButton->getContentSize().height));
-	setButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::setEvent, this));
+	setButton->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::setEvent, this));
 	setButton->setPressedActionEnabled(true);
 	this->addChild(setButton, 2);
 
@@ -275,7 +275,7 @@ void GameMainLayer::createPlayerPro()
 	Button* saveButton = Button::create("image/saveButtonNormal.png", "image/saveButtonPressed.png");
 	saveButton->setPosition(Vec2(saveButton->getContentSize().width,
 		visibleSize.height - saveButton->getContentSize().height * 2.5));
-	saveButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::saveEvent, this));
+	saveButton->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::saveEvent, this));
 	saveButton->setPressedActionEnabled(true);
 	this->addChild(saveButton, 2);
 
@@ -283,7 +283,7 @@ void GameMainLayer::createPlayerPro()
 	Button* exitButton = Button::create("image/exitButtonNormal.png", "image/exitButtonPressed.png");
 	exitButton->setPosition(Vec2(exitButton->getContentSize().width,
 		visibleSize.height - exitButton->getContentSize().height * 4));
-	exitButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::exitEvent, this));
+	exitButton->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::exitEvent, this));
 	exitButton->setPressedActionEnabled(true);
 	this->addChild(exitButton, 2);
 
@@ -291,14 +291,14 @@ void GameMainLayer::createPlayerPro()
 	// 问题按钮
 	Button* questionButton = Button::create("image/settingButtonNormal.png", "image/settingButtonPressed.png");
 	questionButton->setPosition(Vec2(questionButton->getContentSize().width,
-		visibleSize.height - questionButton->getContentSize().height * 3));
-	questionButton->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::setEvent, this));
+	visibleSize.height - questionButton->getContentSize().height * 3));
+	questionButton->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::setEvent, this));
 	questionButton->setPressedActionEnabled(true);
 	this->addChild(questionButton, 2);*/
 }
 
 // 动作相关函数
-void GameMainLayer::diceEvent(Ref* pSender, Widget::TouchEventType type)
+void ContinueMainLayer::diceEvent(Ref* pSender, Widget::TouchEventType type)
 {
 	switch (type)
 	{
@@ -346,8 +346,8 @@ void GameMainLayer::diceEvent(Ref* pSender, Widget::TouchEventType type)
 
 						p.isGoing = true;
 
-						this->schedule(schedule_selector(GameMainLayer::playerGo), 0.5, i - 1, 0);
-						this->scheduleOnce(schedule_selector(GameMainLayer::checkRoad), i*0.5);
+						this->schedule(schedule_selector(ContinueMainLayer::playerGo), 0.5, i - 1, 0);
+						this->scheduleOnce(schedule_selector(ContinueMainLayer::checkRoad), i*0.5);
 					}
 					else
 					{
@@ -370,7 +370,7 @@ void GameMainLayer::diceEvent(Ref* pSender, Widget::TouchEventType type)
 	}
 }
 
-void GameMainLayer::setEvent(Ref* pSender, Widget::TouchEventType type)
+void ContinueMainLayer::setEvent(Ref* pSender, Widget::TouchEventType type)
 {
 	switch (type)
 	{
@@ -390,7 +390,7 @@ void GameMainLayer::setEvent(Ref* pSender, Widget::TouchEventType type)
 	}
 }
 
-void GameMainLayer::saveEvent(Ref* pSender, Widget::TouchEventType type)
+void ContinueMainLayer::saveEvent(Ref* pSender, Widget::TouchEventType type)
 {
 	switch (type)
 	{
@@ -410,7 +410,7 @@ void GameMainLayer::saveEvent(Ref* pSender, Widget::TouchEventType type)
 	}
 }
 
-void GameMainLayer::exitEvent(Ref* pSender, Widget::TouchEventType type)
+void ContinueMainLayer::exitEvent(Ref* pSender, Widget::TouchEventType type)
 {
 	switch (type)
 	{
@@ -430,7 +430,7 @@ void GameMainLayer::exitEvent(Ref* pSender, Widget::TouchEventType type)
 	}
 }
 
-void GameMainLayer::playerGo(float dt)
+void ContinueMainLayer::playerGo(float dt)
 {
 	int n = 1;
 
@@ -474,14 +474,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_right.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_left.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_left.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::left)
@@ -496,14 +496,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_down.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_down.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
 					{
 						nowPlayer.rolePosition.y--;
 						nowPlayer.spritePosition.y += 30;
 						nowPlayer.faceTo = faceForward::up;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_up.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_up.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::up)
@@ -518,14 +518,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_right.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_left.png");
+						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_left.png");
 					}
 				}
 			}
@@ -538,7 +538,7 @@ void GameMainLayer::playerGo(float dt)
 	}
 }
 
-bool GameMainLayer::checkState()
+bool ContinueMainLayer::checkState()
 {
 	// 字儿们
 	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
@@ -568,7 +568,7 @@ bool GameMainLayer::checkState()
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -608,7 +608,7 @@ bool GameMainLayer::checkState()
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -647,7 +647,7 @@ bool GameMainLayer::checkState()
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanMenu, this));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanMenu, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -682,7 +682,7 @@ bool GameMainLayer::checkState()
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanMenu, this));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanMenu, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -710,7 +710,7 @@ bool GameMainLayer::checkState()
 	}
 }
 
-void GameMainLayer::checkRoad(float dt)
+void ContinueMainLayer::checkRoad(float dt)
 {
 	// 清除骰子图片
 	this->removeChildByName("dicePoint");
@@ -726,7 +726,7 @@ void GameMainLayer::checkRoad(float dt)
 			if (road->getTileGIDAt(p.rolePosition) == normal_road_GID)
 			{
 				// 正常通过
-				this->scheduleOnce(schedule_selector(GameMainLayer::checkLand), 0.1);
+				this->scheduleOnce(schedule_selector(ContinueMainLayer::checkLand), 0.1);
 			}
 			else if (road->getTileGIDAt(p.rolePosition) == prisonEntrance_road_GID)
 			{
@@ -738,7 +738,7 @@ void GameMainLayer::checkRoad(float dt)
 				p.spritePosition.x -= 17 * 30;
 				p.spritePosition.y -= 14 * 30;
 				p.roleSprite->setPosition(p.spritePosition);
-				p.roleSprite->setTexture("image/role" + to_string(roles[p.serialNumber-1]) + "_up.png");
+				p.roleSprite->setTexture("image/role" + to_string(roles[p.serialNumber - 1]) + "_up.png");
 				p.faceTo = faceForward::up;
 				p.stayRound = 3;
 
@@ -749,7 +749,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -791,7 +791,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -855,7 +855,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoneyLo, this, p.name, loss));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::checkPayPlayerMoneyLo, this, p.name, loss));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -886,7 +886,7 @@ void GameMainLayer::checkRoad(float dt)
 
 				// 菜单：确定
 				MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoneyLo, this, p.name, 700));
+					"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::checkPayPlayerMoneyLo, this, p.name, 700));
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -923,7 +923,7 @@ void GameMainLayer::checkRoad(float dt)
 	}
 }
 
-void GameMainLayer::checkLand(float dt)
+void ContinueMainLayer::checkLand(float dt)
 {
 	int n = 1;
 
@@ -991,7 +991,7 @@ void GameMainLayer::checkLand(float dt)
 // Land相关函数
 
 // 空地
-void GameMainLayer::emptyLand()
+void ContinueMainLayer::emptyLand()
 {
 	string name;
 	int n = 1;
@@ -1017,7 +1017,7 @@ void GameMainLayer::emptyLand()
 
 	// 菜单 ：是
 	MenuItem* yesM = MenuItemImage::create("image/GreenNormal.png",
-		"image/GreenPressed.png", CC_CALLBACK_0(GameMainLayer::emptyMenuYes, this));
+		"image/GreenPressed.png", CC_CALLBACK_0(ContinueMainLayer::emptyMenuYes, this));
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* yesC = ((String*)ngContent->objectForKey("yes"))->getCString();
@@ -1028,7 +1028,7 @@ void GameMainLayer::emptyLand()
 
 	// 菜单 ：否
 	MenuItem* noM = MenuItemImage::create("image/RedNormal.png",
-		"image/RedPressed.png", CC_CALLBACK_0(GameMainLayer::emptyMenuNo, this));
+		"image/RedPressed.png", CC_CALLBACK_0(ContinueMainLayer::emptyMenuNo, this));
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* noC = ((String*)ngContent->objectForKey("no"))->getCString();
@@ -1071,7 +1071,7 @@ void GameMainLayer::emptyLand()
 	this->addChild(noticeMenu);
 }
 
-void GameMainLayer::emptyMenuYes()
+void ContinueMainLayer::emptyMenuYes()
 {
 	int n = 1;
 
@@ -1114,7 +1114,7 @@ void GameMainLayer::emptyMenuYes()
 						pg->setEndColor(Color4F::Color4F(0, 0, 0, 0));
 						this->addChild(pg, 0, "particle");
 
-						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
+						this->scheduleOnce(schedule_selector(ContinueMainLayer::removeParticle), 1.0f);
 
 						// ここまでだ
 
@@ -1139,7 +1139,7 @@ void GameMainLayer::emptyMenuYes()
 
 						// 菜单：确定
 						MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-							"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
+							"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanAndChange, this));
 						okM->setPosition(0, -visibleSize.height / 5);
 
 						const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -1171,13 +1171,13 @@ void GameMainLayer::emptyMenuYes()
 	}
 }
 
-void GameMainLayer::emptyMenuNo()
+void ContinueMainLayer::emptyMenuNo()
 {
 	this->cleanAndChange();
 }
 
 // 我的
-void GameMainLayer::myLand()
+void ContinueMainLayer::myLand()
 {
 	string name;
 	int n = 1;
@@ -1203,7 +1203,7 @@ void GameMainLayer::myLand()
 
 	// 菜单 ：是
 	MenuItem* yesM = MenuItemImage::create("image/GreenNormal.png",
-		"image/GreenPressed.png", CC_CALLBACK_0(GameMainLayer::myMenuYes, this));
+		"image/GreenPressed.png", CC_CALLBACK_0(ContinueMainLayer::myMenuYes, this));
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* yesC = ((String*)ngContent->objectForKey("yes"))->getCString();
@@ -1214,7 +1214,7 @@ void GameMainLayer::myLand()
 
 	// 菜单 ：否
 	MenuItem* noM = MenuItemImage::create("image/RedNormal.png",
-		"image/RedPressed.png", CC_CALLBACK_0(GameMainLayer::myMenuNo, this));
+		"image/RedPressed.png", CC_CALLBACK_0(ContinueMainLayer::myMenuNo, this));
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* noC = ((String*)ngContent->objectForKey("no"))->getCString();
@@ -1287,7 +1287,7 @@ void GameMainLayer::myLand()
 	this->addChild(noticeMenu);
 }
 
-void GameMainLayer::myMenuYes()
+void ContinueMainLayer::myMenuYes()
 {
 	int n = 1;
 
@@ -1332,7 +1332,7 @@ void GameMainLayer::myMenuYes()
 
 						l->getTileAt(nowLand)->setColor(p.color);
 						p.money -= buildCost;
-						
+
 						// 粒子显示
 						ParticleGalaxy* pg = ParticleGalaxy::create();
 
@@ -1355,7 +1355,7 @@ void GameMainLayer::myMenuYes()
 						pg->setEndColor(Color4F::Color4F(0, 0, 0, 0));
 						this->addChild(pg, 0, "particle");
 
-						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
+						this->scheduleOnce(schedule_selector(ContinueMainLayer::removeParticle), 1.0f);
 
 						// ここまでだ
 
@@ -1379,7 +1379,7 @@ void GameMainLayer::myMenuYes()
 
 						// 菜单：确定
 						MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-							"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
+							"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::cleanAndChange, this));
 						okM->setPosition(0, -visibleSize.height / 5);
 
 						const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -1411,14 +1411,14 @@ void GameMainLayer::myMenuYes()
 	}
 }
 
-void GameMainLayer::myMenuNo()
+void ContinueMainLayer::myMenuNo()
 {
 	this->cleanAndChange();
 }
 
 // 他们的
 
-void GameMainLayer::otherLand()
+void ContinueMainLayer::otherLand()
 {
 	string payName, earnName;
 	faceForward nowF;
@@ -1623,7 +1623,7 @@ void GameMainLayer::otherLand()
 
 	// 菜单：确定
 	MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-		"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoney, this, payName, earnName, price));
+		"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::checkPayPlayerMoney, this, payName, earnName, price));
 	okM->setPosition(0, -visibleSize.height / 5);
 
 	const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -1636,7 +1636,7 @@ void GameMainLayer::otherLand()
 	this->addChild(noticeMenu);
 }
 
-void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int price)
+void ContinueMainLayer::checkPayPlayerMoney(string payName, string earnName, int price)
 {
 	// 暴力检查
 
@@ -1750,7 +1750,7 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 					Sprite* s = Sprite::create("image/Popup.png");
 					s->setPosition(visibleSize / 2);
 
-					string str = blank + selll1  + "\n"
+					string str = blank + selll1 + "\n"
 						+ selll2 + to_string(sellNumber) + selll3 + to_string(wholeSellMoney) + yuan + comma + "\n"
 						+ selll4 + to_string(p.money) + yuan;
 					Label* la = Label::create(str, "arial", 25);
@@ -1762,7 +1762,7 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 					Button* btn = Button::create("image/GreenNormal.png", "image/GreenPressed.png");
 					btn->setPosition(Vec2(s->getContentSize().width / 2,
 						s->getContentSize().height / 4 - btn->getContentSize().height));
-					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToClose, this, payName, earnName, price));
+					btn->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::checkToClose, this, payName, earnName, price));
 					btn->setPressedActionEnabled(true);
 
 					Label* ok = Label::create("OK", "arial", 20);
@@ -1771,7 +1771,7 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 					btn->addChild(ok);
 
 					s->addChild(btn);
-										
+
 					this->addChild(s, 50, "RUA");
 				}
 				else
@@ -1779,13 +1779,13 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 					this->otherMenuClose(payName, earnName, price);
 				}
 			}
-			
+
 			break;
 		}
 	}
 }
 
-void GameMainLayer::checkToClose(Ref* pSender, Widget::TouchEventType type, string payName, string earnName, int price)
+void ContinueMainLayer::checkToClose(Ref* pSender, Widget::TouchEventType type, string payName, string earnName, int price)
 {
 	switch (type)
 	{
@@ -1807,7 +1807,7 @@ void GameMainLayer::checkToClose(Ref* pSender, Widget::TouchEventType type, stri
 	}
 }
 
-void GameMainLayer::otherMenuClose(string payName, string earnName, int price)
+void ContinueMainLayer::otherMenuClose(string payName, string earnName, int price)
 {
 	// 找出对应的两个玩家，进行金钱交易
 	for (auto& p : players)
@@ -1838,7 +1838,7 @@ void GameMainLayer::otherMenuClose(string payName, string earnName, int price)
 
 // 丢钱了
 
-void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
+void ContinueMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 {
 	// 暴力检查
 
@@ -1964,7 +1964,7 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 					Button* btn = Button::create("image/GreenNormal.png", "image/GreenPressed.png");
 					btn->setPosition(Vec2(s->getContentSize().width / 2,
 						s->getContentSize().height / 4 - btn->getContentSize().height));
-					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToCloseLo, this, payName, loss));
+					btn->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::checkToCloseLo, this, payName, loss));
 					btn->setPressedActionEnabled(true);
 
 					Label* ok = Label::create("OK", "arial", 20);
@@ -1987,7 +1987,7 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 	}
 }
 
-void GameMainLayer::checkToCloseLo(Ref* pSender, Widget::TouchEventType type, string payName, int loss)
+void ContinueMainLayer::checkToCloseLo(Ref* pSender, Widget::TouchEventType type, string payName, int loss)
 {
 	switch (type)
 	{
@@ -2009,7 +2009,7 @@ void GameMainLayer::checkToCloseLo(Ref* pSender, Widget::TouchEventType type, st
 	}
 }
 
-void GameMainLayer::payLoss(string payName, int loss)
+void ContinueMainLayer::payLoss(string payName, int loss)
 {
 	for (auto& p : players)
 	{
@@ -2033,13 +2033,13 @@ void GameMainLayer::payLoss(string payName, int loss)
 
 // 清除相关函数
 
-void GameMainLayer::cleanMenu()
+void ContinueMainLayer::cleanMenu()
 {
 	noticeMenu->removeFromParentAndCleanup(true);
 	menuBoard->removeFromParentAndCleanup(true);
 }
 
-void GameMainLayer::changePlayer()
+void ContinueMainLayer::changePlayer()
 {
 	int n = 1;
 
@@ -2082,7 +2082,7 @@ void GameMainLayer::changePlayer()
 			string strPlayer = "player" + to_string(p.serialNumber);
 			const char* player = ((String*)ngContent->objectForKey(strPlayer))->getCString();
 			s = player + str + eliminate;
-			
+
 			noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 			menuBoard->addChild(noticeL);
@@ -2091,7 +2091,7 @@ void GameMainLayer::changePlayer()
 
 			// 菜单：确定
 			MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-				"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::removePlayer, this, n));
+				"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::removePlayer, this, n));
 			okM->setPosition(0, -visibleSize.height / 5);
 
 			const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -2124,7 +2124,7 @@ void GameMainLayer::changePlayer()
 	}
 }
 
-void GameMainLayer::removePlayer(int number)
+void ContinueMainLayer::removePlayer(int number)
 {
 	int n = 0;
 	for (auto& p : players)
@@ -2196,7 +2196,7 @@ void GameMainLayer::removePlayer(int number)
 
 		// 菜单：确定
 		MenuItem* okM = MenuItemImage::create("image/OrangeNormal.png",
-			"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::endGame, this));
+			"image/OrangePressed.png", CC_CALLBACK_0(ContinueMainLayer::endGame, this));
 		okM->setPosition(0, -visibleSize.height / 5);
 
 		const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
@@ -2225,13 +2225,13 @@ void GameMainLayer::removePlayer(int number)
 	}
 }
 
-void GameMainLayer::cleanAndChange()
+void ContinueMainLayer::cleanAndChange()
 {
 	this->cleanMenu();
 	this->changePlayer();
 }
 
-void GameMainLayer::endGame()
+void ContinueMainLayer::endGame()
 {
 	TitleScene* ts = TitleScene::create();
 	Director::getInstance()->pushScene(ts);
