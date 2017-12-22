@@ -87,7 +87,19 @@ void TitleLayer::newGameCallback(Ref* pSender)
 
 void TitleLayer::loadGameCallback(Ref* pSender)
 {
+	auto ud = UserDefault::getInstance();
 
+	if (ud->getIntegerForKey("playersNumber"))
+	{
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
+		auto cgs = ContinueGameScene::create();
+		Director::getInstance()->pushScene(cgs);
+	}
+	else
+	{
+		auto nus = NoUsableSaveLayer::create();
+		this->addChild(nus, 100);
+	}
 }
 
 void TitleLayer::settingCallback(Ref* pSender)

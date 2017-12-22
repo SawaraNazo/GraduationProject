@@ -1,10 +1,14 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "ExitPopupLayer.h"
-#include "NewGameScene.h"
 #include "SimpleAudioEngine.h"
+
 #include "GameSetLayer.h"
+#include "NoUsableSaveLayer.h"
+#include "ExitPopupLayer.h"
+
+#include "NewGameScene.h"
+#include "ContinueGameScene.h"
 
 using namespace std;
 using namespace cocos2d;

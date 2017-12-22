@@ -96,6 +96,9 @@
     <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp">
       <Filter>src\选择游戏角色</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\NoUsableSaveLayer.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h">
       <Filter>src\选择游戏角色</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NoUsableSaveLayer.h">
+      <Filter>src\标题界面</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

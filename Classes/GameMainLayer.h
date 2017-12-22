@@ -34,7 +34,7 @@ typedef enum _stateType
 	prison
 } stateType;
 
-// 玩家：名称、图片、图片位置、角色位置、土地位置、朝向、是否在移动、代表颜色、玩家状态
+// 玩家：名称、角色序号、图片、图片位置、角色位置、朝向、是否在移动、代表颜色、资金、玩家状态、滞留回合数
 struct Player
 {
 	string name;
@@ -52,7 +52,8 @@ struct Player
 
 class GameMainLayer : public Layer
 {
-private :
+private:
+
 	// 不同等级地块对应GID
 
 	// 空地
@@ -136,7 +137,7 @@ private :
 	// 回合数
 	int rounds;
 
-public :
+public:
 	GameMainLayer();
 	~GameMainLayer();
 

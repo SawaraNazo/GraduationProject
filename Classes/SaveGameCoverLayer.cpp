@@ -91,6 +91,8 @@ void SaveGameCoverLayer::okCallback(Ref* pSender)
 		string s1 = "player" + to_string(n) + "name";
 		UserDefault::getInstance()->setStringForKey(s1.c_str(), vp[n].name);
 		// roleSprite
+		string s14 = "player" + to_string(n) + "serialNumber";
+		UserDefault::getInstance()->setIntegerForKey(s14.c_str(), vp[n].serialNumber);
 		string s2 = "player" + to_string(n) + "spritePositionX";
 		UserDefault::getInstance()->setFloatForKey(s2.c_str(), vp[n].spritePosition.x);
 		string s3 = "player" + to_string(n) + "spritePositionY";

@@ -12,28 +12,28 @@ ContinueMainLayer::~ContinueMainLayer()
 
 // set 函数集
 
-void ContinueMainLayer::setPlayersNumber(int pn)
-{
-	this->playersNumber = pn;
-}
-
-void ContinueMainLayer::setStartMoney(int sm)
-{
-	this->startMoney = sm;
-}
-
-void ContinueMainLayer::setPlayersRoles(vector<int> pr)
-{
-	for (int i : pr)
-	{
-		this->roles.push_back(i);
-	}
-}
-
-void ContinueMainLayer::setMapNumber(int mn)
-{
-	this->mapNumber = mn;
-}
+//void ContinueMainLayer::setPlayersNumber(int pn)
+//{
+//	this->playersNumber = pn;
+//}
+//
+//void ContinueMainLayer::setStartMoney(int sm)
+//{
+//	this->startMoney = sm;
+//}
+//
+//void ContinueMainLayer::setPlayersRoles(vector<int> pr)
+//{
+//	for (int i : pr)
+//	{
+//		this->roles.push_back(i);
+//	}
+//}
+//
+//void ContinueMainLayer::setMapNumber(int mn)
+//{
+//	this->mapNumber = mn;
+//}
 
 // get 函数集
 
@@ -110,16 +110,32 @@ bool ContinueMainLayer::init()
 	origin = Director::getInstance()->getVisibleOrigin();
 
 	// 初始化到第一位玩家
-	nowPlayerNumber = 1;
+	//nowPlayerNumber = 1;
+	nowPlayerNumber = UserDefault::getInstance()->getIntegerForKey("nowPlayerNumber");
 
 	// 初始化突发事件数量
-	emEventNumber = 8;
+	//emEventNumber = 8;
+	emEventNumber = UserDefault::getInstance()->getIntegerForKey("emEventNumber");
 
 	// 预设置开始的土地等级数
 	landLevelNumber = 8;
 
 	// 回合数
-	rounds = 1;
+	//rounds = 1;
+	rounds = UserDefault::getInstance()->getIntegerForKey("rounds");
+
+	// 删除了NewMain里的Set方法，直接取值来替代
+
+	playersNumber = UserDefault::getInstance()->getIntegerForKey("playersNumber");
+	startMoney = UserDefault::getInstance()->getIntegerForKey("startMoney");
+
+	for (int n = 0; n < playersNumber; ++n)
+	{
+		string s = "role" + to_string(n);
+		roles.push_back(UserDefault::getInstance()->getIntegerForKey(s.c_str()));
+	}
+
+	//ここまでだ
 
 	// Nowloading
 	Label* loading = Label::create("Now Loading", "arial", 30);
@@ -153,6 +169,8 @@ void ContinueMainLayer::setParameter(float dt)
 
 void ContinueMainLayer::createMap()
 {
+	//string str = "tmx/map" + to_string(mapNumber) + ".tmx";
+	mapNumber = UserDefault::getInstance()->getIntegerForKey("mapNumber");
 	string str = "tmx/map" + to_string(mapNumber) + ".tmx";
 	tileMap = TMXTiledMap::create(str);
 
@@ -191,34 +209,104 @@ void ContinueMainLayer::createPlayer()
 	for (int i = 1; i <= playersNumber; i++)
 	{
 		Player p;
-		p.name = "player" + to_string(i);
-		p.serialNumber = i;
-		p.isGoing = false;
-		p.faceTo = faceForward::right;
-		p.rolePosition = Vec2(4, 4);
-		p.roleSprite = Sprite::create("image/role" + to_string(roles[p.serialNumber - 1]) + "_right.png");
-		p.money = startMoney;
-		p.state = stateType::normal;
-		p.spritePosition = Vec2(px + i * 3, py);
-		p.roleSprite->setPosition(p.spritePosition);
-		p.stayRound = 0;
-
-		if (i == 1)
+		//p.name = "player" + to_string(i);
+		string s1 = "player" + to_string(i - 1) + "name";
+		p.name = UserDefault::getInstance()->getStringForKey(s1.c_str());
+		//p.serialNumber = i;
+		string s14 = "player" + to_string(i - 1) + "serialNumber";
+		p.serialNumber = UserDefault::getInstance()->getIntegerForKey(s14.c_str());
+		//p.isGoing = false;
+		string s7 = "player" + to_string(i - 1) + "isGoing";
+		p.isGoing = UserDefault::getInstance()->getBoolForKey(s7.c_str());
+		//p.faceTo = faceForward::right;
+		string s6 = "player" + to_string(i - 1) + "faceTo";
+		switch (UserDefault::getInstance()->getIntegerForKey(s6.c_str()))
 		{
-			p.color = Color3B::RED;
+		case 0:
+			p.faceTo = faceForward::right;
+			break;
+		case 1:
+			p.faceTo = faceForward::down;
+			break;
+		case 2:
+			p.faceTo = faceForward::left;
+			break;
+		case 3:
+			p.faceTo = faceForward::up;
+			break;
+		}
+		//p.rolePosition = Vec2(4, 4);
+		string s4 = "player" + to_string(i - 1) + "rolePositionX";
+		p.rolePosition.x = UserDefault::getInstance()->getFloatForKey(s4.c_str());
+		string s5 = "player" + to_string(i - 1) + "rolePositionY";
+		p.rolePosition.y = UserDefault::getInstance()->getFloatForKey(s5.c_str());
+		//p.roleSprite = Sprite::create("image/role" + to_string(roles[p.serialNumber - 1]) + "_right.png");
+		switch (p.faceTo)
+		{
+		case faceForward::right:
+			p.roleSprite = Sprite::create("image/role" + to_string(roles[p.serialNumber - 1]) + "_right.png");
+			break;
+		case faceForward::down:
+			p.roleSprite = Sprite::create("image/role" + to_string(roles[p.serialNumber - 1]) + "_down.png");
+			break;
+		case faceForward::left:
+			p.roleSprite = Sprite::create("image/role" + to_string(roles[p.serialNumber - 1]) + "_left.png");
+			break;
+		case faceForward::up:
+			p.roleSprite = Sprite::create("image/role" + to_string(roles[p.serialNumber - 1]) + "_up.png");
+			break;
+		}
+		//p.money = startMoney;
+		string s11 = "player" + to_string(i - 1) + "money";
+		p.money = UserDefault::getInstance()->getIntegerForKey(s11.c_str());
+		//p.state = stateType::normal;
+		string s12 = "player" + to_string(i - 1) + "state";
+		switch (UserDefault::getInstance()->getIntegerForKey(s12.c_str()))
+		{
+		case 0:
+			p.state = stateType::normal;
+			break;
+		case 1:
+			p.state = stateType::parking;
+			break;
+		case 2:
+			p.state = stateType::prison;
+			break;
+		}
+		//p.spritePosition = Vec2(px + i * 3, py);
+		string s2 = "player" + to_string(i - 1) + "spritePositionX";
+		p.spritePosition.x = UserDefault::getInstance()->getFloatForKey(s2.c_str());
+		string s3 = "player" + to_string(i - 1) + "spritePositionY";
+		p.spritePosition.y = UserDefault::getInstance()->getFloatForKey(s3.c_str());
+		p.roleSprite->setPosition(p.spritePosition);
+		//p.stayRound = 0;
+		string s13 = "player" + to_string(i - 1) + "stayRound";
+		p.stayRound = UserDefault::getInstance()->getIntegerForKey(s13.c_str());
+
+		// Color
+		/*if (i == 1)
+		{
+		p.color = Color3B::RED;
 		}
 		else if (i == 2)
 		{
-			p.color = Color3B::BLUE;
+		p.color = Color3B::BLUE;
 		}
 		else if (i == 3)
 		{
-			p.color = Color3B::BLACK;
+		p.color = Color3B::BLACK;
 		}
 		else if (i == 4)
 		{
-			p.color = Color3B::MAGENTA;
-		}
+		p.color = Color3B::MAGENTA;
+		}*/
+
+		string s8 = "player" + to_string(i - 1) + "colorR";
+		p.color.r = UserDefault::getInstance()->getIntegerForKey(s8.c_str());
+		string s9 = "player" + to_string(i - 1) + "colorG";
+		p.color.g = UserDefault::getInstance()->getIntegerForKey(s9.c_str());
+		string s10 = "player" + to_string(i - 1) + "colorB";
+		p.color.b = UserDefault::getInstance()->getIntegerForKey(s10.c_str());
 
 		tileMap->addChild(p.roleSprite, tileMap->getChildrenCount(), "player" + to_string(i));
 

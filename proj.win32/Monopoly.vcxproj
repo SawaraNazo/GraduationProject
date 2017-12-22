@@ -157,6 +157,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\GameMainLayer.cpp" />
     <ClCompile Include="..\Classes\GameSetLayer.cpp" />
     <ClCompile Include="..\Classes\NewGameScene.cpp" />
+    <ClCompile Include="..\Classes\NoUsableSaveLayer.cpp" />
     <ClCompile Include="..\Classes\SaveGameCoverLayer.cpp" />
     <ClCompile Include="..\Classes\SaveGameLayer.cpp" />
     <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp" />
@@ -178,6 +179,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameMainLayer.h" />
     <ClInclude Include="..\Classes\GameSetLayer.h" />
     <ClInclude Include="..\Classes\NewGameScene.h" />
+    <ClInclude Include="..\Classes\NoUsableSaveLayer.h" />
     <ClInclude Include="..\Classes\SaveGameCoverLayer.h" />
     <ClInclude Include="..\Classes\SaveGameLayer.h" />
     <ClInclude Include="..\Classes\SelectGameRolesLayer.h" />

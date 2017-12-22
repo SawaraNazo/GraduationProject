@@ -4,6 +4,7 @@
 #include "cocos-ext.h"
 #include "SimpleAudioEngine.h"
 
+#include "GameMainLayer.h"
 #include "GameSetLayer.h"
 #include "TitleScene.h"
 #include "BackToTitleLayer.h"
@@ -17,9 +18,14 @@ using namespace cocos2d;
 using namespace cocos2d::ui;
 using namespace CocosDenshion;
 
+// ！！！！！！！！！！！！！！！！！！！！
+extern struct Player;
+// ！！！！！！！！！！！！！！！！！！！！
+
 class ContinueMainLayer : public Layer
 {
 private:
+
 	// 不同等级地块对应GID
 
 	// 空地
@@ -57,7 +63,7 @@ private:
 	// 初始资金
 	int startMoney;
 	// 胜利条件  XD
-	// 地图名字
+	// 地图名字序号
 	int mapNumber;
 
 	// 突发事件数量
@@ -104,14 +110,15 @@ private:
 	int rounds;
 
 public:
+
 	ContinueMainLayer();
 	~ContinueMainLayer();
 
 	// private变量相关
-	void setStartMoney(int sm);
-	void setPlayersNumber(int pn);
-	void setPlayersRoles(vector<int> pr);
-	void setMapNumber(int mn);
+	//void setStartMoney(int sm);
+	//void setPlayersNumber(int pn);
+	//void setPlayersRoles(vector<int> pr);
+	//void setMapNumber(int mn);
 
 	int getPlayersNumber();
 	int getStartMoney();
@@ -185,5 +192,5 @@ public:
 	// 结束游戏
 	void endGame();
 
-	CREATE_FUNC(GameMainLayer);
+	CREATE_FUNC(ContinueMainLayer);
 };
