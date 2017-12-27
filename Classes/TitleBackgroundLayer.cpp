@@ -25,6 +25,7 @@ bool TitleBackgroundLayer::init()
 
 void TitleBackgroundLayer::createBackground()
 {
-	Sprite* b = Sprite::create("image/background.png", Rect(origin.x, origin.y, visibleSize.width * 2, visibleSize.height * 2));
+	Sprite* b = Sprite::create("image/titleBG.png");
+	b->setPosition(visibleSize / 2);
 	this->addChild(b);
 }

@@ -4,6 +4,8 @@
 #include "cocos-ext.h"
 #include "SimpleAudioEngine.h"
 
+#include <string>
+
 using namespace cocos2d;
 using namespace extension;
 using namespace CocosDenshion;
@@ -14,6 +16,9 @@ class GameSetLayer : public Layer
 private:
 	Size visibleSize;
 	Vec2 origin;
+
+	int nowMusic;
+
 public:
 	GameSetLayer();
 	~GameSetLayer();

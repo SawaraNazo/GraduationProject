@@ -28,7 +28,7 @@ bool SelectRoleDuplicateLayer::init()
 	MenuItem* mi = MenuItemSprite::create(okn, okp, CC_CALLBACK_1(SelectRoleDuplicateLayer::okCallback, this));
 	mi->setPosition(0, -s->getContentSize().height / 2 + mi->getContentSize().height);
 
-	Label* l = Label::create("OK", "arial", 20);
+	Label* l = Label::createWithSystemFont("OK", "Arial", 20);
 	l->setPosition(mi->getContentSize().width / 2, mi->getContentSize().height / 2);
 	l->setTextColor(Color4B::BLACK);
 	mi->addChild(l);
@@ -36,7 +36,7 @@ bool SelectRoleDuplicateLayer::init()
 	Menu* m = Menu::create(mi, NULL);
 	this->addChild(m);
 
-	// ÍÌÊÂ¼þ
+	// ï¿½ï¿½ï¿½Â¼ï¿½
 	auto callback = [](Touch*, Event*) {return true; };
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = callback;

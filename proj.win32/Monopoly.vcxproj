@@ -172,6 +172,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BackToTitleLayer.h" />
+    <ClInclude Include="..\Classes\Common.h" />
     <ClInclude Include="..\Classes\ContinueGameScene.h" />
     <ClInclude Include="..\Classes\ContinueMainLayer.h" />
     <ClInclude Include="..\Classes\ExitPopupLayer.h" />
@@ -211,7 +212,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <Xml Include="..\Resources\XML\GameSet.xml" />
     <Xml Include="..\Resources\XML\NewGame.xml" />
     <Xml Include="..\Resources\XML\Title.xml" />
-    <Xml Include="..\Resources\XML\TitleAni.XML" />
+    <Xml Include="..\Resources\XML\TitleAni.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

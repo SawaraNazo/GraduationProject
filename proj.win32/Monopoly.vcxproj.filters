@@ -10,32 +10,32 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\标题界面">
-      <UniqueIdentifier>{750f29a1-d696-4cb9-bbbf-1170639a607a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\标题动画">
-      <UniqueIdentifier>{bc759f38-f5ec-46ee-8b3a-ae3d8ad8c19d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="resource\XML">
-      <UniqueIdentifier>{4d9ef816-c74f-484b-a969-d504ae781ea2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\游戏设置">
-      <UniqueIdentifier>{75c4f3f5-d34a-430d-bbe6-6f9d1f16a8a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\结束游戏">
-      <UniqueIdentifier>{437f040c-4999-4a5f-9837-2de0dd457cd1}</UniqueIdentifier>
+      <UniqueIdentifier>{c4b6c2f4-4e72-4e1f-802b-b4bc01cc0865}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\保存游戏进度">
-      <UniqueIdentifier>{c6eaa6b3-f918-4294-9d46-c6dd60f3cd24}</UniqueIdentifier>
+      <UniqueIdentifier>{383ac60a-ded3-409a-8fe5-e1f26c0eddc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\标题动画">
+      <UniqueIdentifier>{ece98610-b754-4401-badc-fb6a5c4cbfb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\标题界面">
+      <UniqueIdentifier>{d1923436-12ac-4f9d-9ce4-07a0ad6a4df2}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\加载游戏进度">
-      <UniqueIdentifier>{de1ebf9e-6289-4b85-909c-3574e6b7a9cd}</UniqueIdentifier>
+      <UniqueIdentifier>{04bbe2b9-b06e-4625-9140-5b7c11444bd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\选择游戏角色">
-      <UniqueIdentifier>{3c520326-69ad-48ff-8bba-1fe09dc6dc14}</UniqueIdentifier>
+    <Filter Include="src\结束游戏">
+      <UniqueIdentifier>{4aa18121-9eec-4628-ad8e-257494b0e071}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\开始新游戏">
-      <UniqueIdentifier>{30c92ccc-64dd-4858-85cb-4fbf1cee9acd}</UniqueIdentifier>
+      <UniqueIdentifier>{edd681d9-b720-4067-b835-712fd66e9dd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\选择游戏角色">
+      <UniqueIdentifier>{db468f53-2b3d-4d0b-80c6-1f940256865b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\游戏设置">
+      <UniqueIdentifier>{109c2932-80cc-4957-9aef-1b36c3e1b672}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,8 +45,26 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SaveGameCoverLayer.cpp">
+      <Filter>src\保存游戏进度</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SaveGameLayer.cpp">
+      <Filter>src\保存游戏进度</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TitleAniLayer.cpp">
+      <Filter>src\标题动画</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\TitleAniScene.cpp">
       <Filter>src\标题动画</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ExitPopupLayer.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\NoUsableSaveLayer.cpp">
+      <Filter>src\标题界面</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TitleBackgroundLayer.cpp">
+      <Filter>src\标题界面</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\TitleLayer.cpp">
       <Filter>src\标题界面</Filter>
@@ -54,20 +72,14 @@
     <ClCompile Include="..\Classes\TitleScene.cpp">
       <Filter>src\标题界面</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\TitleAniLayer.cpp">
-      <Filter>src\标题动画</Filter>
+    <ClCompile Include="..\Classes\ContinueGameScene.cpp">
+      <Filter>src\加载游戏进度</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\TitleBackgroundLayer.cpp">
-      <Filter>src\标题界面</Filter>
+    <ClCompile Include="..\Classes\ContinueMainLayer.cpp">
+      <Filter>src\加载游戏进度</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ExitPopupLayer.cpp">
-      <Filter>src\标题界面</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\NewGameScene.cpp">
-      <Filter>src\开始新游戏</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GameSetLayer.cpp">
-      <Filter>src\游戏设置</Filter>
+    <ClCompile Include="..\Classes\BackToTitleLayer.cpp">
+      <Filter>src\结束游戏</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameInitLayer.cpp">
       <Filter>src\开始新游戏</Filter>
@@ -75,20 +87,8 @@
     <ClCompile Include="..\Classes\GameMainLayer.cpp">
       <Filter>src\开始新游戏</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BackToTitleLayer.cpp">
-      <Filter>src\结束游戏</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ContinueGameScene.cpp">
-      <Filter>src\加载游戏进度</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ContinueMainLayer.cpp">
-      <Filter>src\加载游戏进度</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SaveGameLayer.cpp">
-      <Filter>src\保存游戏进度</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SaveGameCoverLayer.cpp">
-      <Filter>src\保存游戏进度</Filter>
+    <ClCompile Include="..\Classes\NewGameScene.cpp">
+      <Filter>src\开始新游戏</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\SelectGameRolesLayer.cpp">
       <Filter>src\选择游戏角色</Filter>
@@ -96,8 +96,8 @@
     <ClCompile Include="..\Classes\SelectRoleDuplicateLayer.cpp">
       <Filter>src\选择游戏角色</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\NoUsableSaveLayer.cpp">
-      <Filter>src\标题界面</Filter>
+    <ClCompile Include="..\Classes\GameSetLayer.cpp">
+      <Filter>src\游戏设置</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,11 +107,26 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\SaveGameCoverLayer.h">
+      <Filter>src\保存游戏进度</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SaveGameLayer.h">
+      <Filter>src\保存游戏进度</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\TitleAniLayer.h">
       <Filter>src\标题动画</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TitleAniScene.h">
       <Filter>src\标题动画</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ExitPopupLayer.h">
+      <Filter>src\标题界面</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NoUsableSaveLayer.h">
+      <Filter>src\标题界面</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TitleBackgroundLayer.h">
+      <Filter>src\标题界面</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TitleLayer.h">
       <Filter>src\标题界面</Filter>
@@ -119,14 +134,14 @@
     <ClInclude Include="..\Classes\TitleScene.h">
       <Filter>src\标题界面</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\TitleBackgroundLayer.h">
-      <Filter>src\标题界面</Filter>
+    <ClInclude Include="..\Classes\ContinueGameScene.h">
+      <Filter>src\加载游戏进度</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ExitPopupLayer.h">
-      <Filter>src\标题界面</Filter>
+    <ClInclude Include="..\Classes\ContinueMainLayer.h">
+      <Filter>src\加载游戏进度</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\GameSetLayer.h">
-      <Filter>src\游戏设置</Filter>
+    <ClInclude Include="..\Classes\BackToTitleLayer.h">
+      <Filter>src\结束游戏</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameInitLayer.h">
       <Filter>src\开始新游戏</Filter>
@@ -137,29 +152,17 @@
     <ClInclude Include="..\Classes\NewGameScene.h">
       <Filter>src\开始新游戏</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BackToTitleLayer.h">
-      <Filter>src\结束游戏</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ContinueGameScene.h">
-      <Filter>src\加载游戏进度</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ContinueMainLayer.h">
-      <Filter>src\加载游戏进度</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SaveGameLayer.h">
-      <Filter>src\保存游戏进度</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SaveGameCoverLayer.h">
-      <Filter>src\保存游戏进度</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\SelectGameRolesLayer.h">
       <Filter>src\选择游戏角色</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SelectRoleDuplicateLayer.h">
       <Filter>src\选择游戏角色</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\NoUsableSaveLayer.h">
-      <Filter>src\标题界面</Filter>
+    <ClInclude Include="..\Classes\GameSetLayer.h">
+      <Filter>src\游戏设置</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Common.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,19 +171,19 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Resources\XML\TitleAni.XML">
-      <Filter>resource\XML</Filter>
-    </Xml>
-    <Xml Include="..\Resources\XML\Title.xml">
-      <Filter>resource\XML</Filter>
-    </Xml>
-    <Xml Include="..\Resources\XML\NewGame.xml">
+    <Xml Include="..\Resources\XML\GameInit.xml">
       <Filter>resource\XML</Filter>
     </Xml>
     <Xml Include="..\Resources\XML\GameSet.xml">
       <Filter>resource\XML</Filter>
     </Xml>
-    <Xml Include="..\Resources\XML\GameInit.xml">
+    <Xml Include="..\Resources\XML\NewGame.xml">
+      <Filter>resource\XML</Filter>
+    </Xml>
+    <Xml Include="..\Resources\XML\Title.xml">
+      <Filter>resource\XML</Filter>
+    </Xml>
+    <Xml Include="..\Resources\XML\TitleAni.xml">
       <Filter>resource\XML</Filter>
     </Xml>
   </ItemGroup>

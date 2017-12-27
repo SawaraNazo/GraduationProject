@@ -1,4 +1,5 @@
 #include "GameMainLayer.h"
+#include <sstream>
 
 GameMainLayer::GameMainLayer()
 {
@@ -122,7 +123,7 @@ bool GameMainLayer::init()
 	rounds = 1;
 	
 	// Nowloading
-	Label* loading = Label::create("Now Loading", "arial", 30);
+	Label* loading = Label::createWithSystemFont("Now Loading", "arial", 30);
 	loading->enableBold();
 	loading->setPosition(visibleSize / 2);
 	this->addChild(loading, 5, "loading");
@@ -145,7 +146,12 @@ void GameMainLayer::setParameter(float dt)
 	this->createPlayerPro();
 
 	// 打底色 q(≧▽≦q)
-	auto l = LayerColor::create(Color4B::Color4B(139, 129, 76, 255));
+	Color4B color4B;
+	color4B.r = 139;
+	color4B.g = 129;
+	color4B.b = 76;
+	color4B.a = 255;
+	auto l = LayerColor::create(color4B);
 	this->addChild(l, -10);
 }
 
@@ -153,8 +159,12 @@ void GameMainLayer::setParameter(float dt)
 
 void GameMainLayer::createMap()
 {
-	string str = "tmx/map" + to_string(mapNumber) + ".tmx";
+	ostringstream stream1;
+	stream1 << mapNumber;
+	string str = "tmx/map" + stream1.str() + ".tmx";
 	tileMap = TMXTiledMap::create(str);
+	tileMap->setScale((visibleSize.width*3/4)/tileMap->getContentSize().width,
+					  visibleSize.height/tileMap->getContentSize().height);
 
 	this->addChild(tileMap);
 
@@ -162,20 +172,24 @@ void GameMainLayer::createMap()
 
 	for (int i = 1; i <= landLevelNumber; i++)
 	{
-		string s = "Land" + to_string(i);
+		ostringstream stream1;
+		stream1 << i;
+		string s = "Land" + stream1.str();
 		TMXLayer* tl = tileMap->getLayer(s);
 		lands.push_back(tl);
 	}
 
 	// 总回合数
-	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-	const char* roundsC = ((String*)ngContent->objectForKey("rounds"))->getCString();
+	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	const char* roundsC = ((__String*)(ngContent->objectForKey("rounds")))->getCString();
 	Label* roundsL1 = Label::createWithSystemFont(roundsC, "arial", 24);
 	roundsL1->enableBold();
 	roundsL1->setPosition(visibleSize.width * 3 / 8, visibleSize.height - roundsL1->getContentSize().height);
 	this->addChild(roundsL1, 10);
 
-	Label* roundsL2 = Label::createWithSystemFont(to_string(rounds), "arial", 18);
+	ostringstream stream2;
+	stream2 << rounds;
+	Label* roundsL2 = Label::createWithSystemFont(stream2.str(), "arial", 18);
 	roundsL2->enableBold();
 	roundsL2->setPosition(visibleSize.width * 3 / 8, roundsL1->getPosition().y - roundsL2->getContentSize().height);
 	this->addChild(roundsL2, 10, "roundsL");;
@@ -191,12 +205,16 @@ void GameMainLayer::createPlayer()
 	for (int i = 1; i <= playersNumber; i++)
 	{
 		Player p;
-		p.name = "player" + to_string(i);
+		ostringstream stream1;
+		stream1 << i;
+		p.name = "player" + stream1.str();
 		p.serialNumber = i;
 		p.isGoing = false;
 		p.faceTo = faceForward::right;
 		p.rolePosition = Vec2(4, 4);
-		p.roleSprite = Sprite::create("image/role" + to_string(roles[p.serialNumber - 1]) + "_right.png");
+		ostringstream stream2;
+		stream2 << roles[p.serialNumber - 1];
+		p.roleSprite = Sprite::create("image/role" + stream2.str() + "_right.png");
 		p.money = startMoney;
 		p.state = stateType::normal;
 		p.spritePosition = Vec2(px + i * 3, py);
@@ -220,7 +238,9 @@ void GameMainLayer::createPlayer()
 			p.color = Color3B::MAGENTA;
 		}
 
-		tileMap->addChild(p.roleSprite, tileMap->getChildrenCount(), "player" + to_string(i));
+		ostringstream stream3;
+		stream3 << i;
+		tileMap->addChild(p.roleSprite, tileMap->getChildrenCount(), "player" + stream3.str());
 
 		players.push_back(p);
 	}
@@ -228,14 +248,14 @@ void GameMainLayer::createPlayer()
 
 void GameMainLayer::createPlayerPro()
 {
-	auto ng = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	auto ng = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 	int times = 0;
 
 	for (auto p : players)
 	{
 		// 玩家姓名
-		const char* pc = ((String*)ng->objectForKey(p.name))->getCString();
+		const char* pc = ((__String*)ng->objectForKey(p.name))->getCString();
 		Label* l1 = Label::createWithSystemFont(pc, "arial", 20);
 		l1->setColor(p.color);
 		l1->enableBold();
@@ -244,8 +264,10 @@ void GameMainLayer::createPlayerPro()
 		this->addChild(l1, 2, pc);
 
 		// 玩家金钱
-		const char* rmb = ((String*)ng->objectForKey("rmb"))->getCString();
-		string m = rmb + to_string(p.money);
+		const char* rmb = ((__String*)ng->objectForKey("rmb"))->getCString();
+		ostringstream stream1;
+		stream1 << p.money;
+		string m = rmb + stream1.str();
 		string blank = " ";
 		Label* l2 = Label::createWithSystemFont(m, "arial", 18);
 		l2->enableBold();
@@ -440,6 +462,8 @@ void GameMainLayer::playerGo(float dt)
 		{
 			if (road->getTileAt(nowPlayer.rolePosition))
 			{
+				ostringstream stream1;
+				stream1 << roles[nowPlayer.serialNumber - 1];
 				if (nowPlayer.faceTo == faceForward::right)
 				{
 					if (road->getTileAt(Vec2(nowPlayer.rolePosition.x + 1, nowPlayer.rolePosition.y)))
@@ -452,14 +476,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_down.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_down.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
 					{
 						nowPlayer.rolePosition.y--;
 						nowPlayer.spritePosition.y += 30;
 						nowPlayer.faceTo = faceForward::up;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber - 1]) + "_up.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_up.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::down)
@@ -474,14 +498,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_right.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_left.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_left.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::left)
@@ -496,14 +520,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.y++;
 						nowPlayer.spritePosition.y -= 30;
 						nowPlayer.faceTo = faceForward::down;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_down.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_down.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x, nowPlayer.rolePosition.y - 1)))
 					{
 						nowPlayer.rolePosition.y--;
 						nowPlayer.spritePosition.y += 30;
 						nowPlayer.faceTo = faceForward::up;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_up.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_up.png");
 					}
 				}
 				else if (nowPlayer.faceTo == faceForward::up)
@@ -518,14 +542,14 @@ void GameMainLayer::playerGo(float dt)
 						nowPlayer.rolePosition.x++;
 						nowPlayer.spritePosition.x += 30;
 						nowPlayer.faceTo = faceForward::right;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_right.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_right.png");
 					}
 					else if (road->getTileAt(Vec2(nowPlayer.rolePosition.x - 1, nowPlayer.rolePosition.y)))
 					{
 						nowPlayer.rolePosition.x--;
 						nowPlayer.spritePosition.x -= 30;
 						nowPlayer.faceTo = faceForward::left;
-						nowPlayer.roleSprite->setTexture("image/role" + to_string(roles[nowPlayer.serialNumber-1]) + "_left.png");
+						nowPlayer.roleSprite->setTexture("image/role" + stream1.str() + "_left.png");
 					}
 				}
 			}
@@ -541,7 +565,7 @@ void GameMainLayer::playerGo(float dt)
 bool GameMainLayer::checkState()
 {
 	// 字儿们
-	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 	int n = 1;
 
@@ -571,17 +595,19 @@ bool GameMainLayer::checkState()
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* roundsToStayInParkinglot1 = ((String*)ngContent->objectForKey("roundsToStayInParkinglot1"))->getCString();
-				const char* roundsToStayInParkinglot2 = ((String*)ngContent->objectForKey("roundsToStayInParkinglot2"))->getCString();
+				const char* roundsToStayInParkinglot1 = ((__String*)ngContent->objectForKey("roundsToStayInParkinglot1"))->getCString();
+				const char* roundsToStayInParkinglot2 = ((__String*)ngContent->objectForKey("roundsToStayInParkinglot2"))->getCString();
 				string blank = " ";
-				string s = roundsToStayInParkinglot1 + blank + "\n" + roundsToStayInParkinglot2 + to_string(p.stayRound);
+				ostringstream stream1;
+				stream1 << p.stayRound;
+				string s = roundsToStayInParkinglot1 + blank + "\n" + roundsToStayInParkinglot2 + stream1.str();
 				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 				menuBoard->addChild(noticeL);
@@ -611,17 +637,19 @@ bool GameMainLayer::checkState()
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* roundsToStayInPrison1 = ((String*)ngContent->objectForKey("roundsToStayInPrison1"))->getCString();
-				const char* roundsToStayInPrison2 = ((String*)ngContent->objectForKey("roundsToStayInPrison2"))->getCString();
+				const char* roundsToStayInPrison1 = ((__String*)ngContent->objectForKey("roundsToStayInPrison1"))->getCString();
+				const char* roundsToStayInPrison2 = ((__String*)ngContent->objectForKey("roundsToStayInPrison2"))->getCString();
 				string blank = " ";
-				string s = roundsToStayInPrison1 + blank + "\n" + roundsToStayInPrison2 + to_string(p.stayRound);
+				ostringstream stream2;
+				stream2 << p.stayRound;
+				string s = roundsToStayInPrison1 + blank + "\n" + roundsToStayInPrison2 + stream2.str();
 				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 				menuBoard->addChild(noticeL);
@@ -650,14 +678,14 @@ bool GameMainLayer::checkState()
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanMenu, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* outOfParkinglot = ((String*)ngContent->objectForKey("outOfParkinglot"))->getCString();
+				const char* outOfParkinglot = ((__String*)ngContent->objectForKey("outOfParkinglot"))->getCString();
 				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "arial", 25);
 
 				menuBoard->addChild(noticeL);
@@ -685,14 +713,14 @@ bool GameMainLayer::checkState()
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanMenu, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* outOfPrison = ((String*)ngContent->objectForKey("outOfPrison"))->getCString();
+				const char* outOfPrison = ((__String*)ngContent->objectForKey("outOfPrison"))->getCString();
 				Label* noticeL = Label::createWithSystemFont(outOfPrison, "arial", 25);
 
 				menuBoard->addChild(noticeL);
@@ -708,6 +736,8 @@ bool GameMainLayer::checkState()
 
 		n++;
 	}
+
+	return true;
 }
 
 void GameMainLayer::checkRoad(float dt)
@@ -715,7 +745,7 @@ void GameMainLayer::checkRoad(float dt)
 	// 清除骰子图片
 	this->removeChildByName("dicePoint");
 
-	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 	int n = 1;
 
@@ -726,7 +756,7 @@ void GameMainLayer::checkRoad(float dt)
 			if (road->getTileGIDAt(p.rolePosition) == normal_road_GID)
 			{
 				// 正常通过
-				this->scheduleOnce(schedule_selector(GameMainLayer::checkLand), 0.1);
+				this->scheduleOnce(schedule_selector(GameMainLayer::checkLand), 0.1f);
 			}
 			else if (road->getTileGIDAt(p.rolePosition) == prisonEntrance_road_GID)
 			{
@@ -738,7 +768,9 @@ void GameMainLayer::checkRoad(float dt)
 				p.spritePosition.x -= 17 * 30;
 				p.spritePosition.y -= 14 * 30;
 				p.roleSprite->setPosition(p.spritePosition);
-				p.roleSprite->setTexture("image/role" + to_string(roles[p.serialNumber-1]) + "_up.png");
+				ostringstream stream1;
+				stream1 << roles[p.serialNumber - 1];
+				p.roleSprite->setTexture("image/role" + stream1.str() + "_up.png");
 				p.faceTo = faceForward::up;
 				p.stayRound = 3;
 
@@ -752,15 +784,15 @@ void GameMainLayer::checkRoad(float dt)
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* prisonEnterance1 = ((String*)ngContent->objectForKey("prisonEnterance1"))->getCString();
-				const char* prisonEnterance2 = ((String*)ngContent->objectForKey("prisonEnterance2"))->getCString();
+				const char* prisonEnterance1 = ((__String*)ngContent->objectForKey("prisonEnterance1"))->getCString();
+				const char* prisonEnterance2 = ((__String*)ngContent->objectForKey("prisonEnterance2"))->getCString();
 				string blank = " ";
 				string s = prisonEnterance1 + blank + "\n" + prisonEnterance2;
 				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
@@ -794,14 +826,14 @@ void GameMainLayer::checkRoad(float dt)
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* parkinglot = ((String*)ngContent->objectForKey("parkinglot"))->getCString();
+				const char* parkinglot = ((__String*)ngContent->objectForKey("parkinglot"))->getCString();
 				Label* noticeL = Label::createWithSystemFont(parkinglot, "arial", 25);
 
 				menuBoard->addChild(noticeL);
@@ -858,14 +890,16 @@ void GameMainLayer::checkRoad(float dt)
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoneyLo, this, p.name, loss));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* emergencyEvent = ((String*)ngContent->objectForKey("emergencyEvent" + to_string(i)))->getCString();
+				ostringstream stream1;
+				stream1 << i;
+				const char* emergencyEvent = ((__String*)ngContent->objectForKey("emergencyEvent" + stream1.str()))->getCString();
 				Label* noticeL = Label::createWithSystemFont(emergencyEvent, "arial", 25);
 
 				menuBoard->addChild(noticeL);
@@ -889,15 +923,15 @@ void GameMainLayer::checkRoad(float dt)
 					"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoneyLo, this, p.name, 700));
 				okM->setPosition(0, -visibleSize.height / 5);
 
-				const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
-				const char* tax1 = ((String*)ngContent->objectForKey("tax1"))->getCString();
-				const char* tax2 = ((String*)ngContent->objectForKey("tax2"))->getCString();
+				const char* tax1 = ((__String*)ngContent->objectForKey("tax1"))->getCString();
+				const char* tax2 = ((__String*)ngContent->objectForKey("tax2"))->getCString();
 				string blank = " ";
 				string s = tax1 + blank + "\n" + tax2;
 				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
@@ -1013,14 +1047,14 @@ void GameMainLayer::emptyLand()
 	this->addChild(menuBoard);
 
 	// 字儿们
-	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 	// 菜单 ：是
 	MenuItem* yesM = MenuItemImage::create("image/GreenNormal.png",
 		"image/GreenPressed.png", CC_CALLBACK_0(GameMainLayer::emptyMenuYes, this));
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
-	const char* yesC = ((String*)ngContent->objectForKey("yes"))->getCString();
+	const char* yesC = ((__String*)ngContent->objectForKey("yes"))->getCString();
 	Label* yesL = Label::createWithSystemFont(yesC, "arial", 20);
 	yesM->addChild(yesL);
 	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
@@ -1031,7 +1065,7 @@ void GameMainLayer::emptyLand()
 		"image/RedPressed.png", CC_CALLBACK_0(GameMainLayer::emptyMenuNo, this));
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
-	const char* noC = ((String*)ngContent->objectForKey("no"))->getCString();
+	const char* noC = ((__String*)ngContent->objectForKey("no"))->getCString();
 	Label* noL = Label::createWithSystemFont(noC, "arial", 20);
 	noM->addChild(noL);
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
@@ -1041,11 +1075,11 @@ void GameMainLayer::emptyLand()
 	// 菜单主要内容
 	Label* noticeL;
 
-	const char* nc = ((String*)ngContent->objectForKey(name))->getCString();
+	const char* nc = ((__String*)ngContent->objectForKey(name))->getCString();
 	string blank = " ";
-	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
-	const char* upgradeLand0 = ((String*)ngContent->objectForKey("upgradeLand0"))->getCString();
-	const char* payToUpgrade = ((String*)ngContent->objectForKey("payToUpgrade"))->getCString();
+	const char* comma = ((__String*)ngContent->objectForKey("comma"))->getCString();
+	const char* upgradeLand0 = ((__String*)ngContent->objectForKey("upgradeLand0"))->getCString();
+	const char* payToUpgrade = ((__String*)ngContent->objectForKey("payToUpgrade"))->getCString();
 
 	// 所在空白地块的价格
 	int emptyBuildCost;
@@ -1058,9 +1092,11 @@ void GameMainLayer::emptyLand()
 		}
 	}
 
-	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+	const char* yuan = ((__String*)ngContent->objectForKey("yuan"))->getCString();
+	ostringstream stream1;
+	stream1 << emptyBuildCost;
 	string s = nc + blank + comma + upgradeLand0 + "\n" +
-		payToUpgrade + blank + to_string(emptyBuildCost) + yuan;
+		payToUpgrade + blank + stream1.str() + yuan;
 	noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 	menuBoard->addChild(noticeL);
@@ -1086,7 +1122,7 @@ void GameMainLayer::emptyMenuYes()
 				if (l->getTileAt(nowLand))
 				{
 					emptyBuildCost = l->getProperty("emptyBuildCost").asInt();
-					auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+					auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 					if (p.money >= emptyBuildCost)
 					{
@@ -1095,10 +1131,11 @@ void GameMainLayer::emptyMenuYes()
 						// 粒子显示
 						ParticleGalaxy* pg = ParticleGalaxy::create();
 
-						switch (p.faceTo)
+                        pg->setPosition(visibleSize/2);
+						/*switch (p.faceTo)
 						{
 						case faceForward::left:
-							pg->setPosition(p.spritePosition.x, p.spritePosition.y + 30);
+							pg->setPosition(p.spritePosition.x,p.spritePosition.y + 30);
 							break;
 						case faceForward::down:
 							pg->setPosition(p.spritePosition.x - 30, p.spritePosition.y);
@@ -1109,9 +1146,19 @@ void GameMainLayer::emptyMenuYes()
 						case faceForward::up:
 							pg->setPosition(p.spritePosition.x + 30, p.spritePosition.y);
 							break;
-						}
-						pg->setStartColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
-						pg->setEndColor(Color4F::Color4F(0, 0, 0, 0));
+						}*/
+						Color4F color4F;
+						color4F.r = p.color.r / 255;
+						color4F.g = p.color.g / 255;
+						color4F.b = p.color.b / 255;
+						color4F.a = 255;
+						pg->setStartColor(color4F);
+						Color4F color2;
+						color2.r = 0;
+						color2.g = 0;
+						color2.b = 0;
+						color2.a = 0;
+						pg->setEndColor(color2);
 						this->addChild(pg, 0, "particle");
 
 						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
@@ -1120,9 +1167,11 @@ void GameMainLayer::emptyMenuYes()
 
 						p.money -= emptyBuildCost;
 
-						const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+						const char* rmb = ((__String*)ngContent->objectForKey("rmb"))->getCString();
 						string blank = " ";
-						string s = rmb + blank + to_string(p.money);
+						ostringstream stream1;
+						stream1 << p.money;
+						string s = rmb + blank + stream1.str();
 
 						((Label*)this->getChildByName(p.name + blank + "money"))->setString(s);
 
@@ -1142,14 +1191,14 @@ void GameMainLayer::emptyMenuYes()
 							"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
 						okM->setPosition(0, -visibleSize.height / 5);
 
-						const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+						const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 						Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 						okM->addChild(okL);
 						okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 						okL->setTextColor(Color4B::BLACK);
 
 						// 菜单主要内容
-						const char* lackOfMoney = ((String*)ngContent->objectForKey("lackOfMoney"))->getCString();
+						const char* lackOfMoney = ((__String*)ngContent->objectForKey("lackOfMoney"))->getCString();
 						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 25);
 
 						menuBoard->addChild(noticeL);
@@ -1199,14 +1248,14 @@ void GameMainLayer::myLand()
 	this->addChild(menuBoard);
 
 	// 字儿们
-	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 	// 菜单 ：是
 	MenuItem* yesM = MenuItemImage::create("image/GreenNormal.png",
 		"image/GreenPressed.png", CC_CALLBACK_0(GameMainLayer::myMenuYes, this));
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
-	const char* yesC = ((String*)ngContent->objectForKey("yes"))->getCString();
+	const char* yesC = ((__String*)ngContent->objectForKey("yes"))->getCString();
 	Label* yesL = Label::createWithSystemFont(yesC, "arial", 20);
 	yesM->addChild(yesL);
 	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
@@ -1217,7 +1266,7 @@ void GameMainLayer::myLand()
 		"image/RedPressed.png", CC_CALLBACK_0(GameMainLayer::myMenuNo, this));
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
-	const char* noC = ((String*)ngContent->objectForKey("no"))->getCString();
+	const char* noC = ((__String*)ngContent->objectForKey("no"))->getCString();
 	Label* noL = Label::createWithSystemFont(noC, "arial", 20);
 	noM->addChild(noL);
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
@@ -1225,15 +1274,15 @@ void GameMainLayer::myLand()
 
 	// 提示栏内容
 	Label* noticeL;
-	const char* nc = ((String*)ngContent->objectForKey(name))->getCString();
+	const char* nc = ((__String*)ngContent->objectForKey(name))->getCString();
 	string blank = " ";
-	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+	const char* comma = ((__String*)ngContent->objectForKey("comma"))->getCString();
 	const char* upgradeLand;
 	int price;
 
 	if (gLand == empty_land_GID)
 	{
-		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand1"))->getCString();
+		upgradeLand = ((__String*)ngContent->objectForKey("upgradeLand1"))->getCString();
 
 		for (auto l : lands)
 		{
@@ -1245,7 +1294,7 @@ void GameMainLayer::myLand()
 	}
 	else if (gLand == level1_land_GID)
 	{
-		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand2"))->getCString();
+		upgradeLand = ((__String*)ngContent->objectForKey("upgradeLand2"))->getCString();
 
 		for (auto l : lands)
 		{
@@ -1257,7 +1306,7 @@ void GameMainLayer::myLand()
 	}
 	else if (gLand == level2_land_GID)
 	{
-		upgradeLand = ((String*)ngContent->objectForKey("upgradeLand3"))->getCString();
+		upgradeLand = ((__String*)ngContent->objectForKey("upgradeLand3"))->getCString();
 
 		for (auto l : lands)
 		{
@@ -1272,11 +1321,14 @@ void GameMainLayer::myLand()
 		// 土地已为最高级，无需弹出对话框
 	}
 
-	const char* payToUpgrade = ((String*)ngContent->objectForKey("payToUpgrade"))->getCString();
-	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+	const char* payToUpgrade = ((__String*)ngContent->objectForKey("payToUpgrade"))->getCString();
+	const char* yuan = ((__String*)ngContent->objectForKey("yuan"))->getCString();
 
+	ostringstream stream1;
+	stream1 << price;
 	string s = nc + blank + comma + upgradeLand + "\n" +
-		payToUpgrade + blank + to_string(price) + yuan;
+		payToUpgrade + blank + stream1.str() + yuan;
+	
 	noticeL = Label::createWithSystemFont(s, "arial", 25);
 
 	menuBoard->addChild(noticeL);
@@ -1296,7 +1348,7 @@ void GameMainLayer::myMenuYes()
 		if (n == nowPlayerNumber)
 		{
 			int buildCost = 0;
-			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+			auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 			for (auto l : lands)
 			{
@@ -1336,7 +1388,8 @@ void GameMainLayer::myMenuYes()
 						// 粒子显示
 						ParticleGalaxy* pg = ParticleGalaxy::create();
 
-						switch (p.faceTo)
+                        pg->setPosition(visibleSize/2);
+						/*switch (p.faceTo)
 						{
 						case faceForward::left:
 							pg->setPosition(p.spritePosition.x, p.spritePosition.y + 30);
@@ -1350,19 +1403,31 @@ void GameMainLayer::myMenuYes()
 						case faceForward::up:
 							pg->setPosition(p.spritePosition.x + 30, p.spritePosition.y);
 							break;
-						}
-						pg->setStartColor(Color4F::Color4F(p.color.r / 255, p.color.g / 255, p.color.b / 255, 255));
-						pg->setEndColor(Color4F::Color4F(0, 0, 0, 0));
+						}*/
+						Color4F color1;
+						color1.r = p.color.r / 255;
+						color1.g = p.color.g / 255;
+						color1.b = p.color.b / 255;
+						color1.a = 255;
+						pg->setStartColor(color1);
+						Color4F color2;
+						color2.r = 0;
+						color2.g = 0;
+						color2.b = 0;
+						color2.a = 0;
+						pg->setEndColor(color2);
 						this->addChild(pg, 0, "particle");
 
 						this->scheduleOnce(schedule_selector(GameMainLayer::removeParticle), 1.0f);
 
 						// ここまでだ
 
-						auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-						const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+						auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+						const char* rmb = ((__String*)ngContent->objectForKey("rmb"))->getCString();
 						string blank = " ";
-						string s = rmb + blank + to_string(p.money);
+						ostringstream stream1;
+						stream1 << p.money;
+						string s = rmb + blank + stream1.str();
 
 						((Label*)this->getChildByName(p.name + blank + "money"))->setString(s);
 
@@ -1382,14 +1447,14 @@ void GameMainLayer::myMenuYes()
 							"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::cleanAndChange, this));
 						okM->setPosition(0, -visibleSize.height / 5);
 
-						const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+						const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 						Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 						okM->addChild(okL);
 						okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 						okL->setTextColor(Color4B::BLACK);
 
 						// 菜单主要内容
-						const char* lackOfMoney = ((String*)ngContent->objectForKey("lackOfMoney"))->getCString();
+						const char* lackOfMoney = ((__String*)ngContent->objectForKey("lackOfMoney"))->getCString();
 						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 25);
 
 						menuBoard->addChild(noticeL);
@@ -1445,16 +1510,16 @@ void GameMainLayer::otherLand()
 	this->addChild(menuBoard);
 
 	// 字儿们
-	auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 	// 提示框内容
 	Label* noticeL;
-	const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
+	const char* belongLand = ((__String*)ngContent->objectForKey("belongLand"))->getCString();
 	string blank = " ";
-	const char* earnC = ((String*)ngContent->objectForKey(earnName))->getCString();
-	const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
-	const char* payC = ((String*)ngContent->objectForKey(payName))->getCString();
-	const char* payLand = ((String*)ngContent->objectForKey("payLand"))->getCString();
+	const char* earnC = ((__String*)ngContent->objectForKey(earnName))->getCString();
+	const char* comma = ((__String*)ngContent->objectForKey("comma"))->getCString();
+	const char* payC = ((__String*)ngContent->objectForKey(payName))->getCString();
+	const char* payLand = ((__String*)ngContent->objectForKey("payLand"))->getCString();
 
 	int price, rateTimes;
 	int rateTimes1 = 1;
@@ -1601,18 +1666,23 @@ void GameMainLayer::otherLand()
 		}
 	}
 
-	const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
+	const char* yuan = ((__String*)ngContent->objectForKey("yuan"))->getCString();
 
 	string s;
 	if (rate == 0)
 	{
+		ostringstream stream3;
+		stream3 << price;
 		s = belongLand + blank + earnC + comma + payC + "\n" +
-			payLand + blank + to_string(price) + yuan;
+			payLand + blank + stream3.str() + yuan;
 	}
 	else
 	{
+		ostringstream stream3, stream4;
+		stream3 << price;
+		stream4 << rate;
 		s = belongLand + blank + earnC + comma + payC + "\n" +
-			payLand + blank + to_string(price) + yuan + "(+" + to_string(rate) + "%)";
+			payLand + blank + stream3.str() + yuan + "(+" + stream4.str() + "%)";
 	}
 
 	noticeL = Label::createWithSystemFont(s, "arial", 25);
@@ -1626,7 +1696,7 @@ void GameMainLayer::otherLand()
 		"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::checkPayPlayerMoney, this, payName, earnName, price));
 	okM->setPosition(0, -visibleSize.height / 5);
 
-	const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+	const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 	Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 	okM->addChild(okL);
 	okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
@@ -1739,21 +1809,26 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 
 				if (sellFlag == true)
 				{
-					auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-					const char* selll1 = ((String*)ngContent->objectForKey("sellLand1"))->getCString();
-					const char* selll2 = ((String*)ngContent->objectForKey("sellLand2"))->getCString();
-					const char* selll3 = ((String*)ngContent->objectForKey("sellLand3"))->getCString();
-					const char* selll4 = ((String*)ngContent->objectForKey("sellLand4"))->getCString();
-					const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
-					const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+					auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+					//(ngContent->objectForKey("sellLand1"))
+					const char* selll1 = ((__String*)(ngContent->objectForKey("sellLand1")))->getCString();
+					const char* selll2 = ((__String*)(ngContent->objectForKey("sellLand2")))->getCString();
+					const char* selll3 = ((__String*)(ngContent->objectForKey("sellLand3")))->getCString();
+					const char* selll4 = ((__String*)(ngContent->objectForKey("sellLand4")))->getCString();
+					const char* yuan = ((__String*)(ngContent->objectForKey("yuan")))->getCString();
+					const char* comma = ((__String*)(ngContent->objectForKey("comma")))->getCString();
 					string blank = "";
 					Sprite* s = Sprite::create("image/Popup.png");
 					s->setPosition(visibleSize / 2);
-
+					
+					ostringstream stream1, stream2, stream3;
+					stream1 << sellNumber;
+					stream2 << wholeSellMoney;
+					stream3 << p.money;
 					string str = blank + selll1  + "\n"
-						+ selll2 + to_string(sellNumber) + selll3 + to_string(wholeSellMoney) + yuan + comma + "\n"
-						+ selll4 + to_string(p.money) + yuan;
-					Label* la = Label::create(str, "arial", 25);
+						+ selll2 + stream1.str() + selll3 + stream2.str() + yuan + comma + "\n"
+						+ selll4 + stream3.str() + yuan;
+					Label* la = Label::createWithSystemFont(str, "arial", 25);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
 						s->getContentSize().height * 3 / 4);
@@ -1765,7 +1840,7 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToClose, this, payName, earnName, price));
 					btn->setPressedActionEnabled(true);
 
-					Label* ok = Label::create("OK", "arial", 20);
+					Label* ok = Label::createWithSystemFont("OK", "arial", 20);
 					ok->setColor(Color3B::BLACK);
 					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
 					btn->addChild(ok);
@@ -1819,11 +1894,15 @@ void GameMainLayer::otherMenuClose(string payName, string earnName, int price)
 				p.money -= price;
 				e.money += price;
 
-				auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-				const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+				auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+				const char* rmb = ((__String*)ngContent->objectForKey("rmb"))->getCString();
 				string blank = " ";
-				string sp = rmb + blank + to_string(p.money);
-				string se = rmb + blank + to_string(e.money);
+				ostringstream stream1;
+				stream1 << p.money;
+				string sp = rmb + blank + stream1.str();
+				ostringstream stream2;
+				stream2 << e.money;
+				string se = rmb + blank + stream2.str();
 
 				((Label*)this->getChildByName(payName + blank + "money"))->setString(sp);
 				((Label*)this->getChildByName(earnName + blank + "money"))->setString(se);
@@ -1941,21 +2020,25 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 
 				if (sellFlag == true)
 				{
-					auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-					const char* selll1 = ((String*)ngContent->objectForKey("sellLand1"))->getCString();
-					const char* selll2 = ((String*)ngContent->objectForKey("sellLand2"))->getCString();
-					const char* selll3 = ((String*)ngContent->objectForKey("sellLand3"))->getCString();
-					const char* selll4 = ((String*)ngContent->objectForKey("sellLand4"))->getCString();
-					const char* yuan = ((String*)ngContent->objectForKey("yuan"))->getCString();
-					const char* comma = ((String*)ngContent->objectForKey("comma"))->getCString();
+					auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+					const char* selll1 = ((__String*)ngContent->objectForKey("sellLand1"))->getCString();
+					const char* selll2 = ((__String*)ngContent->objectForKey("sellLand2"))->getCString();
+					const char* selll3 = ((__String*)ngContent->objectForKey("sellLand3"))->getCString();
+					const char* selll4 = ((__String*)ngContent->objectForKey("sellLand4"))->getCString();
+					const char* yuan = ((__String*)ngContent->objectForKey("yuan"))->getCString();
+					const char* comma = ((__String*)ngContent->objectForKey("comma"))->getCString();
 					string blank = "";
 					Sprite* s = Sprite::create("image/Popup.png");
 					s->setPosition(visibleSize / 2);
 
+					ostringstream stream1, stream2, stream3;
+					stream1 << sellNumber;
+					stream2 << wholeSellMoney;
+					stream3 << p.money;
 					string str = blank + selll1 + "\n"
-						+ selll2 + to_string(sellNumber) + selll3 + to_string(wholeSellMoney) + yuan + comma + "\n"
-						+ selll4 + to_string(p.money) + yuan;
-					Label* la = Label::create(str, "arial", 25);
+						+ selll2 + stream1.str() + selll3 + stream2.str() + yuan + comma + "\n"
+						+ selll4 + stream3.str() + yuan;
+					Label* la = Label::createWithSystemFont(str, "arial", 25);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
 						s->getContentSize().height * 3 / 4);
@@ -1967,7 +2050,7 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToCloseLo, this, payName, loss));
 					btn->setPressedActionEnabled(true);
 
-					Label* ok = Label::create("OK", "arial", 20);
+					Label* ok = Label::createWithSystemFont("OK", "arial", 20);
 					ok->setColor(Color3B::BLACK);
 					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
 					btn->addChild(ok);
@@ -2015,12 +2098,14 @@ void GameMainLayer::payLoss(string payName, int loss)
 	{
 		if (p.name == payName)
 		{
-			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
-			const char* rmb = ((String*)ngContent->objectForKey("rmb"))->getCString();
+			auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+			const char* rmb = ((__String*)ngContent->objectForKey("rmb"))->getCString();
 			string blank = " ";
 			p.money -= loss;
 
-			string sp = rmb + blank + to_string(p.money);
+			ostringstream stream;
+			stream << p.money;
+			string sp = rmb + blank + stream.str();
 
 			((Label*)this->getChildByName(payName + blank + "money"))->setString(sp);
 
@@ -2069,18 +2154,20 @@ void GameMainLayer::changePlayer()
 			this->addChild(menuBoard);
 
 			// 字儿们
-			auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+			auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 			// 提示框内容
 			Label* noticeL;
-			const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
-			const char* eliminate = ((String*)ngContent->objectForKey("eliminate"))->getCString();
+			const char* belongLand = ((__String*)ngContent->objectForKey("belongLand"))->getCString();
+			const char* eliminate = ((__String*)ngContent->objectForKey("eliminate"))->getCString();
 			string str = "";
 			string s = "";
 
 			// Change player get way
-			string strPlayer = "player" + to_string(p.serialNumber);
-			const char* player = ((String*)ngContent->objectForKey(strPlayer))->getCString();
+			ostringstream stream1;
+			stream1 << p.serialNumber;
+			string strPlayer = "player" + stream1.str();
+			const char* player = ((__String*)ngContent->objectForKey(strPlayer))->getCString();
 			s = player + str + eliminate;
 			
 			noticeL = Label::createWithSystemFont(s, "arial", 25);
@@ -2094,7 +2181,7 @@ void GameMainLayer::changePlayer()
 				"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::removePlayer, this, n));
 			okM->setPosition(0, -visibleSize.height / 5);
 
-			const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+			const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 			Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 			okM->addChild(okL);
 			okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
@@ -2113,13 +2200,15 @@ void GameMainLayer::changePlayer()
 	if (flag == false)
 	{
 		nowPlayerNumber++;
-		if (nowPlayerNumber > players.size())
+		if ((size_t)nowPlayerNumber > players.size())
 		{
 			nowPlayerNumber = 1;
 
 			// 切换回合数
 			rounds++;
-			((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
+			ostringstream stream2;
+			stream2 << rounds;
+			((Label*)this->getChildByName("roundsL"))->setString(stream2.str());
 		}
 	}
 }
@@ -2132,7 +2221,9 @@ void GameMainLayer::removePlayer(int number)
 		if (n == number)
 		{
 			p.roleSprite->removeFromParentAndCleanup(true);
-			this->removeChildByName("player" + to_string(n + 1), true);
+			ostringstream stream1;
+			stream1 << n + 1;
+			this->removeChildByName("player" + stream1.str(), true);
 
 			players.erase(players.begin() + number);
 
@@ -2158,33 +2249,33 @@ void GameMainLayer::removePlayer(int number)
 		this->addChild(menuBoard);
 
 		// 字儿们
-		auto ngContent = Dictionary::createWithContentsOfFile("XML/NewGame.xml");
+		auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 
 		// 提示框内容
 		Label* noticeL;
-		const char* belongLand = ((String*)ngContent->objectForKey("belongLand"))->getCString();
-		const char* win = ((String*)ngContent->objectForKey("win"))->getCString();
+		const char* belongLand = ((__String*)ngContent->objectForKey("belongLand"))->getCString();
+		const char* win = ((__String*)ngContent->objectForKey("win"))->getCString();
 		string str = "";
 		string s = "";
 
 		if (players[0].name == "player1")
 		{
-			const char* player = ((String*)ngContent->objectForKey("player1"))->getCString();
+			const char* player = ((__String*)ngContent->objectForKey("player1"))->getCString();
 			s = player + str + win;
 		}
 		else if (players[0].name == "player2")
 		{
-			const char* player = ((String*)ngContent->objectForKey("player2"))->getCString();
+			const char* player = ((__String*)ngContent->objectForKey("player2"))->getCString();
 			s = player + str + win;
 		}
 		else if (players[0].name == "player3")
 		{
-			const char* player = ((String*)ngContent->objectForKey("player3"))->getCString();
+			const char* player = ((__String*)ngContent->objectForKey("player3"))->getCString();
 			s = player + str + win;
 		}
 		else if (players[0].name == "player4")
 		{
-			const char* player = ((String*)ngContent->objectForKey("player4"))->getCString();
+			const char* player = ((__String*)ngContent->objectForKey("player4"))->getCString();
 			s = player + str + win;
 		}
 
@@ -2199,7 +2290,7 @@ void GameMainLayer::removePlayer(int number)
 			"image/OrangePressed.png", CC_CALLBACK_0(GameMainLayer::endGame, this));
 		okM->setPosition(0, -visibleSize.height / 5);
 
-		const char* okC = ((String*)ngContent->objectForKey("ok"))->getCString();
+		const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
 		Label* okL = Label::createWithSystemFont(okC, "arial", 20);
 		okM->addChild(okL);
 		okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
@@ -2214,13 +2305,15 @@ void GameMainLayer::removePlayer(int number)
 	if (flag == false)
 	{
 		nowPlayerNumber++;
-		if (nowPlayerNumber > players.size())
+		if ((size_t)nowPlayerNumber > players.size())
 		{
 			nowPlayerNumber = 1;
 
 			// 切换回合数
 			rounds++;
-			((Label*)this->getChildByName("roundsL"))->setString(to_string(rounds));
+			ostringstream stream21;
+			stream21 << rounds;
+			((Label*)this->getChildByName("roundsL"))->setString(stream21.str());
 		}
 	}
 }

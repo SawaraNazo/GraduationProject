@@ -1,4 +1,5 @@
 #include "SelectGameRolesLayer.h"
+#include <sstream>
 
 SelectGameRolesLayer::SelectGameRolesLayer()
 {
@@ -19,9 +20,9 @@ bool SelectGameRolesLayer::init()
 
 	visibleSize = Director::getInstance()->getVisibleSize();
 
-	this->scheduleOnce(schedule_selector(SelectGameRolesLayer::setParameter), 0.05);
+	this->scheduleOnce(schedule_selector(SelectGameRolesLayer::setParameter), 0.05f);
 
-	// ÍÌÊÂ¼þ
+	// ï¿½ï¿½ï¿½Â¼ï¿½
 	auto callback = [](Touch*, Event*) {return true; };
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = callback;
@@ -59,11 +60,13 @@ void SelectGameRolesLayer::createMenu()
 	if (playersNumber == 2)
 	{
 		// 1
-		Label* l1 = Label::create("player1", "arial", 18);
+		Label* l1 = Label::createWithSystemFont("player1", "Arial", 18);
 		l1->setPosition(w / 8, h * 3 / 4);
 		bg->addChild(l1);
 
-		string s1loc = "image/role" + to_string(playersRoles[0]) + "_head.png";
+		ostringstream stream1;
+		stream1<<playersRoles[0];
+		string s1loc = "image/role" + stream1.str() + "_head.png";
 		Sprite* s1 = Sprite::create(s1loc);
 		s1->setPosition(w * 3 / 4, l1->getPosition().y);
 		bg->addChild(s1);
@@ -81,11 +84,13 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir1);
 
 		// 2
-		Label* l2 = Label::create("player2", "arial", 18);
+		Label* l2 = Label::createWithSystemFont("player2", "Arial", 18);
 		l2->setPosition(w / 8, h / 2);
 		bg->addChild(l2);
 
-		string s2loc = "image/role" + to_string(playersRoles[1]) + "_head.png";
+		ostringstream stream2;
+		stream2<<playersRoles[1];
+		string s2loc = "image/role" + stream2.str() + "_head.png";
 		Sprite* s2 = Sprite::create(s2loc);
 		s2->setPosition(w * 3 / 4, l2->getPosition().y);
 		bg->addChild(s2);
@@ -106,11 +111,13 @@ void SelectGameRolesLayer::createMenu()
 	else if (playersNumber == 3)
 	{
 		// 1
-		Label* l1 = Label::create("player1", "arial", 18);
+		Label* l1 = Label::createWithSystemFont("player1", "Arial", 18);
 		l1->setPosition(w / 8, h * 3 / 4);
 		bg->addChild(l1);
 
-		string s1loc = "image/role" + to_string(playersRoles[0]) + "_head.png";
+		ostringstream ostringstream1;
+		ostringstream1<<playersRoles[0];
+		string s1loc = "image/role" + ostringstream1.str() + "_head.png";
 		Sprite* s1 = Sprite::create(s1loc);
 		s1->setPosition(w * 3 / 4, l1->getPosition().y);
 		bg->addChild(s1);
@@ -128,11 +135,13 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir1);
 
 		// 2
-		Label* l2 = Label::create("player2", "arial", 18);
+		Label* l2 = Label::createWithSystemFont("player2", "Arial", 18);
 		l2->setPosition(w / 8, h / 2);
 		bg->addChild(l2);
 
-		string s2loc = "image/role" + to_string(playersRoles[1]) + "_head.png";
+		ostringstream ostringstream2;
+		ostringstream2<<playersRoles[1];
+		string s2loc = "image/role" + ostringstream2.str() + "_head.png";
 		Sprite* s2 = Sprite::create(s2loc);
 		s2->setPosition(w * 3 / 4, l2->getPosition().y);
 		bg->addChild(s2);
@@ -150,11 +159,13 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir2);
 
 		// 3
-		Label* l3 = Label::create("player3", "arial", 18);
+		Label* l3 = Label::createWithSystemFont("player3", "Arial", 18);
 		l3->setPosition(w / 8, h / 4);
 		bg->addChild(l3);
 
-		string s3loc = "image/role" + to_string(playersRoles[2]) + "_head.png";
+		ostringstream ostringstream3;
+		ostringstream3 << playersRoles[2];
+		string s3loc = "image/role" + ostringstream3.str() + "_head.png";
 		Sprite* s3 = Sprite::create(s3loc);
 		s3->setPosition(w * 3 / 4, l3->getPosition().y);
 		bg->addChild(s3);
@@ -174,11 +185,13 @@ void SelectGameRolesLayer::createMenu()
 	else if (playersNumber == 4)
 	{
 		// 1
-		Label* l1 = Label::create("player1", "arial", 18);
+		Label* l1 = Label::createWithSystemFont("player1", "Arial", 18);
 		l1->setPosition(w / 8, h * 3 / 4);
 		bg->addChild(l1);
 
-		string s1loc = "image/role" + to_string(playersRoles[0]) + "_head.png";
+		ostringstream ostringstream1;
+		ostringstream1 <<playersRoles[0];
+		string s1loc = "image/role" + ostringstream1.str() + "_head.png";
 		Sprite* s1 = Sprite::create(s1loc);
 		s1->setPosition(w * 3 / 4, l1->getPosition().y);
 		bg->addChild(s1);
@@ -196,11 +209,13 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir1);
 
 		// 2
-		Label* l2 = Label::create("player2", "arial", 18);
+		Label* l2 = Label::createWithSystemFont("player2", "Arial", 18);
 		l2->setPosition(w / 8, h * 7 / 12);
 		bg->addChild(l2);
 
-		string s2loc = "image/role" + to_string(playersRoles[1]) + "_head.png";
+		ostringstream ostringstream2;
+		ostringstream2 << playersRoles[1];
+		string s2loc = "image/role" + ostringstream2.str() + "_head.png";
 		Sprite* s2 = Sprite::create(s2loc);
 		s2->setPosition(w * 3 / 4, l2->getPosition().y);
 		bg->addChild(s2);
@@ -218,11 +233,13 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir2);
 
 		// 3
-		Label* l3 = Label::create("player3", "arial", 18);
+		Label* l3 = Label::createWithSystemFont("player3", "Arial", 18);
 		l3->setPosition(w / 8, h * 5 / 12);
 		bg->addChild(l3);
 
-		string s3loc = "image/role" + to_string(playersRoles[2]) + "_head.png";
+		ostringstream ostringstream3;
+		ostringstream3 << playersRoles[2];
+		string s3loc = "image/role" + ostringstream3.str() + "_head.png";
 		Sprite* s3 = Sprite::create(s3loc);
 		s3->setPosition(w * 3 / 4, l3->getPosition().y);
 		bg->addChild(s3);
@@ -240,11 +257,13 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir3);
 
 		// 4
-		Label* l4 = Label::create("player4", "arial", 18);
+		Label* l4 = Label::createWithSystemFont("player4", "Arial", 18);
 		l4->setPosition(w / 8, h / 4);
 		bg->addChild(l4);
 
-		string s4loc = "image/role" + to_string(playersRoles[3]) + "_head.png";
+		ostringstream ostringstream4;
+		ostringstream4 << playersRoles[3];
+		string s4loc = "image/role" + ostringstream4.str() + "_head.png";
 		Sprite* s4 = Sprite::create(s4loc);
 		s4->setPosition(w * 3 / 4, l4->getPosition().y);
 		bg->addChild(s4);
@@ -266,7 +285,7 @@ void SelectGameRolesLayer::createMenu()
 	Sprite* pressed = Sprite::create("image/GreenPressed.png");
 	MenuItem* mi = MenuItemSprite::create(normal, pressed, CC_CALLBACK_1(SelectGameRolesLayer::okCallback, this));
 	mi->setPosition(0, -h / 2 + mi->getContentSize().height);
-	Label* lm = Label::create("OK", "arial", 18);
+	Label* lm = Label::createWithSystemFont("OK", "Arial", 18);
 	lm->setTextColor(Color4B::BLACK);
 	lm->setPosition(mi->getContentSize().width / 2, mi->getContentSize().height / 2);
 	mi->addChild(lm);
@@ -283,7 +302,9 @@ void SelectGameRolesLayer::leftCallback(Ref* pSender, int n, Sprite* &s)
 		playersRoles[n] = 5;
 	}
 
-	string sloc = "image/role" + to_string(playersRoles[n]) + "_head.png";
+	ostringstream ostringstream1;
+	ostringstream1 << playersRoles[n];
+	string sloc = "image/role" + ostringstream1.str() + "_head.png";
 	Sprite* ss = Sprite::create(sloc);
 	s->setTexture(ss->getTexture());
 }
@@ -296,7 +317,9 @@ void SelectGameRolesLayer::rightCallback(Ref* pSender, int n, Sprite* &s)
 		playersRoles[n] = 1;
 	}
 
-	string sloc = "image/role" + to_string(playersRoles[n]) + "_head.png";
+	ostringstream ostringstream1;
+	ostringstream1 << playersRoles[n];
+	string sloc = "image/role" + ostringstream1.str() + "_head.png";
 	Sprite* ss = Sprite::create(sloc);
 	s->setTexture(ss->getTexture());
 }

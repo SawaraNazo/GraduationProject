@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/../Classes/BackToTitleLayer.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/ContinueMainLayer.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/ContinueMainLayer.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/GameInitLayer.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/GameMainLayer.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/GameSetLayer.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/NoUsableSaveLayer.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/SaveGameCoverLayer.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/../Classes/SaveGameLayer.cpp" charset="GBK" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

@@ -4,7 +4,7 @@
 #include "cocos-ext.h"
 #include "SimpleAudioEngine.h"
 
-#include "GameMainLayer.h"
+#include "Common.h"
 #include "GameSetLayer.h"
 #include "TitleScene.h"
 #include "BackToTitleLayer.h"
@@ -17,10 +17,6 @@ using namespace std;
 using namespace cocos2d;
 using namespace cocos2d::ui;
 using namespace CocosDenshion;
-
-// £¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
-extern struct Player;
-// £¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
 
 class ContinueMainLayer : public Layer
 {

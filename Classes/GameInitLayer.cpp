@@ -1,4 +1,5 @@
 #include "GameInitLayer.h"
+#include <sstream>
 
 GameInitLayer::GameInitLayer()
 {
@@ -46,7 +47,7 @@ bool GameInitLayer::init()
 
 void GameInitLayer::createMenu()
 {
-	dict = Dictionary::createWithContentsOfFile("XML/GameInit.xml");
+	dict = __Dictionary::createWithContentsOfFile("XML/GameInit.xml");
 
 	m = Menu::create();
 
@@ -62,8 +63,8 @@ void GameInitLayer::createMenu()
 	MenuItem* mok = MenuItemSprite::create(nok, pok, CC_CALLBACK_1(GameInitLayer::okCallback, this));
 	mok->setPosition(-visibleSize.width / 4, -visibleSize.height * 3 / 8 - mok->getContentSize().height / 4);
 
-	auto ok = ((String*)dict->objectForKey("ok"))->getCString();
-	Label* lok = Label::create(ok, "arial", 18);
+	auto ok = ((__String *)(dict->objectForKey("ok")))->getCString();
+	Label* lok = Label::createWithSystemFont(ok, "Arial", 18);
 	lok->setTextColor(Color4B::BLACK);
 	lok->setPosition(mok->getContentSize().width / 2, mok->getContentSize().height / 2);
 	mok->addChild(lok);
@@ -75,8 +76,8 @@ void GameInitLayer::createMenu()
 	MenuItem* mcan = MenuItemSprite::create(ncan, pcan, CC_CALLBACK_1(GameInitLayer::cancelCallback, this));
 	mcan->setPosition(visibleSize.width / 4, -visibleSize.height * 3 / 8 - mcan->getContentSize().height / 4);
 
-	auto cancel = ((String*)dict->objectForKey("cancel"))->getCString();
-	Label* lcancel = Label::create(cancel, "arial", 18);
+	auto cancel = ((__String*)dict->objectForKey("cancel"))->getCString();
+	Label* lcancel = Label::createWithSystemFont(cancel, "Arial", 18);
 	lcancel->setTextColor(Color4B::BLACK);
 	lcancel->setPosition(mcan->getContentSize().width / 2, mcan->getContentSize().height / 2);
 	mcan->addChild(lcancel);
@@ -94,13 +95,15 @@ void GameInitLayer::createBackground()
 
 void GameInitLayer::nzPlayersNumber()
 {
-	auto d = ((String*)dict->objectForKey("playersNumber"))->getCString();
-	Label* l = Label::create(d, "arial", 24);
+	auto d = ((__String*)dict->objectForKey("playersNumber"))->getCString();
+	Label* l = Label::createWithSystemFont(d, "Arial", 24);
 	l->setTextColor(Color4B::ORANGE);
 	l->setPosition(visibleSize.width / 8, visibleSize.height * 7 / 8);
 	this->addChild(l);
 
-	Label* number = Label::create(to_string(playersNumber), "arial", 20);
+	ostringstream stream1;
+	stream1 << playersNumber;
+	Label* number = Label::createWithSystemFont(stream1.str(), "Arial", 20);
 	number->setTextColor(Color4B::ORANGE);
 	number->setPosition(visibleSize.width * 3 / 8, l->getPosition().y);
 	this->addChild(number);
@@ -128,7 +131,9 @@ void GameInitLayer::playersNumberLeft(Ref* pSender, Label* &l)
 		playersNumber = 4;
 	}
 	
-	l->setString(to_string(playersNumber));
+	ostringstream stream1;
+	stream1 << playersNumber;
+	l->setString(stream1.str());
 }
 
 void GameInitLayer::playersNumberRight(Ref* pSender, Label* &l)
@@ -140,18 +145,22 @@ void GameInitLayer::playersNumberRight(Ref* pSender, Label* &l)
 		playersNumber = 2;
 	}
 
-	l->setString(to_string(playersNumber));
+	ostringstream stream;
+	stream << playersNumber;
+	l->setString(stream.str());
 }
 
 void GameInitLayer::nzStartMoney()
 {
-	auto d = ((String*)dict->objectForKey("startMoney"))->getCString();
-	Label* l = Label::create(d, "arial", 24);
+	auto d = ((__String*)dict->objectForKey("startMoney"))->getCString();
+	Label* l = Label::createWithSystemFont(d, "Arial", 24);
 	l->setTextColor(Color4B::ORANGE);
 	l->setPosition(visibleSize.width / 8, visibleSize.height / 2);
 	this->addChild(l);
-
-	Label* number = Label::create(to_string(startMoney), "arial", 20);
+	
+	ostringstream stream1;
+	stream1 << startMoney;
+	Label* number = Label::createWithSystemFont(stream1.str(), "Arial", 20);
 	number->setTextColor(Color4B::ORANGE);
 	number->setPosition(visibleSize.width * 3 / 8, l->getPosition().y);
 	this->addChild(number);
@@ -172,7 +181,7 @@ void GameInitLayer::nzStartMoney()
 
 void GameInitLayer::startMoneyLeft(Ref* pSender, Label* &l)
 {
-	for (int i = 0; i < v.size(); ++i)
+	for (size_t i = 0; i < v.size(); ++i)
 	{
 		if (startMoney == v[i])
 		{
@@ -188,12 +197,14 @@ void GameInitLayer::startMoneyLeft(Ref* pSender, Label* &l)
 		}
 	}
 
-	l->setString(to_string(startMoney));
+	ostringstream stream;
+	stream << startMoney;
+	l->setString(stream.str());
 }
 
 void GameInitLayer::startMoneyRight(Ref* pSender, Label* &l)
 {
-	for (int i = 0; i < v.size(); ++i)
+	for (size_t i = 0; i < v.size(); ++i)
 	{
 		if (startMoney == v[i])
 		{
@@ -209,7 +220,9 @@ void GameInitLayer::startMoneyRight(Ref* pSender, Label* &l)
 		}
 	}
 
-	l->setString(to_string(startMoney));
+	ostringstream stream;
+	stream << startMoney;
+	l->setString(stream.str());
 }
 
 void GameInitLayer::nzPlayersRoles()
@@ -222,8 +235,8 @@ void GameInitLayer::nzPlayersRoles()
 	mi->setScale(1.5);
 	auto mC = mi->getContentSize();
 	
-	auto d = ((String*)dict->objectForKey("playersRoles"))->getCString();
-	Label* l = Label::create(d, "arial", 16);
+	auto d = ((__String*)dict->objectForKey("playersRoles"))->getCString();
+	Label* l = Label::createWithSystemFont(d, "Arial", 16);
 	l->setTextColor(Color4B::BLACK);
 	l->setPosition(mC.width / 2, mC.height / 2);
 
@@ -240,13 +253,15 @@ void GameInitLayer::createPRLayer(Ref* pSender)
 
 void GameInitLayer::nzMapNumber()
 {
-	auto d = ((String*)dict->objectForKey("mapNumber"))->getCString();
-	Label* l = Label::create(d, "arial", 24);
+	auto d = ((__String*)dict->objectForKey("mapNumber"))->getCString();
+	Label* l = Label::createWithSystemFont(d, "Arial", 24);
 	l->setTextColor(Color4B::ORANGE);
 	l->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 7 / 8);
 	this->addChild(l);
 
-	Sprite* s = Sprite::create("image/map" + to_string(mapNumber) + ".png");
+	ostringstream stream;
+	stream << mapNumber;
+	Sprite* s = Sprite::create("image/map" + stream.str() + ".png");
 	s->setPosition(visibleSize.width * 3 / 4, visibleSize.height / 2);
 	this->addChild(s);
 
@@ -272,7 +287,9 @@ void GameInitLayer::mapNumberLeft(Ref* pSender,Sprite* &s)
 		mapNumber = 3;
 	}
 
-	string str = "image/map" + to_string(mapNumber) + ".png";
+	ostringstream stream;
+	stream << mapNumber;
+	string str = "image/map" + stream.str() + ".png";
 	Sprite* spr = Sprite::create(str);
 	s->setTexture(spr->getTexture());
 }
@@ -285,7 +302,9 @@ void GameInitLayer::mapNumberRight(Ref* pSender, Sprite* &s)
 		mapNumber = 1;
 	}
 
-	string str = "image/map" + to_string(mapNumber) + ".png";
+	ostringstream stream;
+	stream << mapNumber;
+	string str = "image/map" + stream.str() + ".png";
 	Sprite* spr = Sprite::create(str);
 	s->setTexture(spr->getTexture());
 }

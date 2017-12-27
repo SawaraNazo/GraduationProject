@@ -1,4 +1,5 @@
 #include "GameSetLayer.h"
+#include <sstream>
 
 GameSetLayer::GameSetLayer()
 {
@@ -38,18 +39,18 @@ void GameSetLayer::createMenu()
 	s->setPosition(visibleSize.width / 2, visibleSize.height / 2);
 	this->addChild(s);
 
-	auto d = Dictionary::createWithContentsOfFile("XML/GameSet.xml");
+	auto d = __Dictionary::createWithContentsOfFile("XML/GameSet.xml");
 
 	// 标题
-	auto title = ((String*)d->objectForKey("title"))->getCString();
-	Label* l1 = Label::createWithSystemFont(title, "arial", 40);
+	auto title = ((__String*)d->objectForKey("title"))->getCString();
+	Label* l1 = Label::createWithSystemFont(title, "Arial", 40);
 	l1->setTextColor(Color4B::BLACK);
 	l1->setPosition(Vec2(s->getContentSize().width / 2, s->getContentSize().height * 3 / 4));
 	s->addChild(l1);
 
 	// 音乐开关
-	auto onOff = ((String*)d->objectForKey("onOff"))->getCString();
-	Label* l2 = Label::createWithSystemFont(onOff, "arial", 23);
+	auto onOff = ((__String*)d->objectForKey("onOff"))->getCString();
+	Label* l2 = Label::createWithSystemFont(onOff, "Arial", 23);
 	l2->setTextColor(Color4B::BLACK);
 	l2->setPosition(Vec2(s->getContentSize().width / 4, s->getContentSize().height / 2 + l2->getContentSize().height));
 	s->addChild(l2);
@@ -58,17 +59,17 @@ void GameSetLayer::createMenu()
 	Sprite* onSprite = Sprite::create("image/switch-on.png");
 	Sprite* offSprite = Sprite::create("image/switch-off.png");
 	Sprite* thumbSpriteW = Sprite::create("image/switch-thumb.png");
-	Label* onLabel = Label::createWithSystemFont("ON", "arial", 16);
-	Label* offLabel = Label::createWithSystemFont("OFF", "arial", 16);
+	Label* onLabel = Label::createWithSystemFont("ON", "Arial", 16);
+	Label* offLabel = Label::createWithSystemFont("OFF", "Arial", 16);
 	ControlSwitch* csw = ControlSwitch::create(maskSprite, onSprite, offSprite, thumbSpriteW, onLabel, offLabel);
 	csw->addTargetWithActionForControlEvents(this, cccontrol_selector(GameSetLayer::switchStateChanged), Control::EventType::VALUE_CHANGED);
-	csw->setScale(1.2);
+	csw->setScale(1.2f);
 	csw->setPosition(s->getContentSize().width / 4, l2->getPosition().y - l2->getContentSize().height * 2);
 	s->addChild(csw);
 
 	// 音量调节
-	auto volume = ((String*)d->objectForKey("volume"))->getCString();
-	Label* l3 = Label::createWithSystemFont(volume, "arial", 23);
+	auto volume = ((__String*)d->objectForKey("volume"))->getCString();
+	Label* l3 = Label::createWithSystemFont(volume, "Arial", 23);
 	l3->setTextColor(Color4B::BLACK);
 	l3->setPosition(Vec2(s->getContentSize().width * 3 / 4, s->getContentSize().height / 2 + l3->getContentSize().height));
 	s->addChild(l3);
@@ -85,13 +86,13 @@ void GameSetLayer::createMenu()
 	s->addChild(csl);
 
 	// BGM选择
-	auto chooseMusic = ((String*)d->objectForKey("chooseMusic"))->getCString();
-	Label* l4 = Label::createWithSystemFont(chooseMusic, "arial", 23);
+	auto chooseMusic = ((__String*)d->objectForKey("chooseMusic"))->getCString();
+	Label* l4 = Label::createWithSystemFont(chooseMusic, "Arial", 23);
 	l4->setTextColor(Color4B::BLACK);
 	l4->setPosition(s->getContentSize().width / 4, s->getContentSize().height / 4 + l4->getContentSize().height);
 	s->addChild(l4);
 
-	Label* bgm = Label::createWithSystemFont("BGM01", "arial", 21);
+	Label* bgm = Label::createWithSystemFont("BGM01", "Arial", 21);
 	bgm->setTextColor(Color4B::BLACK);
 	bgm->setPosition(s->getContentSize().width * 3 / 4, l4->getPosition().y);
 	s->addChild(bgm);
@@ -111,13 +112,13 @@ void GameSetLayer::createMenu()
 	MenuItem* closeButton = MenuItemImage::create("image/OrangeNormal.png",
 		"image/OrangePressed.png",
 		CC_CALLBACK_1(GameSetLayer::closeCallback, this));
-	auto close = ((String*)d->objectForKey("close"))->getCString();
-	Label* l5 = Label::createWithSystemFont(close, "arial", 20);
+	auto close = ((__String*)d->objectForKey("close"))->getCString();
+	Label* l5 = Label::createWithSystemFont(close, "Arial", 20);
 	l5->setTextColor(Color4B::BLACK);
 	l5->setPosition(Vec2(closeButton->getContentSize().width / 2, closeButton->getContentSize().height / 2));
 	closeButton->addChild(l5);
-	closeButton->setScale(1.2);
-	closeButton->setPosition(0, -(s->getContentSize().height / 2) + closeButton->getContentSize().height * 3);
+	closeButton->setScale(1.2f);
+	closeButton->setPosition(0, -s->getContentSize().height / 4 - closeButton->getContentSize().height * 1.5);
 
 	Menu* m = Menu::create(closeButton, button_left, button_right, NULL);
 	this->addChild(m);
@@ -134,11 +135,27 @@ void GameSetLayer::switchStateChanged(Ref* pSender, Control::EventType controlEv
 	auto sm = SimpleAudioEngine::getInstance();
 	if (controlSwitch->isOn())
 	{
-		SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+        string sp;
+        if (nowMusic < 10)
+        {
+            ostringstream s1;
+            s1 << nowMusic;
+            sp = "0" + s1.str();
+        }
+        else
+        {
+            ostringstream s1;
+            s1 << nowMusic;
+            sp = s1.str();
+        }
+
+        string m = "music/rich" + sp + ".mp3";
+        SimpleAudioEngine::getInstance()->playBackgroundMusic(m.c_str(), true);
+		//SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 	}
 	else
 	{
-		SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
 	}
 }
 
@@ -160,15 +177,20 @@ void GameSetLayer::changeBGMPre(Ref* pSender, Label* &bgm, ControlSwitch* cs)
 	{
 		nowNum = 14;
 	}
+    nowMusic = nowNum;
 
 	string sp;
 	if (nowNum < 10)
 	{
-		sp = "0" + to_string(nowNum);
+		ostringstream s1;
+		s1 << nowNum;
+		sp = "0" + s1.str();
 	}
 	else
 	{
-		sp = to_string(nowNum);
+		ostringstream s1;
+		s1 << nowNum;
+		sp = s1.str();
 	}
 
 	bgm->setString(s.substr(0, 3) + sp);
@@ -190,15 +212,20 @@ void GameSetLayer::changeBGMNext(Ref* pSender, Label* &bgm, ControlSwitch* cs)
 	{
 		nowNum = 1;
 	}
+    nowMusic = nowNum;
 
 	string sp;
 	if (nowNum < 10)
 	{
-		sp = "0" + to_string(nowNum);
+		ostringstream s1;
+		s1 << nowNum;
+		sp = "0" + s1.str();
 	}
 	else
 	{
-		sp = to_string(nowNum);
+		ostringstream s1;
+		s1 << nowNum;
+		sp = s1.str();
 	}
 
 	bgm->setString(s.substr(0, 3) + sp);

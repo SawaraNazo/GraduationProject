@@ -20,7 +20,7 @@ bool ExitPopupLayer::init()
 
 	this->createMenu();
 
-	// ÍÌ
+	// ï¿½ï¿½
 	auto callback = [](Touch*, Event*) {return true; };
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = callback;
@@ -36,32 +36,32 @@ void ExitPopupLayer::createMenu()
 	s->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 	this->addChild(s);
 
-	auto d = Dictionary::createWithContentsOfFile("XML/Title.xml");
+	auto d = __Dictionary::createWithContentsOfFile("XML/Title.xml");
 
-	// ÌáÊ¾Óï
-	auto epT1 = ((String*)d->objectForKey("exitPopupT1"))->getCString();
+	// ï¿½ï¿½Ê¾ï¿½ï¿½
+	auto epT1 = ((__String*)d->objectForKey("exitPopupT1"))->getCString();
 	Label* T1 = Label::createWithSystemFont(epT1, "arial", 38);
 	T1->enableBold();
 	T1->setTextColor(Color4B::BLACK);
 	T1->setPosition(Vec2(s->getContentSize().width / 2, s->getContentSize().height * 3 / 4));
 	s->addChild(T1);
 
-	// OK ÊÇ
+	// OK ï¿½ï¿½
 	MenuItem* ok = MenuItemImage::create("image/RedNormal.png",
 		"image/RedPressed.png",
 		CC_CALLBACK_1(ExitPopupLayer::okCallBack, this));
-	auto epT2 = ((String*)d->objectForKey("exitPopupT2"))->getCString();
+	auto epT2 = ((__String*)d->objectForKey("exitPopupT2"))->getCString();
 	Label* T2 = Label::createWithSystemFont(epT2, "arial", 20);
 	T2->setPosition(Vec2(ok->getContentSize().width / 2, ok->getContentSize().height / 2));
 	ok->addChild(T2);
 	ok->setScale(1.2);
 	ok->setPosition(Vec2(-s->getContentSize().width / 4, -s->getContentSize().height / 4));
 
-	// Cancel ·ñ
+	// Cancel ï¿½ï¿½
 	MenuItem* cancel = MenuItemImage::create("image/GreenNormal.png",
 		"image/GreenPressed.png",
 		CC_CALLBACK_1(ExitPopupLayer::cancelCallBack, this));
-	auto epT3 = ((String*)d->objectForKey("exitPopupT3"))->getCString();
+	auto epT3 = ((__String*)d->objectForKey("exitPopupT3"))->getCString();
 	Label* T3 = Label::createWithSystemFont(epT3, "arial", 20);
 	T3->setPosition(Vec2(cancel->getContentSize().width / 2, cancel->getContentSize().height / 2));
 	cancel->addChild(T3);

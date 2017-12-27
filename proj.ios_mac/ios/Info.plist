@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>Icon-57.png</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.nazo.Monopoly</string>
+	<string>com.nazox.swr</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon-29</string>
