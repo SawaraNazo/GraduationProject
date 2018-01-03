@@ -28,7 +28,7 @@ bool SelectRoleDuplicateLayer::init()
 	MenuItem* mi = MenuItemSprite::create(okn, okp, CC_CALLBACK_1(SelectRoleDuplicateLayer::okCallback, this));
 	mi->setPosition(0, -s->getContentSize().height / 2 + mi->getContentSize().height);
 
-	Label* l = Label::createWithSystemFont("OK", "Arial", 20);
+	Label* l = Label::createWithSystemFont("OK", "Arial", 30);
 	l->setPosition(mi->getContentSize().width / 2, mi->getContentSize().height / 2);
 	l->setTextColor(Color4B::BLACK);
 	mi->addChild(l);

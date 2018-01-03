@@ -42,7 +42,7 @@ void TitleLayer::createMenu()
 		CC_CALLBACK_1(TitleLayer::newGameCallback, this));
 	newGame->setPosition(Vec2(-visibleSize.width / 4, 0));
 	const char* bgT1 = ((cocos2d::__String*)title->objectForKey("backgroundT1"))->getCString();
-	Label* newGameLabel = Label::createWithSystemFont(bgT1, "arial", 18);
+	Label* newGameLabel = Label::createWithSystemFont(bgT1, "arial", 28);
 	newGameLabel->setPosition(newGame->getContentSize() / 2);
 	newGame->addChild(newGameLabel);
 
@@ -52,7 +52,7 @@ void TitleLayer::createMenu()
 		CC_CALLBACK_1(TitleLayer::loadGameCallback, this));
 	loadGame->setPosition(Vec2(-visibleSize.width / 5, -visibleSize.height / 4));
 	const char* bgT2 = ((cocos2d::__String*)title->objectForKey("backgroundT2"))->getCString();
-	Label* loadGameLabel = Label::createWithSystemFont(bgT2, "arial", 18);
+	Label* loadGameLabel = Label::createWithSystemFont(bgT2, "arial", 28);
 	loadGameLabel->setPosition(newGame->getContentSize() / 2);
 	loadGame->addChild(loadGameLabel);
 
@@ -61,7 +61,7 @@ void TitleLayer::createMenu()
 		CC_CALLBACK_1(TitleLayer::settingCallback, this));
 	setting->setPosition(Vec2(visibleSize.width / 4, 0));
 	const char* bgT3 = ((cocos2d::__String*)title->objectForKey("backgroundT3"))->getCString();
-	Label* settingLabel = Label::createWithSystemFont(bgT3, "arial", 18);
+	Label* settingLabel = Label::createWithSystemFont(bgT3, "arial", 28);
 	settingLabel->setPosition(newGame->getContentSize() / 2);
 	setting->addChild(settingLabel);
 
@@ -70,7 +70,7 @@ void TitleLayer::createMenu()
 		CC_CALLBACK_1(TitleLayer::exitCallback, this));
 	exit->setPosition(Vec2(visibleSize.width / 5, -visibleSize.height / 4));
 	const char* bgT4 = ((cocos2d::__String*)title->objectForKey("backgroundT4"))->getCString();
-	Label* exitLabel = Label::createWithSystemFont(bgT4, "arial", 18);
+	Label* exitLabel = Label::createWithSystemFont(bgT4, "arial", 28);
 	exitLabel->setPosition(newGame->getContentSize() / 2);
 	exit->addChild(exitLabel);
 

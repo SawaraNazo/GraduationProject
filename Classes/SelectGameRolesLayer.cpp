@@ -60,7 +60,7 @@ void SelectGameRolesLayer::createMenu()
 	if (playersNumber == 2)
 	{
 		// 1
-		Label* l1 = Label::createWithSystemFont("player1", "Arial", 18);
+		Label* l1 = Label::createWithSystemFont("player1", "Arial", 38);
 		l1->setPosition(w / 8, h * 3 / 4);
 		bg->addChild(l1);
 
@@ -84,7 +84,7 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir1);
 
 		// 2
-		Label* l2 = Label::createWithSystemFont("player2", "Arial", 18);
+		Label* l2 = Label::createWithSystemFont("player2", "Arial", 38);
 		l2->setPosition(w / 8, h / 2);
 		bg->addChild(l2);
 
@@ -111,7 +111,7 @@ void SelectGameRolesLayer::createMenu()
 	else if (playersNumber == 3)
 	{
 		// 1
-		Label* l1 = Label::createWithSystemFont("player1", "Arial", 18);
+		Label* l1 = Label::createWithSystemFont("player1", "Arial", 38);
 		l1->setPosition(w / 8, h * 3 / 4);
 		bg->addChild(l1);
 
@@ -135,7 +135,7 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir1);
 
 		// 2
-		Label* l2 = Label::createWithSystemFont("player2", "Arial", 18);
+		Label* l2 = Label::createWithSystemFont("player2", "Arial", 38);
 		l2->setPosition(w / 8, h / 2);
 		bg->addChild(l2);
 
@@ -159,7 +159,7 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir2);
 
 		// 3
-		Label* l3 = Label::createWithSystemFont("player3", "Arial", 18);
+		Label* l3 = Label::createWithSystemFont("player3", "Arial", 38);
 		l3->setPosition(w / 8, h / 4);
 		bg->addChild(l3);
 
@@ -185,7 +185,7 @@ void SelectGameRolesLayer::createMenu()
 	else if (playersNumber == 4)
 	{
 		// 1
-		Label* l1 = Label::createWithSystemFont("player1", "Arial", 18);
+		Label* l1 = Label::createWithSystemFont("player1", "Arial", 38);
 		l1->setPosition(w / 8, h * 3 / 4);
 		bg->addChild(l1);
 
@@ -209,7 +209,7 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir1);
 
 		// 2
-		Label* l2 = Label::createWithSystemFont("player2", "Arial", 18);
+		Label* l2 = Label::createWithSystemFont("player2", "Arial", 38);
 		l2->setPosition(w / 8, h * 7 / 12);
 		bg->addChild(l2);
 
@@ -233,7 +233,7 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir2);
 
 		// 3
-		Label* l3 = Label::createWithSystemFont("player3", "Arial", 18);
+		Label* l3 = Label::createWithSystemFont("player3", "Arial", 38);
 		l3->setPosition(w / 8, h * 5 / 12);
 		bg->addChild(l3);
 
@@ -257,7 +257,7 @@ void SelectGameRolesLayer::createMenu()
 		m->addChild(mir3);
 
 		// 4
-		Label* l4 = Label::createWithSystemFont("player4", "Arial", 18);
+		Label* l4 = Label::createWithSystemFont("player4", "Arial", 38);
 		l4->setPosition(w / 8, h / 4);
 		bg->addChild(l4);
 
@@ -285,7 +285,7 @@ void SelectGameRolesLayer::createMenu()
 	Sprite* pressed = Sprite::create("image/GreenPressed.png");
 	MenuItem* mi = MenuItemSprite::create(normal, pressed, CC_CALLBACK_1(SelectGameRolesLayer::okCallback, this));
 	mi->setPosition(0, -h / 2 + mi->getContentSize().height);
-	Label* lm = Label::createWithSystemFont("OK", "Arial", 18);
+	Label* lm = Label::createWithSystemFont("OK", "Arial", 38);
 	lm->setTextColor(Color4B::BLACK);
 	lm->setPosition(mi->getContentSize().width / 2, mi->getContentSize().height / 2);
 	mi->addChild(lm);

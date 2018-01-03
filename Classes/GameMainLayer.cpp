@@ -123,7 +123,7 @@ bool GameMainLayer::init()
 	rounds = 1;
 	
 	// Nowloading
-	Label* loading = Label::createWithSystemFont("Now Loading", "arial", 30);
+	Label* loading = Label::createWithSystemFont("Now Loading", "arial", 40);
 	loading->enableBold();
 	loading->setPosition(visibleSize / 2);
 	this->addChild(loading, 5, "loading");
@@ -182,14 +182,14 @@ void GameMainLayer::createMap()
 	// 总回合数
 	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 	const char* roundsC = ((__String*)(ngContent->objectForKey("rounds")))->getCString();
-	Label* roundsL1 = Label::createWithSystemFont(roundsC, "arial", 24);
+	Label* roundsL1 = Label::createWithSystemFont(roundsC, "arial", 34);
 	roundsL1->enableBold();
 	roundsL1->setPosition(visibleSize.width * 3 / 8, visibleSize.height - roundsL1->getContentSize().height);
 	this->addChild(roundsL1, 10);
 
 	ostringstream stream2;
 	stream2 << rounds;
-	Label* roundsL2 = Label::createWithSystemFont(stream2.str(), "arial", 18);
+	Label* roundsL2 = Label::createWithSystemFont(stream2.str(), "arial", 28);
 	roundsL2->enableBold();
 	roundsL2->setPosition(visibleSize.width * 3 / 8, roundsL1->getPosition().y - roundsL2->getContentSize().height);
 	this->addChild(roundsL2, 10, "roundsL");;
@@ -256,7 +256,7 @@ void GameMainLayer::createPlayerPro()
 	{
 		// 玩家姓名
 		const char* pc = ((__String*)ng->objectForKey(p.name))->getCString();
-		Label* l1 = Label::createWithSystemFont(pc, "arial", 20);
+		Label* l1 = Label::createWithSystemFont(pc, "arial", 30);
 		l1->setColor(p.color);
 		l1->enableBold();
 		l1->setPosition(visibleSize.width * 6 / 7,
@@ -269,7 +269,7 @@ void GameMainLayer::createPlayerPro()
 		stream1 << p.money;
 		string m = rmb + stream1.str();
 		string blank = " ";
-		Label* l2 = Label::createWithSystemFont(m, "arial", 18);
+		Label* l2 = Label::createWithSystemFont(m, "arial", 28);
 		l2->enableBold();
 		l2->setPosition(visibleSize.width * 6 / 7, l1->getPosition().y - 2 * l1->getContentSize().height);
 		this->addChild(l2, 2, p.name + blank + "money");
@@ -596,7 +596,7 @@ bool GameMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -608,7 +608,7 @@ bool GameMainLayer::checkState()
 				ostringstream stream1;
 				stream1 << p.stayRound;
 				string s = roundsToStayInParkinglot1 + blank + "\n" + roundsToStayInParkinglot2 + stream1.str();
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -638,7 +638,7 @@ bool GameMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -650,7 +650,7 @@ bool GameMainLayer::checkState()
 				ostringstream stream2;
 				stream2 << p.stayRound;
 				string s = roundsToStayInPrison1 + blank + "\n" + roundsToStayInPrison2 + stream2.str();
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -679,14 +679,14 @@ bool GameMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
 				const char* outOfParkinglot = ((__String*)ngContent->objectForKey("outOfParkinglot"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -714,14 +714,14 @@ bool GameMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
 				const char* outOfPrison = ((__String*)ngContent->objectForKey("outOfPrison"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(outOfPrison, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(outOfPrison, "arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -785,7 +785,7 @@ void GameMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -795,7 +795,7 @@ void GameMainLayer::checkRoad(float dt)
 				const char* prisonEnterance2 = ((__String*)ngContent->objectForKey("prisonEnterance2"))->getCString();
 				string blank = " ";
 				string s = prisonEnterance1 + blank + "\n" + prisonEnterance2;
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -827,14 +827,14 @@ void GameMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
 				const char* parkinglot = ((__String*)ngContent->objectForKey("parkinglot"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(parkinglot, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(parkinglot, "arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -891,7 +891,7 @@ void GameMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -900,7 +900,7 @@ void GameMainLayer::checkRoad(float dt)
 				ostringstream stream1;
 				stream1 << i;
 				const char* emergencyEvent = ((__String*)ngContent->objectForKey("emergencyEvent" + stream1.str()))->getCString();
-				Label* noticeL = Label::createWithSystemFont(emergencyEvent, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(emergencyEvent, "arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -924,7 +924,7 @@ void GameMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -934,7 +934,7 @@ void GameMainLayer::checkRoad(float dt)
 				const char* tax2 = ((__String*)ngContent->objectForKey("tax2"))->getCString();
 				string blank = " ";
 				string s = tax1 + blank + "\n" + tax2;
-				Label* noticeL = Label::createWithSystemFont(s, "arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 
 				menuBoard->addChild(noticeL);
@@ -1055,7 +1055,7 @@ void GameMainLayer::emptyLand()
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* yesC = ((__String*)ngContent->objectForKey("yes"))->getCString();
-	Label* yesL = Label::createWithSystemFont(yesC, "arial", 20);
+	Label* yesL = Label::createWithSystemFont(yesC, "arial", 30);
 	yesM->addChild(yesL);
 	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
 	yesL->setTextColor(Color4B::BLACK);
@@ -1066,7 +1066,7 @@ void GameMainLayer::emptyLand()
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* noC = ((__String*)ngContent->objectForKey("no"))->getCString();
-	Label* noL = Label::createWithSystemFont(noC, "arial", 20);
+	Label* noL = Label::createWithSystemFont(noC, "arial", 30);
 	noM->addChild(noL);
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
 	noL->setTextColor(Color4B::BLACK);
@@ -1097,7 +1097,7 @@ void GameMainLayer::emptyLand()
 	stream1 << emptyBuildCost;
 	string s = nc + blank + comma + upgradeLand0 + "\n" +
 		payToUpgrade + blank + stream1.str() + yuan;
-	noticeL = Label::createWithSystemFont(s, "arial", 25);
+	noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1192,14 +1192,14 @@ void GameMainLayer::emptyMenuYes()
 						okM->setPosition(0, -visibleSize.height / 5);
 
 						const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-						Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+						Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 						okM->addChild(okL);
 						okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 						okL->setTextColor(Color4B::BLACK);
 
 						// 菜单主要内容
 						const char* lackOfMoney = ((__String*)ngContent->objectForKey("lackOfMoney"))->getCString();
-						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 25);
+						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 35);
 
 						menuBoard->addChild(noticeL);
 						noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1256,7 +1256,7 @@ void GameMainLayer::myLand()
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* yesC = ((__String*)ngContent->objectForKey("yes"))->getCString();
-	Label* yesL = Label::createWithSystemFont(yesC, "arial", 20);
+	Label* yesL = Label::createWithSystemFont(yesC, "arial", 30);
 	yesM->addChild(yesL);
 	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
 	yesL->setTextColor(Color4B::BLACK);
@@ -1267,7 +1267,7 @@ void GameMainLayer::myLand()
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* noC = ((__String*)ngContent->objectForKey("no"))->getCString();
-	Label* noL = Label::createWithSystemFont(noC, "arial", 20);
+	Label* noL = Label::createWithSystemFont(noC, "arial", 30);
 	noM->addChild(noL);
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
 	noL->setTextColor(Color4B::BLACK);
@@ -1329,7 +1329,7 @@ void GameMainLayer::myLand()
 	string s = nc + blank + comma + upgradeLand + "\n" +
 		payToUpgrade + blank + stream1.str() + yuan;
 	
-	noticeL = Label::createWithSystemFont(s, "arial", 25);
+	noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1448,14 +1448,14 @@ void GameMainLayer::myMenuYes()
 						okM->setPosition(0, -visibleSize.height / 5);
 
 						const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-						Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+						Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 						okM->addChild(okL);
 						okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 						okL->setTextColor(Color4B::BLACK);
 
 						// 菜单主要内容
 						const char* lackOfMoney = ((__String*)ngContent->objectForKey("lackOfMoney"))->getCString();
-						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 25);
+						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "arial", 35);
 
 						menuBoard->addChild(noticeL);
 						noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1685,7 +1685,7 @@ void GameMainLayer::otherLand()
 			payLand + blank + stream3.str() + yuan + "(+" + stream4.str() + "%)";
 	}
 
-	noticeL = Label::createWithSystemFont(s, "arial", 25);
+	noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1697,7 +1697,7 @@ void GameMainLayer::otherLand()
 	okM->setPosition(0, -visibleSize.height / 5);
 
 	const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-	Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+	Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 	okM->addChild(okL);
 	okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 	okL->setTextColor(Color4B::BLACK);
@@ -1828,7 +1828,7 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 					string str = blank + selll1  + "\n"
 						+ selll2 + stream1.str() + selll3 + stream2.str() + yuan + comma + "\n"
 						+ selll4 + stream3.str() + yuan;
-					Label* la = Label::createWithSystemFont(str, "arial", 25);
+					Label* la = Label::createWithSystemFont(str, "arial", 35);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
 						s->getContentSize().height * 3 / 4);
@@ -1840,7 +1840,7 @@ void GameMainLayer::checkPayPlayerMoney(string payName, string earnName, int pri
 					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToClose, this, payName, earnName, price));
 					btn->setPressedActionEnabled(true);
 
-					Label* ok = Label::createWithSystemFont("OK", "arial", 20);
+					Label* ok = Label::createWithSystemFont("OK", "arial", 30);
 					ok->setColor(Color3B::BLACK);
 					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
 					btn->addChild(ok);
@@ -2038,7 +2038,7 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 					string str = blank + selll1 + "\n"
 						+ selll2 + stream1.str() + selll3 + stream2.str() + yuan + comma + "\n"
 						+ selll4 + stream3.str() + yuan;
-					Label* la = Label::createWithSystemFont(str, "arial", 25);
+					Label* la = Label::createWithSystemFont(str, "arial", 35);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
 						s->getContentSize().height * 3 / 4);
@@ -2050,7 +2050,7 @@ void GameMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 					btn->addTouchEventListener(CC_CALLBACK_2(GameMainLayer::checkToCloseLo, this, payName, loss));
 					btn->setPressedActionEnabled(true);
 
-					Label* ok = Label::createWithSystemFont("OK", "arial", 20);
+					Label* ok = Label::createWithSystemFont("OK", "arial", 30);
 					ok->setColor(Color3B::BLACK);
 					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
 					btn->addChild(ok);
@@ -2170,7 +2170,7 @@ void GameMainLayer::changePlayer()
 			const char* player = ((__String*)ngContent->objectForKey(strPlayer))->getCString();
 			s = player + str + eliminate;
 			
-			noticeL = Label::createWithSystemFont(s, "arial", 25);
+			noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 			menuBoard->addChild(noticeL);
 			noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -2182,7 +2182,7 @@ void GameMainLayer::changePlayer()
 			okM->setPosition(0, -visibleSize.height / 5);
 
 			const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-			Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+			Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 			okM->addChild(okL);
 			okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 			okL->setTextColor(Color4B::BLACK);
@@ -2279,7 +2279,7 @@ void GameMainLayer::removePlayer(int number)
 			s = player + str + win;
 		}
 
-		noticeL = Label::createWithSystemFont(s, "arial", 25);
+		noticeL = Label::createWithSystemFont(s, "arial", 35);
 
 		menuBoard->addChild(noticeL);
 		noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -2291,7 +2291,7 @@ void GameMainLayer::removePlayer(int number)
 		okM->setPosition(0, -visibleSize.height / 5);
 
 		const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-		Label* okL = Label::createWithSystemFont(okC, "arial", 20);
+		Label* okL = Label::createWithSystemFont(okC, "arial", 30);
 		okM->addChild(okL);
 		okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 		okL->setTextColor(Color4B::BLACK);

@@ -30,7 +30,7 @@ bool NoUsableSaveLayer::init()
 	MenuItem* mi = MenuItemSprite::create(s1, s2, CC_CALLBACK_1(NoUsableSaveLayer::closeCallback, this));
 	mi->setPosition(0, -s->getContentSize().height / 4 - mi->getContentSize().height / 2);
 
-	Label* l = Label::createWithSystemFont("OK", "Arial", 20);
+	Label* l = Label::createWithSystemFont("OK", "Arial", 30);
 	l->setColor(Color3B::BLACK);
 	l->setPosition(mi->getContentSize().width / 2, mi->getContentSize().height / 2);
 	mi->addChild(l);

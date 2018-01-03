@@ -64,7 +64,7 @@ void GameInitLayer::createMenu()
 	mok->setPosition(-visibleSize.width / 4, -visibleSize.height * 3 / 8 - mok->getContentSize().height / 4);
 
 	auto ok = ((__String *)(dict->objectForKey("ok")))->getCString();
-	Label* lok = Label::createWithSystemFont(ok, "Arial", 18);
+	Label* lok = Label::createWithSystemFont(ok, "Arial",28);
 	lok->setTextColor(Color4B::BLACK);
 	lok->setPosition(mok->getContentSize().width / 2, mok->getContentSize().height / 2);
 	mok->addChild(lok);
@@ -77,7 +77,7 @@ void GameInitLayer::createMenu()
 	mcan->setPosition(visibleSize.width / 4, -visibleSize.height * 3 / 8 - mcan->getContentSize().height / 4);
 
 	auto cancel = ((__String*)dict->objectForKey("cancel"))->getCString();
-	Label* lcancel = Label::createWithSystemFont(cancel, "Arial", 18);
+	Label* lcancel = Label::createWithSystemFont(cancel, "Arial", 28);
 	lcancel->setTextColor(Color4B::BLACK);
 	lcancel->setPosition(mcan->getContentSize().width / 2, mcan->getContentSize().height / 2);
 	mcan->addChild(lcancel);
@@ -96,14 +96,14 @@ void GameInitLayer::createBackground()
 void GameInitLayer::nzPlayersNumber()
 {
 	auto d = ((__String*)dict->objectForKey("playersNumber"))->getCString();
-	Label* l = Label::createWithSystemFont(d, "Arial", 24);
+	Label* l = Label::createWithSystemFont(d, "Arial", 34);
 	l->setTextColor(Color4B::ORANGE);
 	l->setPosition(visibleSize.width / 8, visibleSize.height * 7 / 8);
 	this->addChild(l);
 
 	ostringstream stream1;
 	stream1 << playersNumber;
-	Label* number = Label::createWithSystemFont(stream1.str(), "Arial", 20);
+	Label* number = Label::createWithSystemFont(stream1.str(), "Arial", 30);
 	number->setTextColor(Color4B::ORANGE);
 	number->setPosition(visibleSize.width * 3 / 8, l->getPosition().y);
 	this->addChild(number);
@@ -153,14 +153,14 @@ void GameInitLayer::playersNumberRight(Ref* pSender, Label* &l)
 void GameInitLayer::nzStartMoney()
 {
 	auto d = ((__String*)dict->objectForKey("startMoney"))->getCString();
-	Label* l = Label::createWithSystemFont(d, "Arial", 24);
+	Label* l = Label::createWithSystemFont(d, "Arial", 34);
 	l->setTextColor(Color4B::ORANGE);
 	l->setPosition(visibleSize.width / 8, visibleSize.height / 2);
 	this->addChild(l);
 	
 	ostringstream stream1;
 	stream1 << startMoney;
-	Label* number = Label::createWithSystemFont(stream1.str(), "Arial", 20);
+	Label* number = Label::createWithSystemFont(stream1.str(), "Arial", 30);
 	number->setTextColor(Color4B::ORANGE);
 	number->setPosition(visibleSize.width * 3 / 8, l->getPosition().y);
 	this->addChild(number);
@@ -236,7 +236,7 @@ void GameInitLayer::nzPlayersRoles()
 	auto mC = mi->getContentSize();
 	
 	auto d = ((__String*)dict->objectForKey("playersRoles"))->getCString();
-	Label* l = Label::createWithSystemFont(d, "Arial", 16);
+	Label* l = Label::createWithSystemFont(d, "Arial", 26);
 	l->setTextColor(Color4B::BLACK);
 	l->setPosition(mC.width / 2, mC.height / 2);
 
@@ -254,7 +254,7 @@ void GameInitLayer::createPRLayer(Ref* pSender)
 void GameInitLayer::nzMapNumber()
 {
 	auto d = ((__String*)dict->objectForKey("mapNumber"))->getCString();
-	Label* l = Label::createWithSystemFont(d, "Arial", 24);
+	Label* l = Label::createWithSystemFont(d, "Arial", 34);
 	l->setTextColor(Color4B::ORANGE);
 	l->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 7 / 8);
 	this->addChild(l);

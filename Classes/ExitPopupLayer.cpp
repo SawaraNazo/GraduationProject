@@ -40,7 +40,7 @@ void ExitPopupLayer::createMenu()
 
 	// ��ʾ��
 	auto epT1 = ((__String*)d->objectForKey("exitPopupT1"))->getCString();
-	Label* T1 = Label::createWithSystemFont(epT1, "arial", 38);
+	Label* T1 = Label::createWithSystemFont(epT1, "arial", 48);
 	T1->enableBold();
 	T1->setTextColor(Color4B::BLACK);
 	T1->setPosition(Vec2(s->getContentSize().width / 2, s->getContentSize().height * 3 / 4));
@@ -51,7 +51,7 @@ void ExitPopupLayer::createMenu()
 		"image/RedPressed.png",
 		CC_CALLBACK_1(ExitPopupLayer::okCallBack, this));
 	auto epT2 = ((__String*)d->objectForKey("exitPopupT2"))->getCString();
-	Label* T2 = Label::createWithSystemFont(epT2, "arial", 20);
+	Label* T2 = Label::createWithSystemFont(epT2, "arial", 30);
 	T2->setPosition(Vec2(ok->getContentSize().width / 2, ok->getContentSize().height / 2));
 	ok->addChild(T2);
 	ok->setScale(1.2);
@@ -62,7 +62,7 @@ void ExitPopupLayer::createMenu()
 		"image/GreenPressed.png",
 		CC_CALLBACK_1(ExitPopupLayer::cancelCallBack, this));
 	auto epT3 = ((__String*)d->objectForKey("exitPopupT3"))->getCString();
-	Label* T3 = Label::createWithSystemFont(epT3, "arial", 20);
+	Label* T3 = Label::createWithSystemFont(epT3, "arial", 30);
 	T3->setPosition(Vec2(cancel->getContentSize().width / 2, cancel->getContentSize().height / 2));
 	cancel->addChild(T3);
 	cancel->setScale(1.2);

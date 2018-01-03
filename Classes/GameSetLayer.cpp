@@ -43,14 +43,14 @@ void GameSetLayer::createMenu()
 
 	// 标题
 	auto title = ((__String*)d->objectForKey("title"))->getCString();
-	Label* l1 = Label::createWithSystemFont(title, "Arial", 40);
+	Label* l1 = Label::createWithSystemFont(title, "Arial", 50);
 	l1->setTextColor(Color4B::BLACK);
 	l1->setPosition(Vec2(s->getContentSize().width / 2, s->getContentSize().height * 3 / 4));
 	s->addChild(l1);
 
 	// 音乐开关
 	auto onOff = ((__String*)d->objectForKey("onOff"))->getCString();
-	Label* l2 = Label::createWithSystemFont(onOff, "Arial", 23);
+	Label* l2 = Label::createWithSystemFont(onOff, "Arial", 33);
 	l2->setTextColor(Color4B::BLACK);
 	l2->setPosition(Vec2(s->getContentSize().width / 4, s->getContentSize().height / 2 + l2->getContentSize().height));
 	s->addChild(l2);
@@ -59,8 +59,8 @@ void GameSetLayer::createMenu()
 	Sprite* onSprite = Sprite::create("image/switch-on.png");
 	Sprite* offSprite = Sprite::create("image/switch-off.png");
 	Sprite* thumbSpriteW = Sprite::create("image/switch-thumb.png");
-	Label* onLabel = Label::createWithSystemFont("ON", "Arial", 16);
-	Label* offLabel = Label::createWithSystemFont("OFF", "Arial", 16);
+	Label* onLabel = Label::createWithSystemFont("ON", "Arial", 26);
+	Label* offLabel = Label::createWithSystemFont("OFF", "Arial", 26);
 	ControlSwitch* csw = ControlSwitch::create(maskSprite, onSprite, offSprite, thumbSpriteW, onLabel, offLabel);
 	csw->addTargetWithActionForControlEvents(this, cccontrol_selector(GameSetLayer::switchStateChanged), Control::EventType::VALUE_CHANGED);
 	csw->setScale(1.2f);
@@ -69,7 +69,7 @@ void GameSetLayer::createMenu()
 
 	// 音量调节
 	auto volume = ((__String*)d->objectForKey("volume"))->getCString();
-	Label* l3 = Label::createWithSystemFont(volume, "Arial", 23);
+	Label* l3 = Label::createWithSystemFont(volume, "Arial", 33);
 	l3->setTextColor(Color4B::BLACK);
 	l3->setPosition(Vec2(s->getContentSize().width * 3 / 4, s->getContentSize().height / 2 + l3->getContentSize().height));
 	s->addChild(l3);
@@ -87,12 +87,12 @@ void GameSetLayer::createMenu()
 
 	// BGM选择
 	auto chooseMusic = ((__String*)d->objectForKey("chooseMusic"))->getCString();
-	Label* l4 = Label::createWithSystemFont(chooseMusic, "Arial", 23);
+	Label* l4 = Label::createWithSystemFont(chooseMusic, "Arial", 33);
 	l4->setTextColor(Color4B::BLACK);
 	l4->setPosition(s->getContentSize().width / 4, s->getContentSize().height / 4 + l4->getContentSize().height);
 	s->addChild(l4);
 
-	Label* bgm = Label::createWithSystemFont("BGM01", "Arial", 21);
+	Label* bgm = Label::createWithSystemFont("BGM01", "Arial", 31);
 	bgm->setTextColor(Color4B::BLACK);
 	bgm->setPosition(s->getContentSize().width * 3 / 4, l4->getPosition().y);
 	s->addChild(bgm);
@@ -113,7 +113,7 @@ void GameSetLayer::createMenu()
 		"image/OrangePressed.png",
 		CC_CALLBACK_1(GameSetLayer::closeCallback, this));
 	auto close = ((__String*)d->objectForKey("close"))->getCString();
-	Label* l5 = Label::createWithSystemFont(close, "Arial", 20);
+	Label* l5 = Label::createWithSystemFont(close, "Arial", 30);
 	l5->setTextColor(Color4B::BLACK);
 	l5->setPosition(Vec2(closeButton->getContentSize().width / 2, closeButton->getContentSize().height / 2));
 	closeButton->addChild(l5);

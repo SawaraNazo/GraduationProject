@@ -141,7 +141,7 @@ bool ContinueMainLayer::init()
 	//ここまでだ
 
 	// Nowloading
-	Label* loading = Label::createWithSystemFont("Now Loading", "Arial", 30);
+	Label* loading = Label::createWithSystemFont("Now Loading", "Arial", 40);
 	loading->enableBold();
 	loading->setPosition(visibleSize / 2);
 	this->addChild(loading, 5, "loading");
@@ -202,14 +202,14 @@ void ContinueMainLayer::createMap()
 	// 总回合数
 	auto ngContent = __Dictionary::createWithContentsOfFile("XML/NewGame.xml");
 	const char* roundsC = ((__String*)ngContent->objectForKey("rounds"))->getCString();
-	Label* roundsL1 = Label::createWithSystemFont(roundsC, "Arial", 24);
+	Label* roundsL1 = Label::createWithSystemFont(roundsC, "Arial", 34);
 	roundsL1->enableBold();
 	roundsL1->setPosition(visibleSize.width * 3 / 8, visibleSize.height - roundsL1->getContentSize().height);
 	this->addChild(roundsL1, 10);
 
 	ostringstream stream3;
 	stream3 << rounds;
-	Label* roundsL2 = Label::createWithSystemFont(stream3.str(), "Arial", 18);
+	Label* roundsL2 = Label::createWithSystemFont(stream3.str(), "Arial", 28);
 	roundsL2->enableBold();
 	roundsL2->setPosition(visibleSize.width * 3 / 8, roundsL1->getPosition().y - roundsL2->getContentSize().height);
 	this->addChild(roundsL2, 10, "roundsL");;
@@ -348,7 +348,7 @@ void ContinueMainLayer::createPlayerPro()
 	{
 		// 玩家姓名
 		const char* pc = ((__String*)ng->objectForKey(p.name))->getCString();
-		Label* l1 = Label::createWithSystemFont(pc, "Arial", 20);
+		Label* l1 = Label::createWithSystemFont(pc, "Arial", 30);
 		l1->setColor(p.color);
 		l1->enableBold();
 		l1->setPosition(visibleSize.width * 6 / 7,
@@ -361,7 +361,7 @@ void ContinueMainLayer::createPlayerPro()
 		stream1 << p.money;
 		string m = rmb + stream1.str();
 		string blank = " ";
-		Label* l2 = Label::createWithSystemFont(m, "Arial", 18);
+		Label* l2 = Label::createWithSystemFont(m, "Arial", 28);
 		l2->enableBold();
 		l2->setPosition(visibleSize.width * 6 / 7, l1->getPosition().y - 2 * l1->getContentSize().height);
 		this->addChild(l2, 2, p.name + blank + "money");
@@ -689,7 +689,7 @@ bool ContinueMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -701,7 +701,7 @@ bool ContinueMainLayer::checkState()
 				ostringstream stream1;
 				stream1 << p.stayRound;
 				string s = roundsToStayInParkinglot1 + blank + "\n" + roundsToStayInParkinglot2 + stream1.str();
-				Label* noticeL = Label::createWithSystemFont(s, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -731,7 +731,7 @@ bool ContinueMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -743,7 +743,7 @@ bool ContinueMainLayer::checkState()
 				ostringstream stream1;
 				stream1 << p.stayRound;
 				string s = roundsToStayInPrison1 + blank + "\n" + roundsToStayInPrison2 + stream1.str();
-				Label* noticeL = Label::createWithSystemFont(s, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -772,14 +772,14 @@ bool ContinueMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
 				const char* outOfParkinglot = ((__String*)ngContent->objectForKey("outOfParkinglot"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(outOfParkinglot, "Arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -807,14 +807,14 @@ bool ContinueMainLayer::checkState()
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
 				const char* outOfPrison = ((__String*)ngContent->objectForKey("outOfPrison"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(outOfPrison, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(outOfPrison, "Arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -878,7 +878,7 @@ void ContinueMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -888,7 +888,7 @@ void ContinueMainLayer::checkRoad(float dt)
 				const char* prisonEnterance2 = ((__String*)ngContent->objectForKey("prisonEnterance2"))->getCString();
 				string blank = " ";
 				string s = prisonEnterance1 + blank + "\n" + prisonEnterance2;
-				Label* noticeL = Label::createWithSystemFont(s, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -920,14 +920,14 @@ void ContinueMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
 
 				// 菜单主要内容
 				const char* parkinglot = ((__String*)ngContent->objectForKey("parkinglot"))->getCString();
-				Label* noticeL = Label::createWithSystemFont(parkinglot, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(parkinglot, "Arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -984,7 +984,7 @@ void ContinueMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -993,7 +993,7 @@ void ContinueMainLayer::checkRoad(float dt)
 				ostringstream stream1;
 				stream1 << i;
 				const char* emergencyEvent = ((__String*)ngContent->objectForKey("emergencyEvent" + stream1.str()))->getCString();
-				Label* noticeL = Label::createWithSystemFont(emergencyEvent, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(emergencyEvent, "Arial", 35);
 
 				menuBoard->addChild(noticeL);
 				noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1017,7 +1017,7 @@ void ContinueMainLayer::checkRoad(float dt)
 				okM->setPosition(0, -visibleSize.height / 5);
 
 				const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-				Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+				Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 				okM->addChild(okL);
 				okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 				okL->setTextColor(Color4B::BLACK);
@@ -1027,7 +1027,7 @@ void ContinueMainLayer::checkRoad(float dt)
 				const char* tax2 = ((__String*)ngContent->objectForKey("tax2"))->getCString();
 				string blank = " ";
 				string s = tax1 + blank + "\n" + tax2;
-				Label* noticeL = Label::createWithSystemFont(s, "Arial", 25);
+				Label* noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 
 				menuBoard->addChild(noticeL);
@@ -1148,7 +1148,7 @@ void ContinueMainLayer::emptyLand()
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* yesC = ((__String*)ngContent->objectForKey("yes"))->getCString();
-	Label* yesL = Label::createWithSystemFont(yesC, "Arial", 20);
+	Label* yesL = Label::createWithSystemFont(yesC, "Arial", 30);
 	yesM->addChild(yesL);
 	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
 	yesL->setTextColor(Color4B::BLACK);
@@ -1159,7 +1159,7 @@ void ContinueMainLayer::emptyLand()
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* noC = ((__String*)ngContent->objectForKey("no"))->getCString();
-	Label* noL = Label::createWithSystemFont(noC, "Arial", 20);
+	Label* noL = Label::createWithSystemFont(noC, "Arial", 30);
 	noM->addChild(noL);
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
 	noL->setTextColor(Color4B::BLACK);
@@ -1190,7 +1190,7 @@ void ContinueMainLayer::emptyLand()
 	stream1 << emptyBuildCost;
 	string s = nc + blank + comma + upgradeLand0 + "\n" +
 		payToUpgrade + blank + stream1.str() + yuan;
-	noticeL = Label::createWithSystemFont(s, "Arial", 25);
+	noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1285,14 +1285,14 @@ void ContinueMainLayer::emptyMenuYes()
 						okM->setPosition(0, -visibleSize.height / 5);
 
 						const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-						Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+						Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 						okM->addChild(okL);
 						okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 						okL->setTextColor(Color4B::BLACK);
 
 						// 菜单主要内容
 						const char* lackOfMoney = ((__String*)ngContent->objectForKey("lackOfMoney"))->getCString();
-						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "Arial", 25);
+						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "Arial", 35);
 
 						menuBoard->addChild(noticeL);
 						noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1349,7 +1349,7 @@ void ContinueMainLayer::myLand()
 	yesM->setPosition(-visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* yesC = ((__String*)ngContent->objectForKey("yes"))->getCString();
-	Label* yesL = Label::createWithSystemFont(yesC, "Arial", 20);
+	Label* yesL = Label::createWithSystemFont(yesC, "Arial", 30);
 	yesM->addChild(yesL);
 	yesL->setPosition(yesM->getContentSize().width / 2, yesM->getContentSize().height / 2);
 	yesL->setTextColor(Color4B::BLACK);
@@ -1360,7 +1360,7 @@ void ContinueMainLayer::myLand()
 	noM->setPosition(visibleSize.width / 8, -visibleSize.height / 5);
 
 	const char* noC = ((__String*)ngContent->objectForKey("no"))->getCString();
-	Label* noL = Label::createWithSystemFont(noC, "Arial", 20);
+	Label* noL = Label::createWithSystemFont(noC, "Arial", 30);
 	noM->addChild(noL);
 	noL->setPosition(noM->getContentSize().width / 2, noM->getContentSize().height / 2);
 	noL->setTextColor(Color4B::BLACK);
@@ -1421,7 +1421,7 @@ void ContinueMainLayer::myLand()
 	stream1 << price;
 	string s = nc + blank + comma + upgradeLand + "\n" +
 		payToUpgrade + blank + stream1.str() + yuan;
-	noticeL = Label::createWithSystemFont(s, "Arial", 25);
+	noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1541,14 +1541,14 @@ void ContinueMainLayer::myMenuYes()
 						okM->setPosition(0, -visibleSize.height / 5);
 
 						const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-						Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+						Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 						okM->addChild(okL);
 						okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 						okL->setTextColor(Color4B::BLACK);
 
 						// 菜单主要内容
 						const char* lackOfMoney = ((__String*)ngContent->objectForKey("lackOfMoney"))->getCString();
-						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "Arial", 25);
+						Label* noticeL = Label::createWithSystemFont(lackOfMoney, "Arial", 35);
 
 						menuBoard->addChild(noticeL);
 						noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1778,7 +1778,7 @@ void ContinueMainLayer::otherLand()
 			payLand + blank + stream1.str() + yuan + "(+" + stream2.str() + "%)";
 	}
 
-	noticeL = Label::createWithSystemFont(s, "Arial", 25);
+	noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 	menuBoard->addChild(noticeL);
 	noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -1920,7 +1920,7 @@ void ContinueMainLayer::checkPayPlayerMoney(string payName, string earnName, int
 					string str = blank + selll1 + "\n"
 						+ selll2 + stream1.str() + selll3 + stream2.str() + yuan + comma + "\n"
 						+ selll4 + stream3.str() + yuan;
-					Label* la = Label::createWithSystemFont(str, "Arial", 25);
+					Label* la = Label::createWithSystemFont(str, "Arial", 35);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
 						s->getContentSize().height * 3 / 4);
@@ -1932,7 +1932,7 @@ void ContinueMainLayer::checkPayPlayerMoney(string payName, string earnName, int
 					btn->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::checkToClose, this, payName, earnName, price));
 					btn->setPressedActionEnabled(true);
 
-					Label* ok = Label::createWithSystemFont("OK", "Arial", 20);
+					Label* ok = Label::createWithSystemFont("OK", "Arial", 30);
 					ok->setColor(Color3B::BLACK);
 					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
 					btn->addChild(ok);
@@ -2130,7 +2130,7 @@ void ContinueMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 					string str = blank + selll1 + "\n"
 						+ selll2 + stream1.str() + selll3 + stream2.str() + yuan + comma + "\n"
 						+ selll4 + stream3.str() + yuan;
-					Label* la = Label::createWithSystemFont(str, "Arial", 25);
+					Label* la = Label::createWithSystemFont(str, "Arial", 35);
 					la->setTextColor(Color4B::BLACK);
 					la->setPosition(s->getContentSize().width / 2,
 						s->getContentSize().height * 3 / 4);
@@ -2142,7 +2142,7 @@ void ContinueMainLayer::checkPayPlayerMoneyLo(string payName, int loss)
 					btn->addTouchEventListener(CC_CALLBACK_2(ContinueMainLayer::checkToCloseLo, this, payName, loss));
 					btn->setPressedActionEnabled(true);
 
-					Label* ok = Label::createWithSystemFont("OK", "Arial", 20);
+					Label* ok = Label::createWithSystemFont("OK", "Arial", 30);
 					ok->setColor(Color3B::BLACK);
 					ok->setPosition(btn->getContentSize().width / 2, btn->getContentSize().height / 2);
 					btn->addChild(ok);
@@ -2262,7 +2262,7 @@ void ContinueMainLayer::changePlayer()
 			const char* player = ((__String*)ngContent->objectForKey(strPlayer))->getCString();
 			s = player + str + eliminate;
 
-			noticeL = Label::createWithSystemFont(s, "Arial", 25);
+			noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 			menuBoard->addChild(noticeL);
 			noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);
@@ -2274,7 +2274,7 @@ void ContinueMainLayer::changePlayer()
 			okM->setPosition(0, -visibleSize.height / 5);
 
 			const char* okC = ((__String*)ngContent->objectForKey("ok"))->getCString();
-			Label* okL = Label::createWithSystemFont(okC, "Arial", 20);
+			Label* okL = Label::createWithSystemFont(okC, "Arial", 30);
 			okM->addChild(okL);
 			okL->setPosition(okM->getContentSize().width / 2, okM->getContentSize().height / 2);
 			okL->setTextColor(Color4B::BLACK);
@@ -2371,7 +2371,7 @@ void ContinueMainLayer::removePlayer(int number)
 			s = player + str + win;
 		}
 
-		noticeL = Label::createWithSystemFont(s, "Arial", 25);
+		noticeL = Label::createWithSystemFont(s, "Arial", 35);
 
 		menuBoard->addChild(noticeL);
 		noticeL->setPosition(menuBoard->getContentSize().width / 2, menuBoard->getContentSize().height * 3 / 4);

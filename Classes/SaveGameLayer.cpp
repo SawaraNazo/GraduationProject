@@ -32,7 +32,7 @@ bool SaveGameLayer::init()
 	okmi->setPosition(-s->getContentSize().width / 2 + okmi->getContentSize().width * 3 / 4,
 		-s->getContentSize().height / 4 - okmi->getContentSize().height);
 
-	Label* okl = Label::createWithSystemFont("Yes", "Arial", 20);
+	Label* okl = Label::createWithSystemFont("Yes", "Arial", 30);
 	okl->setColor(Color3B::BLACK);
 	okl->setPosition(okmi->getContentSize().width / 2, okmi->getContentSize().height / 2);
 	okmi->addChild(okl);
@@ -46,7 +46,7 @@ bool SaveGameLayer::init()
 	cmi->setPosition(s->getContentSize().width / 2 - cmi->getContentSize().width * 3 / 4,
 		-s->getContentSize().height / 4 - cmi->getContentSize().height);
 
-	Label* cl = Label::createWithSystemFont("No", "Arial", 20);
+	Label* cl = Label::createWithSystemFont("No", "Arial", 30);
 	cl->setColor(Color3B::BLACK);
 	cl->setPosition(cmi->getContentSize().width / 2, cmi->getContentSize().height / 2);
 	cmi->addChild(cl);
@@ -151,7 +151,7 @@ void SaveGameLayer::saveCallback(Ref* pSender)
 		auto okmi = MenuItemSprite::create(okn, okp, CC_CALLBACK_1(SaveGameLayer::cancelCallback, this));
 		okmi->setPosition(0, -s->getContentSize().height / 4 - okmi->getContentSize().height);
 
-		Label* okl = Label::createWithSystemFont("Yes", "Arial", 20);
+		Label* okl = Label::createWithSystemFont("Yes", "Arial", 30);
 		okl->setColor(Color3B::BLACK);
 		okl->setPosition(okmi->getContentSize().width / 2, okmi->getContentSize().height / 2);
 		okmi->addChild(okl);
