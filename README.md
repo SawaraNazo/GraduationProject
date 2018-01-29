@@ -3,7 +3,7 @@ EN：Monopoly game made with Cocos2d-x （大富翁）
 CH：基于Cocos2d-x的大富翁类游戏的设计与开发  
 
 # 项目介绍
-引擎及版本：Cocos2d-x 3.16  
+引擎及版本：Cocos2d-x 3.16  
 语言：C++  
 软件：Microsoft Visual Studio Community 2017  
 
